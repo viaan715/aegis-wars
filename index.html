@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>Aegis Wars</title>
+<link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<div id="notif"></div>
+
+<!-- MENU -->
+<div class="screen" id="sMenu">
+  <div class="title" style="font-size:36px">⚔</div>
+  <div class="sub">FULL SPECTRUM WARFARE</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+    <button class="btn g" id="btnSolo">[ SOLO BATTLE ]</button>
+    <button class="btn b" id="btnFriends">[ FRIENDS & LOBBY ]</button>
+    <button class="btn" id="btnLocal">[ LOCAL SPLITSCREEN ]</button>
+    <button class="btn y" id="btnProg">[ PROGRESSION & XP ]</button>
+  </div>
+  <div style="margin-top:14px;font-size:9px;color:#3a3a20;letter-spacing:1px" id="menuRank"></div>
+</div>
+
+<!-- PROGRESSION SCREEN -->
+<div class="screen hidden" id="sProg" style="padding:10px;align-items:flex-start;overflow-y:auto">
+  <div style="width:100%;max-width:660px">
+    <div style="font-size:18px;color:#e8d880;letter-spacing:3px;margin-bottom:4px;text-align:center">PROGRESSION</div>
+    <div style="font-size:9px;color:#4a4a30;letter-spacing:3px;margin-bottom:14px;text-align:center">XP · RANKS · UNLOCKS</div>
+    <div id="progContent"></div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="btn" id="progBack">← BACK</button>
+      <button class="btn r" id="progReset">RESET PROGRESS</button>
+    </div>
+  </div>
+</div>
+
+<!-- FRIENDS -->
+<div class="screen hidden" id="sFriends">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+    <div class="card">
+      <div class="ct">Profile</div>
+      <div class="rank-badge" id="friendRankBadge"><span class="rank-icon">🎖</span><div><div class="rank-name" id="frName">Commander</div><div class="rank-sub" id="frRank">PRIVATE · 0 XP</div></div></div>
+      <input class="inp" id="nameInp" placeholder="YOUR NAME" maxlength="12">
+      <button class="btn" style="width:100%;margin-top:3px" id="friendsSetName">SET NAME</button>
+      <div class="sep"></div>
+      <div class="ct">Friends</div>
+      <div id="friendsList"></div>
+      <div style="display:flex;gap:3px;margin-top:5px">
+        <input class="inp" id="addFInp" placeholder="FRIEND NAME" style="flex:1">
+        <button class="btn" style="min-width:0;padding:6px 8px" id="friendsAddFriend">+</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Create Room</div>
+      <div style="font-size:22px;font-weight:bold;color:#e8d880;letter-spacing:5px;background:#0a0c06;border:1px solid #2a2a18;padding:7px 16px;margin:5px 0;text-align:center" id="roomCode">------</div>
+      <button class="btn g" id="friendsCreateRoom">GENERATE</button>
+      <button class="btn" id="friendsCopyCode">COPY</button>
+      <div class="sep"></div>
+      <input class="inp" id="joinInp" placeholder="JOIN CODE" maxlength="6" style="text-transform:uppercase">
+      <button class="btn b" id="friendsJoinRoom">JOIN</button>
+    </div>
+    <div class="card" id="lobbyCard" style="display:none">
+      <div class="ct">Lobby — <span id="lobCode" style="color:#e8d880"></span></div>
+      <div style="display:flex;gap:4px;margin:5px 0">
+        <button class="btn b" style="flex:1;min-width:0" id="friendsTeamBlue">BLUE</button>
+        <button class="btn r" style="flex:1;min-width:0" id="friendsTeamRed">RED</button>
+      </div>
+      <div id="lobSlots"></div>
+      <button class="btn g" style="width:100%;margin-top:5px" id="friendsStartOnline">START</button>
+    </div>
+  </div>
+  <button class="btn" style="margin-top:10px" id="friendsBack">← BACK</button>
+</div>
+
+<!-- LOCAL -->
+<div class="screen hidden" id="sLocal">
+  <div class="title" style="font-size:18px">SPLITSCREEN</div>
+  <div class="card">
+    <div class="ct">P1 Blue · WASD + G + F + 1/2/3</div>
+    <div class="sep"></div>
+    <div class="ct">P2 Red · IJKL + ; + P + 4/5/6</div>
+  </div>
+  <button class="btn g" style="margin-top:10px" id="localDeploy">DEPLOY</button>
+  <button class="btn" style="margin-top:3px" id="localBack">← BACK</button>
+</div>
+
+<!-- SOLO -->
+<div class="screen hidden" id="sSolo">
+  <div class="title" style="font-size:18px">SOLO BATTLE</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+    <div class="card">
+      <div class="ct">Map</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap" id="mapBtns"></div>
+      <div class="sep"></div>
+      <div class="ct">Difficulty</div>
+      <div style="display:flex;gap:4px">
+        <button class="btn g" id="dE">BEGINNER</button>
+        <button class="btn" id="dN">NORMAL</button>
+        <button class="btn" id="dH">HARD</button>
+        <button class="btn r" id="dB">BRUTAL</button>
+      </div>
+    </div>
+    <div class="card" style="min-width:220px">
+      <div class="ct">Your Tank</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;max-width:300px" id="tankSelectBtns"></div>
+      <div id="selTankInfo" style="margin-top:8px;font-size:9px;color:#5a5a38;min-height:36px"></div>
+    </div>
+  </div>
+  <button class="btn g" style="margin-top:10px" id="soloDeploy">DEPLOY</button>
+  <button class="btn" style="margin-top:3px" id="soloBack">← BACK</button>
+</div>
+
+<!-- GAME -->
+<canvas id="gc" width="680" height="430"></canvas>
+<canvas id="mmcanvas" width="120" height="90" style="display:none"></canvas>
+
+<div id="statsbl" style="display:none">
+  <div class="sr"><span class="sl">GEAR</span><span class="sv" id="sGear">N</span></div>
+  <div class="sr"><span class="sl">RPM</span><span class="sv" id="sRpm">0</span></div>
+  <div class="sr"><span class="sl">SPD</span><span class="sv" id="sSpd">0 km/h</span></div>
+</div>
+<div id="capbar" style="display:none">
+  <div id="captrack"><div id="capblue" style="width:33%"></div><div id="capred" style="width:33%"></div></div>
+  <div id="capdots"><div class="cdot neu" id="dA"></div><div class="cdot neu" id="dB2"></div><div class="cdot neu" id="dC"></div></div>
+  <div id="captext"></div>
+</div>
+<div id="killshud" style="display:none">KILLS: <span id="killsV">0</span> &nbsp; SCORE: <span id="scoreV">0</span> &nbsp; WAVE: <span id="waveV">1</span></div>
+<div id="artbar" style="display:none">
+  <div class="aslot" id="aSlot0">🎯 ARTY1 <span id="aCD0" style="color:#3a8a30">READY</span></div>
+  <div class="aslot" id="aSlot1">🎯 ARTY2 <span id="aCD1" style="color:#3a8a30">READY</span></div>
+</div>
+<div id="zonepanel" style="display:none">
+  <div class="zt" id="pTankName">AEGIS</div>
+  <div class="zbar"><span>Gun</span><div class="zbg"><div class="zfill" id="zG" style="width:100%;background:#c8b870"></div></div></div>
+  <div class="zbar"><span>Engine</span><div class="zbg"><div class="zfill" id="zE" style="width:100%;background:#d07040"></div></div></div>
+  <div class="zbar"><span>Tracks</span><div class="zbg"><div class="zfill" id="zTr" style="width:100%;background:#7a9a70"></div></div></div>
+  <div class="zbar"><span>Crew</span><div class="zbg"><div class="zfill" id="zC" style="width:100%;background:#e05050"></div></div></div>
+</div>
+<div id="ammohud" style="display:none">
+  <div class="ash sel" id="sh0"><span class="snum">1</span><svg class="sico" viewBox="0 0 22 28"><rect x="7" y="1" width="8" height="14" rx="4" fill="#e8d870"/><rect x="5" y="15" width="12" height="8" rx="1" fill="#b8a840"/><rect x="3" y="22" width="16" height="4" rx="1" fill="#8a7a30"/></svg><div class="scnt" id="c0">34</div><div class="stype">APFSDS</div></div>
+  <div class="ash" id="sh1"><span class="snum">2</span><svg class="sico" viewBox="0 0 22 28"><rect x="6" y="1" width="10" height="11" rx="5" fill="#e07030"/><rect x="4" y="12" width="14" height="10" rx="1" fill="#b05020"/><rect x="2" y="21" width="18" height="5" rx="1" fill="#7a3010"/></svg><div class="scnt" id="c1">12</div><div class="stype">HE-GP</div></div>
+  <div class="ash" id="sh2"><span class="snum">3</span><svg class="sico" viewBox="0 0 22 28"><rect x="7" y="1" width="8" height="12" rx="4" fill="#d0a030"/><rect x="5" y="13" width="12" height="9" rx="1" fill="#a07820"/><rect x="3" y="21" width="16" height="5" rx="1" fill="#705010"/></svg><div class="scnt" id="c2">20</div><div class="stype">HEAT</div></div>
+</div>
+<div id="mmwrap" style="display:none"><canvas id="mmcanvas2" width="120" height="90" style="border:1px solid #3a3a20;display:block"></canvas></div>
+<div id="dmglog" style="display:none"></div>
+<div id="xpbar-wrap" style="display:none">
+  <div id="xpbar-label">XP</div>
+  <div id="xpbar-bg"><div id="xpbar-fill" style="width:0%"></div></div>
+  <div id="xpbar-rank">PRIVATE · 0 XP</div>
+</div>
+<div id="tankLabel" style="display:none"></div>
+<div id="respPanel"><div style="font-size:12px;color:#c8b870;letter-spacing:2px;margin-bottom:6px">TANK DESTROYED</div><div id="respCD">5</div><div style="font-size:9px;color:#5a5a38;margin-top:6px">LIVES: <span id="livesV">3</span></div></div>
+<div id="controls" style="display:none">WASD+MOUSE+CLICK · G=FIRE · F=SMOKE · X/C=ARTY · 1/2/3=AMMO · R=RANGE · M=MAP</div>
+<div id="gameOverlay"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body></html>

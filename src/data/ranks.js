@@ -1,0 +1,28 @@
+export const RANKS=[
+  {name:'PRIVATE',icon:'🪖',xp:0},{name:'CORPORAL',icon:'⭐',xp:500},{name:'SERGEANT',icon:'⭐⭐',xp:1500},
+  {name:'LIEUTENANT',icon:'🥉',xp:3500},{name:'CAPTAIN',icon:'🥈',xp:7000},{name:'MAJOR',icon:'🥇',xp:12000},
+  {name:'COLONEL',icon:'🎖',xp:20000},{name:'GENERAL',icon:'🏅',xp:32000},{name:'FIELD MARSHAL',icon:'👑',xp:50000},
+];
+export const UNLOCKS=[
+  {xp:0,name:'M1A4 Aegis',type:'tank',key:'aegis'},
+  {xp:0,name:'APFSDS-T ammo',type:'ammo'},
+  {xp:200,name:'HE-GP ammo',type:'ammo'},
+  {xp:500,name:'HEAT ammo',type:'ammo'},
+  {xp:500,name:'Tiger I',type:'tank',key:'tiger1'},
+  {xp:800,name:'Sherman M4',type:'tank',key:'sherman'},
+  {xp:1000,name:'T-34/85',type:'tank',key:'t34'},
+  {xp:1200,name:'Churchill IV',type:'tank',key:'churchill'},
+  {xp:1500,name:'Panther',type:'tank',key:'panther'},
+  {xp:1800,name:'Tiger II',type:'tank',key:'tiger2'},
+  {xp:2000,name:'T-55',type:'tank',key:'t55'},
+  {xp:2500,name:'M60 Patton',type:'tank',key:'m60'},
+  {xp:3000,name:'Chieftain',type:'tank',key:'chieftain'},
+  {xp:3500,name:'T-62',type:'tank',key:'t62'},
+  {xp:4000,name:'Leclerc',type:'tank',key:'leclerc'},
+  {xp:5000,name:'Artillery Strike',type:'ability'},
+  {xp:7000,name:'Double Smoke',type:'ability'},
+  {xp:10000,name:'Desert map',type:'map'},
+  {xp:12000,name:'Jungle map',type:'map'},
+  {xp:15000,name:'Night map',type:'map'},
+  {xp:20000,name:'Arctic Fortress map',type:'map'},
+];
