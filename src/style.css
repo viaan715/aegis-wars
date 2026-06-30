@@ -1,7 +1,24 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#080a05;font-family:'Courier New',monospace;color:#c8b870;overflow:hidden;width:680px;height:430px}
 canvas{display:block;cursor:crosshair;position:absolute;top:0;left:0}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#080a05;z-index:20;overflow-y:auto}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background-color:#262a18;background-image:
+  radial-gradient(ellipse 120px 80px at 6% 12%, #14150d 60%, transparent 62%),
+  radial-gradient(ellipse 90px 130px at 27% 6%, #4a3c22 60%, transparent 62%),
+  radial-gradient(ellipse 150px 90px at 50% 18%, #1f2e14 60%, transparent 62%),
+  radial-gradient(ellipse 100px 110px at 78% 8%, #14150d 60%, transparent 62%),
+  radial-gradient(ellipse 130px 90px at 96% 22%, #4a3c22 60%, transparent 62%),
+  radial-gradient(ellipse 100px 140px at 10% 42%, #4a3c22 60%, transparent 62%),
+  radial-gradient(ellipse 160px 100px at 38% 38%, #14150d 60%, transparent 62%),
+  radial-gradient(ellipse 110px 130px at 66% 45%, #1f2e14 60%, transparent 62%),
+  radial-gradient(ellipse 120px 90px at 92% 50%, #1f2e14 60%, transparent 62%),
+  radial-gradient(ellipse 140px 100px at 18% 70%, #1f2e14 60%, transparent 62%),
+  radial-gradient(ellipse 100px 120px at 48% 72%, #4a3c22 60%, transparent 62%),
+  radial-gradient(ellipse 130px 90px at 74% 68%, #14150d 60%, transparent 62%),
+  radial-gradient(ellipse 110px 110px at 4% 92%, #1f2e14 60%, transparent 62%),
+  radial-gradient(ellipse 150px 90px at 32% 96%, #14150d 60%, transparent 62%),
+  radial-gradient(ellipse 100px 130px at 60% 94%, #4a3c22 60%, transparent 62%),
+  radial-gradient(ellipse 130px 100px at 90% 90%, #1f2e14 60%, transparent 62%);
+  z-index:20;overflow-y:auto}
 .screen.hidden{display:none!important}
 .title{font-size:32px;font-weight:bold;color:#e8d880;letter-spacing:6px;margin-bottom:2px;text-shadow:0 0 30px rgba(232,216,128,0.3)}
 .sub{font-size:9px;color:#4a4a30;letter-spacing:4px;margin-bottom:20px}
