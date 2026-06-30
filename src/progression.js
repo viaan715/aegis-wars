@@ -3,6 +3,8 @@ import {RANKS, UNLOCKS} from './data/ranks.js';
 import {SFX} from './audio.js';
 import {$} from './dom.js';
 import {notify} from './ui/notify.js';
+import {getCrew, getCrewTier, getCrewNextTier, resetCrew, TIERS} from './crew.js';
+import {PAINTS, DECALS} from './customization.js';
 
 let playerXP=parseInt(localStorage.getItem('aegisXP')||'0');
 let playerName=localStorage.getItem('aegisName')||'Commander';
@@ -38,7 +40,7 @@ function showXPPopup(text,x,y){
   d.style.left=x+'px';d.style.top=y+'px';d.style.position='absolute';d.style.zIndex='25';
   document.body.appendChild(d);setTimeout(()=>d.remove(),1200);
 }
-export function resetXP(){if(confirm('Reset all progress?')){playerXP=0;saveXP();updateXPBar();buildProgScreen();notify('Progress reset','#e05050');}}
+export function resetXP(){if(confirm('Reset all progress?')){playerXP=0;saveXP();resetCrew();updateXPBar();buildProgScreen();notify('Progress reset','#e05050');}}
 export function resetGameProg(){if(confirm('Reset game progress?')){playerXP=0;saveXP();updateXPBar();buildProgScreen();notify('Progress reset','#e05050');}}
 
 export function isUnlocked(u){return playerXP>=u.xp;}
@@ -74,9 +76,13 @@ export function buildProgScreen(){
   });
   html+=`</div><div style="background:#0a0c06;border:1px solid #2a2a18;padding:10px 12px">
     <div class="ct">Unlocks</div>`;
-  UNLOCKS.forEach(u=>{
-    const done=isUnlocked(u);
-    const typeCol=u.type==='tank'?'#6a7ade':u.type==='ammo'?'#c8b870':u.type==='ability'?'#e07030':'#7a9a70';
+  const cosmeticEntries=[
+    ...PAINTS.filter(p=>p.key!=='standard').map(p=>({type:'paint',name:p.name,xp:p.unlockXp})),
+    ...DECALS.filter(d=>d.key!=='none').map(d=>({type:'decal',name:d.name,xp:d.unlockXp})),
+  ];
+  [...UNLOCKS,...cosmeticEntries].forEach(u=>{
+    const done=playerXP>=u.xp;
+    const typeCol=u.type==='tank'?'#6a7ade':u.type==='ammo'?'#c8b870':u.type==='ability'?'#e07030':u.type==='paint'?'#d090d0':u.type==='decal'?'#e8d870':'#7a9a70';
     html+=`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #111;font-size:10px">
       <span style="font-size:9px;background:#0e0e08;border:1px solid ${done?typeCol:'#2a2a18'};color:${done?typeCol:'#2a2a18'};padding:1px 5px">${u.type.toUpperCase()}</span>
       <span style="flex:1;color:${done?'#c8b870':'#3a3a28'}">${u.name}</span>
@@ -84,5 +90,24 @@ export function buildProgScreen(){
     </div>`;
   });
   html+=`</div></div>`;
+  html+=`<div style="background:#0a0c06;border:1px solid #2a2a18;padding:10px 12px;margin-top:8px">
+    <div class="ct">Crew roster</div>`;
+  const crew=getCrew();
+  Object.entries(crew).forEach(([role,member])=>{
+    const tier=getCrewTier(role);
+    const nextTier=getCrewNextTier(role);
+    const cpct=nextTier?Math.min(100,(member.xp-tier.xp)/(nextTier.xp-tier.xp)*100):100;
+    html+=`<div style="padding:6px 0;border-bottom:1px solid #111">
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:10px">
+        <span style="color:#c8b870">${member.role}</span>
+        <span style="color:#e8d880;font-size:9px">${tier.name}${nextTier?' · '+member.xp+'/'+nextTier.xp+' XP':' · MAX'}</span>
+      </div>
+      <div style="font-size:8px;color:#5a5a38;margin:2px 0">${member.desc}</div>
+      <div style="background:#1a1a10;height:4px;border:1px solid #2a2a18">
+        <div style="height:100%;background:#7a9a70;width:${cpct}%"></div>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
   c.innerHTML=html;
 }

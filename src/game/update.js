@@ -11,6 +11,9 @@ import {addXP} from '../progression.js';
 import {showScreen} from '../ui/screens.js';
 import {decayShake} from './shake.js';
 import {isActionDown} from '../keybinds.js';
+import {addCrewXP, getDriverSpeedMult} from '../crew.js';
+import {AMMO_KEYS, AMMO} from '../data/ammo.js';
+import {notify} from '../ui/notify.js';
 
 function buildGameOverlay(state,xpEarned){
   const overlay=$('gameOverlay');
@@ -40,19 +43,39 @@ export function update(dt){
   G.p1Reload=Math.max(0,G.p1Reload-1);G.p2Reload=Math.max(0,G.p2Reload-1);G.p1SmokeCD=Math.max(0,G.p1SmokeCD-1);
   G.artCDs=G.artCDs.map(c=>Math.max(0,c-1));
   [0,1].forEach(i=>{const r=G.artCDs[i]<=0;$('aCD'+i).textContent=r?'READY':Math.ceil(G.artCDs[i]/60)+'s';$('aCD'+i).style.color=r?'#3a8a30':'#3a3a28';$('aSlot'+i).className='aslot'+(r?' aready':'');});
+  G.crateSpawnTimer--;
+  if(G.crateSpawnTimer<=0&&G.ammoCrates.length<2){
+    let cx,cy,tries=0;
+    do{cx=40+Math.random()*(W-80);cy=40+Math.random()*(H-80);tries++;}while(solidAt(cx,cy)&&tries<20);
+    G.ammoCrates.push({x:cx,y:cy});
+    G.crateSpawnTimer=900+Math.random()*600;
+  }
+  [G.p1,G.p2].filter(p=>p&&!p.dead).forEach(p=>{
+    for(let i=G.ammoCrates.length-1;i>=0;i--){
+      const c=G.ammoCrates[i];
+      if(Math.hypot(p.x-c.x,p.y-c.y)<24){
+        const stock=p===G.p2?G.p2Stock:G.p1Stock;
+        AMMO_KEYS.forEach((k,idx)=>{stock[idx]=Math.min(AMMO[k].max,stock[idx]+Math.round(AMMO[k].max*0.3));});
+        if(p===G.p1)updateAmmoHUD();
+        G.ammoCrates.splice(i,1);
+        SFX.resupply();notify('Ammo resupplied','#5aba50');logDmg('AMMO CRATE','#5aba50');
+      }
+    }
+  });
   if(G.p1RespTimer>0){G.p1RespTimer--;$('respCD').textContent=Math.ceil(G.p1RespTimer/60);if(G.p1RespTimer<=0){G.p1=makePlayerFromTank(G.selectedTankKey,false);if(G.difficulty===-1)G.p1Stock=[99,40,60];updateAmmoHUD();$('respPanel').classList.remove('active');updateZones(G.p1);}}
   if(G.p1&&!G.p1.dead){
+    const driverMult=getDriverSpeedMult();
     const fwd=isActionDown('p1Forward')?1:isActionDown('p1Back')?-1:0;
     const turn=isActionDown('p1Right')?1:isActionDown('p1Left')?-1:0;
     if(!G.p1.isTracked&&G.p1.eng>0){
       G.p1.angle+=turn*G.p1.trv*(G.p1.eng/100);
-      if(fwd){const sp=fwd*G.p1.spd*(G.p1.eng/100)*0.65,nx=G.p1.x+Math.cos(G.p1.angle)*sp,ny=G.p1.y+Math.sin(G.p1.angle)*sp;if(!solidAt(nx,ny)){G.p1.x=Math.max(22,Math.min(W-22,nx));G.p1.y=Math.max(22,Math.min(H-22,ny));}}
+      if(fwd){const sp=fwd*G.p1.spd*driverMult*(G.p1.eng/100)*0.65,nx=G.p1.x+Math.cos(G.p1.angle)*sp,ny=G.p1.y+Math.sin(G.p1.angle)*sp;if(!solidAt(nx,ny)){G.p1.x=Math.max(22,Math.min(W-22,nx));G.p1.y=Math.max(22,Math.min(H-22,ny));}}
     }
     if(G.p1.isTracked){G.p1.trackedTimer--;if(G.p1.trackedTimer<=0){G.p1.isTracked=false;SFX.trackRepair();}}
     if(G.p1.burning){G.p1.burnTick++;if(G.p1.burnTick%60===0){spawnParticles(G.p1.x,G.p1.y,'#e07030',2,false);G.p1.eng=Math.max(0,G.p1.eng-0.5);}}
     if(G.p1.apsCd>0)G.p1.apsCd--;
     G.p1.tAngle=Math.atan2(G.mouseY-G.p1.y,G.mouseX-G.p1.x);
-    const vel=Math.abs(fwd)*G.p1.spd*(G.p1.eng/100)*0.65;
+    const vel=Math.abs(fwd)*G.p1.spd*driverMult*(G.p1.eng/100)*0.65;
     $('sGear').textContent=vel<0.1?'N':(fwd>0?vel<0.8?'1':vel<1.2?'2':vel<1.6?'3':'4':'R');
     $('sRpm').textContent=Math.round(800+vel*600);$('sSpd').textContent=Math.round(vel*32)+' km/h';
     G.engineTick++;if(G.engineTick%8===0){if(vel>0.5)SFX.engineRev();else SFX.engineIdle();}
@@ -76,7 +99,7 @@ export function update(dt){
   let ct='';G.captureZones.forEach(z=>{if([G.p1,G.p2].some(p=>p&&!p.dead&&Math.hypot(p.x-z.x,p.y-z.y)<z.r)&&z.owner!=='blue')ct='Capturing '+z.label+'...';});$('captext').textContent=ct;
   $('killsV').textContent=G.kills;$('scoreV').textContent=G.score;$('waveV').textContent=G.wave;
   if(G.blueTickets<=0){G.phase='dead';SFX.lose();}if(G.redTickets<=0){G.phase='win';SFX.rankUp();}
-  G.smokes.forEach(s=>{if(s.r<s.maxR)s.r=Math.min(s.maxR,s.r+0.85);else s.life-=0.0015;});G.smokes=G.smokes.filter(s=>s.life>0);
+  G.smokes.forEach(s=>{if(s.r<s.maxR)s.r=Math.min(s.maxR,s.r+0.85);else s.life-=0.0015;s.x+=s.vx||0;s.y+=s.vy||0;});G.smokes=G.smokes.filter(s=>s.life>0);
   for(let i=G.projectiles.length-1;i>=0;i--){
     const p=G.projectiles[i];p.trail.push({x:p.x,y:p.y});if(p.trail.length>10)p.trail.shift();
     p.x+=p.vx;p.y+=p.vy;
@@ -92,7 +115,7 @@ export function update(dt){
   if(G.enemies.length&&G.enemies.every(e=>e.dead)&&!G.spawnQueue.length){
     G.waveTimer++;
     if(G.waveTimer>110){
-      addXP(G.wave*100,W/2,H/2);G.wave++;G.waveTimer=0;
+      addXP(G.wave*100,W/2,H/2);addCrewXP('driver',10);G.wave++;G.waveTimer=0;
       if(G.wave>WCOMPS.length){G.phase='win';SFX.rankUp();addXP(500,W/2,H/2);}
       else{G.enemies=[];buildWave(G.wave);}
     }

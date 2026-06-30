@@ -28,7 +28,7 @@ export function aiUpdate(e){
     const perp=toP+Math.PI/2;e.x+=Math.cos(perp)*Math.sin(e.bobPhase)*0.8;e.y+=Math.sin(perp)*Math.sin(e.bobPhase)*0.8;
     e.x=Math.max(18,Math.min(W-18,e.x));e.y=Math.max(18,Math.min(H-18,e.y));
     const now=Date.now();
-    if(e.gun>20&&dist<240&&now-e.lastShot>e.cd){
+    if(e.gun>20&&dist<240*G.weather.visibilityMult&&now-e.lastShot>e.cd){
       if(e.ability==='rocketPod'&&e.abilityCd<=0){for(let i=-1;i<=1;i++)setTimeout(()=>{if(!e.dead)fireAI(e,tgt.x+(Math.random()-0.5)*50,tgt.y+(Math.random()-0.5)*50,'HE-GP',0.5);},i*80+80);e.abilityCd=e.maxAbilityCd||300;}
       else if(e.ability==='hellfire'&&e.abilityCd<=0){fireAI(e,tgt.x,tgt.y,'HEAT',1.8);e.abilityCd=e.maxAbilityCd||400;logDmg('HELLFIRE INBOUND!','#c03030');}
       else fireAI(e,tgt.x+(Math.random()-0.5)*60,tgt.y+(Math.random()-0.5)*60,'APFSDS-T');
@@ -47,7 +47,7 @@ export function aiUpdate(e){
     e.angle+=Math.sign(ad)*Math.min(Math.abs(ad),e.trv);
     if(dist>60){const nx=e.x+Math.cos(e.angle)*e.spd*0.4,ny=e.y+Math.sin(e.angle)*e.spd*0.4;if(!solidAt(nx,ny)){e.x=Math.max(18,Math.min(W-18,nx));e.y=Math.max(18,Math.min(H-18,ny));}}
     const now=Date.now();
-    if(e.gun>20&&dist<200&&now-e.lastShot>e.cd){
+    if(e.gun>20&&dist<200*G.weather.visibilityMult&&now-e.lastShot>e.cd){
       if(e.ability==='guidedMissile'&&e.abilityCd<=0){fireAI(e,tgt.x,tgt.y,'HEAT',1.5);e.abilityCd=e.maxAbilityCd||600;logDmg('ATGM FIRED!','#e05050');}
       else fireAI(e,tgt.x+(Math.random()-0.5)*80,tgt.y+(Math.random()-0.5)*80,'HE-GP',1.2);
       e.lastShot=now;
@@ -62,7 +62,7 @@ export function aiUpdate(e){
     else if(dist<70){const nx=e.x-Math.cos(e.angle)*e.spd*0.3,ny=e.y-Math.sin(e.angle)*e.spd*0.3;if(!solidAt(nx,ny)){e.x=Math.max(18,Math.min(W-18,nx));e.y=Math.max(18,Math.min(H-18,ny));}}
   }
   const now=Date.now();
-  if(e.gun>20&&dist<270&&now-e.lastShot>e.cd){
+  if(e.gun>20&&dist<270*G.weather.visibilityMult&&now-e.lastShot>e.cd){
     const sp=(1-e.gun/100)*0.14;const tx=tgt.x+(Math.random()-0.5)*sp*200,ty=tgt.y+(Math.random()-0.5)*sp*200;
     if(e.ability==='smokeBarrage'&&e.abilityCd<=0&&dist<150){deploySmoke(e.x,e.y,e.x,e.y-70);deploySmoke(e.x,e.y,e.x+70,e.y);e.abilityCd=e.maxAbilityCd||500;logDmg('Enemy smoke!','#888');}
     else if(e.ability==='tow'&&e.abilityCd<=0){fireAI(e,tgt.x,tgt.y,'HEAT',1.6);e.abilityCd=e.maxAbilityCd||500;logDmg('TOW MISSILE!','#e05050');}

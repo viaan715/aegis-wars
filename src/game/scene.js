@@ -8,6 +8,8 @@ import {makePlayerFromTank} from './entities.js';
 import {updateAmmoHUD, updateZones} from './combat.js';
 import {updateXPBar} from '../progression.js';
 import {showScreen} from '../ui/screens.js';
+import {notify} from '../ui/notify.js';
+import {rollWeather} from '../weather.js';
 
 export function buildScene(){
   G.terrain=MAPS[G.mapIdx].objects.map(o=>{const d=OBJDEF[o.t]||{w:20,h:16,solid:true};return{x:o.x,y:o.y,type:o.t,w:d.w,h:d.h,solid:d.solid,hp:3};});
@@ -38,12 +40,16 @@ export function startGame(){
   G.p2AmmoIdx=0;G.p2Stock=[34,12,20];G.p2Reload=0;
   G.blueTickets=100;G.redTickets=100;
   G.projectiles=[];G.particles=[];G.smokes=[];G.craters=[];G.dmgLog=[];G.enemies=[];G.waveTimer=0;
+  G.ammoCrates=[];G.crateSpawnTimer=600;
+  G.viewMode='topdown';
+  G.weather=rollWeather();
+  if(G.weather.type==='rain')notify('RAIN — visibility reduced','#7ecfb3');
   buildScene();
   G.p1=makePlayerFromTank(G.selectedTankKey,false);
   G.p2=G.localMode||G.gameMode==='online'?makePlayerFromTank('t34',true):null;
   buildWave(1);updateAmmoHUD();updateZones(G.p1);updateXPBar();
   $('pTankName').textContent=ALL_TANKS[G.selectedTankKey]?.name||'AEGIS';
-  $('tankLabel').textContent=(ALL_TANKS[G.selectedTankKey]?.era||'FUTURE')+' · '+(ALL_TANKS[G.selectedTankKey]?.nation||'🇺🇸');
+  $('tankLabel').textContent=(ALL_TANKS[G.selectedTankKey]?.era||'FUTURE')+' · '+(ALL_TANKS[G.selectedTankKey]?.nation||'🇺🇸')+(G.weather.type==='rain'?' · 🌧 RAIN':'');
   $('respPanel').classList.remove('active');
   showScreen('__game');
 }

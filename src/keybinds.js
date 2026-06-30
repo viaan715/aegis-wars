@@ -15,6 +15,7 @@ export const DEFAULT_KEYBINDS = {
   p2Fire:';', p2Smoke:'p',
   p2Ammo1:'4', p2Ammo2:'5', p2Ammo3:'6',
   pause:'Escape',
+  viewToggle:'v',
 };
 
 export const ACTION_LABELS = {
@@ -27,6 +28,7 @@ export const ACTION_LABELS = {
   p2Fire:'P2 Fire', p2Smoke:'P2 Smoke',
   p2Ammo1:'P2 Ammo Slot 1', p2Ammo2:'P2 Ammo Slot 2', p2Ammo3:'P2 Ammo Slot 3',
   pause:'Pause',
+  viewToggle:'Toggle Gunner Scope',
 };
 
 const ARROW_FALLBACK = {p1Forward:'ArrowUp', p1Back:'ArrowDown', p1Left:'ArrowLeft', p1Right:'ArrowRight'};

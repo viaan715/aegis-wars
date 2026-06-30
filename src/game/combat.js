@@ -6,6 +6,7 @@ import {addXP} from '../progression.js';
 import {ART_CD, W, H} from '../constants.js';
 import {G} from './state.js';
 import {addShake} from './shake.js';
+import {addCrewXP, getGunnerPenMult} from '../crew.js';
 
 // ── ARMOR ─────────────────────────────────────────────────
 export function getArmor(v,hitA){
@@ -30,6 +31,7 @@ export function applyHit(v,proj,hx,hy){
   G.craters.push({x:hx,y:hy,r:am===AMMO['HE-GP']?14:4,life:1});
   if(!penned){logDmg(`${face} ${Math.round(pen)}/${Math.round(armor)}mm RICO`,'#4a4a38');SFX.ricochet();return;}
   SFX.shellHit();
+  if(proj.fromPlayer&&!proj.fromP2)addCrewXP('gunner',3);
   const isPlayerVeh=v===G.p1||v===G.p2;
   addShake(isPlayerVeh?4:1.5);
   const r=Math.random();let msg='';
@@ -80,8 +82,10 @@ export function fire(from,tx,ty,ammoType,isP2f){
   const stock=isP2f?G.p2Stock:G.p1Stock,aIdx=isP2f?G.p2AmmoIdx:G.p1AmmoIdx;
   if(stock[aIdx]<=0){logDmg('NO AMMO','#e05050');return;}
   stock[aIdx]--;updateAmmoHUD();SFX.shoot();
+  if(!isP2f)addCrewXP('loader',1);
+  const pm=isP2f?1:getGunnerPenMult();
   const a=Math.atan2(ty-from.y,tx-from.x),spd=AMMO[ammoType].vel*(G.difficulty===-1?1.6:1);
-  G.projectiles.push({x:from.x+Math.cos(a)*26,y:from.y+Math.sin(a)*26,ox:from.x,oy:from.y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,ammoType,fromPlayer:true,fromP2:isP2f,pm:1,trail:[]});
+  G.projectiles.push({x:from.x+Math.cos(a)*26,y:from.y+Math.sin(a)*26,ox:from.x,oy:from.y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,ammoType,fromPlayer:true,fromP2:isP2f,pm,trail:[]});
   spawnParticles(from.x+Math.cos(a)*26,from.y+Math.sin(a)*26,'#e8e8b0',5,false);
 }
 
@@ -92,7 +96,7 @@ export function fireAI(from,tx,ty,ammoType,pm){
 }
 
 export function spawnParticles(x,y,col,n,big){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(big?2:0.5)+Math.random()*(big?5:2);G.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,col,sz:big?3:1.5});}}
-export function deploySmoke(fx,fy,tx,ty){SFX.smoke();const a=Math.atan2(ty-fy,tx-fx),px=fx+Math.cos(a)*60,py=fy+Math.sin(a)*60;for(let i=-1;i<=1;i++)G.smokes.push({x:px+Math.cos(a+i*0.5)*25,y:py+Math.sin(a+i*0.5)*25,r:0,maxR:44,life:1});}
+export function deploySmoke(fx,fy,tx,ty){SFX.smoke();const a=Math.atan2(ty-fy,tx-fx),px=fx+Math.cos(a)*60,py=fy+Math.sin(a)*60;for(let i=-1;i<=1;i++)G.smokes.push({x:px+Math.cos(a+i*0.5)*25,y:py+Math.sin(a+i*0.5)*25,r:0,maxR:44,life:1,vx:G.weather.windX,vy:G.weather.windY});}
 export function inSmoke(x,y){return G.smokes.some(s=>Math.hypot(s.x-x,s.y-y)<s.r);}
 export function solidAt(x,y){return G.terrain.some(t=>t.solid&&Math.abs(x-t.x)<t.w/2+8&&Math.abs(y-t.y)<t.h/2+8);}
 export function updateZones(v){if(v!==G.p1)return;$('zG').style.width=(v.gun||100)+'%';$('zE').style.width=(v.eng||100)+'%';$('zTr').style.width=(v.trk||100)+'%';$('zC').style.width=(v.crew/v.maxCrew*100)+'%';}

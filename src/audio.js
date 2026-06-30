@@ -68,4 +68,5 @@ export const SFX={
   drone:()=>{playTone(400+Math.random()*100,'square',0.15,0.05);},
   trackRepair:()=>{playTone(200,'square',0.2,0.1);setTimeout(()=>playTone(300,'square',0.2,0.1),120);},
   waveIn:()=>{[220,277,330].forEach((f,i)=>setTimeout(()=>playTone(f,'sawtooth',0.3,0.2),i*100));},
+  resupply:()=>{playTone(440,'sine',0.3,0.08);setTimeout(()=>playTone(660,'sine',0.3,0.12),80);},
 };
