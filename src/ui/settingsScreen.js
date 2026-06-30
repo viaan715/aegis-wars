@@ -1,6 +1,9 @@
 import {$} from '../dom.js';
-import {getSettings, setVolume, setMuted, setColorblind, setScreenShake} from '../settings.js';
+import {getSettings, setVolume, setMuted, setColorblind, setScreenShake, setGraphicsQuality} from '../settings.js';
 import {keybinds, ACTION_LABELS, DEFAULT_KEYBINDS, setKey, resetKeybinds} from '../keybinds.js';
+import {exportSave, importSaveFromFile} from '../saveData.js';
+import {notify} from './notify.js';
+import {refreshGamepadStatus} from '../game/gamepad.js';
 
 function keyDisplayName(k){
   if(k===' ')return 'SPACE';
@@ -61,7 +64,9 @@ export function buildSettingsScreen(){
   $('muteToggle').checked = s.muted;
   $('colorblindToggle').checked = s.colorblind;
   $('screenShakeToggle').checked = s.screenShake;
+  $('graphicsQualitySelect').value = s.graphicsQuality;
   buildKeybindList();
+  refreshGamepadStatus();
 }
 
 export function initSettingsControls(){
@@ -69,5 +74,19 @@ export function initSettingsControls(){
   $('muteToggle').addEventListener('change', e=>setMuted(e.target.checked));
   $('colorblindToggle').addEventListener('change', e=>setColorblind(e.target.checked));
   $('screenShakeToggle').addEventListener('change', e=>setScreenShake(e.target.checked));
+  $('graphicsQualitySelect').addEventListener('change', e=>setGraphicsQuality(e.target.value));
   $('keybindReset').addEventListener('click', ()=>{resetKeybinds();buildKeybindList();});
+
+  $('saveExportBtn').addEventListener('click', ()=>{exportSave();notify('Save exported','#7a9a70');});
+  $('saveImportBtn').addEventListener('click', ()=>$('saveImportInput').click());
+  $('saveImportInput').addEventListener('change', e=>{
+    const file = e.target.files[0];
+    e.target.value = '';
+    if(!file) return;
+    importSaveFromFile(file).then(()=>{
+      if(confirm('Save imported. Reload now to apply it?')) location.reload();
+    }).catch(err=>{
+      notify(err.message || 'Import failed','#e05050');
+    });
+  });
 }

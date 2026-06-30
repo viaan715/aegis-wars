@@ -53,6 +53,24 @@
         <div id="keybindList"></div>
         <button class="btn" style="width:100%;margin-top:8px;min-width:0" id="keybindReset">RESET TO DEFAULTS</button>
       </div>
+      <div class="prog-card">
+        <h3>Graphics &amp; Controller</h3>
+        <div class="setting-row"><span>Graphics Quality</span>
+          <select id="graphicsQualitySelect">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="setting-row"><span>Controller</span><span id="gamepadStatus" style="color:#5a5a38">Not connected</span></div>
+      </div>
+      <div class="prog-card">
+        <h3>Save Data</h3>
+        <div style="font-size:9px;color:#5a5a38;margin-bottom:8px">Back up your progress to a file, or restore it on a new device/browser.</div>
+        <button class="btn" style="width:100%;min-width:0" id="saveExportBtn">EXPORT SAVE</button>
+        <button class="btn" style="width:100%;margin-top:6px;min-width:0" id="saveImportBtn">IMPORT SAVE</button>
+        <input type="file" id="saveImportInput" accept="application/json,.json" style="display:none">
+      </div>
     </div>
     <div style="text-align:center;margin-top:10px">
       <button class="btn" id="settingsBack">← BACK</button>

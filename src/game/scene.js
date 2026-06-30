@@ -11,6 +11,7 @@ import {showScreen} from '../ui/screens.js';
 import {notify} from '../ui/notify.js';
 import {rollWeather} from '../weather.js';
 import {rebuildWorld3D} from './render3d.js';
+import {resetPools} from './pools.js';
 
 export function buildScene(){
   G.terrain=MAPS[G.mapIdx].objects.map(o=>{const d=OBJDEF[o.t]||{w:20,h:16,solid:true};return{x:o.x,y:o.y,type:o.t,w:d.w,h:d.h,solid:d.solid,hp:3};});
@@ -41,7 +42,7 @@ export function startGame(){
   G.p1AmmoIdx=0;G.p1Stock=G.difficulty===-1?[99,40,60]:[34,12,20];G.p1Reload=0;G.p1SmokeCD=0;G.p1Lives=G.difficulty===-1?6:3;G.p1RespTimer=0;
   G.p2AmmoIdx=0;G.p2Stock=[34,12,20];G.p2Reload=0;
   G.blueTickets=100;G.redTickets=100;
-  G.projectiles=[];G.particles=[];G.smokes=[];G.craters=[];G.dmgLog=[];G.enemies=[];G.waveTimer=0;
+  resetPools();G.smokes=[];G.craters=[];G.dmgLog=[];G.enemies=[];G.waveTimer=0;
   G.ammoCrates=[];G.crateSpawnTimer=600;
   G.viewMode='topdown';
   G.weather=rollWeather();

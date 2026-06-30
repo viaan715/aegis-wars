@@ -6,6 +6,7 @@ const DEFAULTS = {
   muted: false,
   colorblind: false, // swaps team-red for an orange-based colorblind-safe palette
   screenShake: true,
+  graphicsQuality: 'high', // 'low' | 'medium' | 'high' -- see graphicsQuality.js
 };
 
 function load(){
@@ -52,5 +53,10 @@ export function setColorblind(b){
 
 export function setScreenShake(b){
   settings.screenShake = !!b;
+  save();
+}
+
+export function setGraphicsQuality(q){
+  settings.graphicsQuality = ['low','medium','high'].includes(q) ? q : 'high';
   save();
 }

@@ -8,6 +8,7 @@ import {startSolo, startLocal} from './game/scene.js';
 import {initInput} from './game/input.js';
 import {startLoop} from './game/loop.js';
 import {initRender3D} from './game/render3d.js';
+import {initGamepad} from './game/gamepad.js';
 import {runLoadingScreen} from './ui/loading.js';
 import {initSettingsControls} from './ui/settingsScreen.js';
 import {pauseGame} from './ui/pauseMenu.js';
@@ -60,6 +61,7 @@ $('squadmateToggle').addEventListener('click',()=>{
 buildTankSelect();
 initRender3D();
 initInput();
+initGamepad();
 initSettingsControls();
 startLoop();
 updateXPBar();

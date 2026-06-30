@@ -4,6 +4,7 @@
 // so everything that multiple modules need to read AND write lives as
 // properties on this one object instead. Values and semantics are unchanged.
 import {W,H} from '../constants.js';
+import {particlePool, projectilePool} from './pools.js';
 
 const TANK_STORAGE_KEY='aegisSelectedTank';
 let _selectedTankKey=localStorage.getItem(TANK_STORAGE_KEY)||'aegis';
@@ -22,9 +23,14 @@ export const G={
   score:0,kills:0,wave:1,
 
   p1:null,p2:null,
-  enemies:[],projectiles:[],particles:[],smokes:[],craters:[],terrain:[],captureZones:[],
+  // projectiles/particles are pool-backed (see pools.js) -- this array
+  // reference must never be reassigned (G.projectiles=[] etc), only
+  // cleared via resetPools(), so the pool's `live` array stays in sync
+  // with what every consumer (combat, update, render3d) is iterating.
+  enemies:[],projectiles:projectilePool.live,particles:particlePool.live,smokes:[],craters:[],terrain:[],captureZones:[],
 
   mouseX:W/2,mouseY:H/2,keys:{},
+  gamepad:{active:false,fwd:0,turn:0},
 
   p1AmmoIdx:0,p1Stock:[34,12,20],p1Reload:0,p1SmokeCD:0,p1Lives:3,p1RespTimer:0,
   p2AmmoIdx:0,p2Stock:[34,12,20],p2Reload:0,

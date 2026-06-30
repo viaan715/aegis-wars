@@ -16,6 +16,8 @@ import {pal} from '../theme.js';
 import {getDecal} from '../customization.js';
 import {drawMinimap} from './render.js';
 import {shakeOffset} from './shake.js';
+import {getQualityTier} from '../graphicsQuality.js';
+import {onSettingsChange} from '../settings.js';
 
 // World mapping: 3D (x,z) = game (x - W/2, y - H/2); 3D y is "up".
 export const toWorldX = gx => gx - W/2;
@@ -23,7 +25,7 @@ export const toWorldZ = gy => gy - H/2;
 export const toGameX = wx => wx + W/2;
 export const toGameY = wz => wz + H/2;
 
-let renderer, scene, camTop, camCockpit;
+let renderer, scene, camTop, camCockpit, sunLight;
 const groundPlane = new THREE.Plane(new THREE.Vector3(0,1,0), 0);
 const raycaster = new THREE.Raycaster();
 
@@ -49,6 +51,7 @@ export function initRender3D(){
   const ambient = new THREE.AmbientLight(0xffffff, 0.55);
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xfff4d8, 1.05);
+  sunLight = sun;
   sun.position.set(-220,360,160);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024,1024);
@@ -82,6 +85,20 @@ export function initRender3D(){
   particleGeom.setAttribute('color', new THREE.BufferAttribute(particleColors,3));
   particlePoints = new THREE.Points(particleGeom, new THREE.PointsMaterial({size:3.2, vertexColors:true, transparent:true, opacity:0.9, sizeAttenuation:true}));
   scene.add(particlePoints);
+
+  applyGraphicsQuality();
+  onSettingsChange(applyGraphicsQuality);
+}
+
+// Camera far-plane and shadow rendering are cheap to flip at runtime (no
+// renderer/geometry rebuild needed), so the graphics-quality setting
+// applies live the moment the player changes it, not just on next match.
+function applyGraphicsQuality(){
+  const tier = getQualityTier();
+  camTop.far = tier.drawDistance; camTop.updateProjectionMatrix();
+  camCockpit.far = tier.drawDistance; camCockpit.updateProjectionMatrix();
+  renderer.shadowMap.enabled = tier.shadows;
+  if(sunLight) sunLight.castShadow = tier.shadows;
 }
 
 // ── World rebuild (called when buildScene() sets new terrain/zones) ──

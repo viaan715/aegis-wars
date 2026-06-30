@@ -15,6 +15,7 @@ import {addCrewXP, getDriverSpeedMult} from '../crew.js';
 import {AMMO_KEYS, AMMO} from '../data/ammo.js';
 import {notify} from '../ui/notify.js';
 import {unlockAchievement} from '../achievements.js';
+import {particlePool, projectilePool} from './pools.js';
 
 function buildGameOverlay(state,xpEarned){
   const overlay=$('gameOverlay');
@@ -66,8 +67,13 @@ export function update(dt){
   if(G.p1RespTimer>0){G.p1RespTimer--;$('respCD').textContent=Math.ceil(G.p1RespTimer/60);if(G.p1RespTimer<=0){G.p1=makePlayerFromTank(G.selectedTankKey,false);if(G.difficulty===-1)G.p1Stock=[99,40,60];updateAmmoHUD();$('respPanel').classList.remove('active');updateZones(G.p1);}}
   if(G.p1&&!G.p1.dead){
     const driverMult=getDriverSpeedMult();
-    const fwd=isActionDown('p1Forward')?1:isActionDown('p1Back')?-1:0;
-    const turn=isActionDown('p1Right')?1:isActionDown('p1Left')?-1:0;
+    // Gamepad left stick gives analog forward/turn; it only overrides
+    // keyboard while actively deflected (G.gamepad.fwd/turn reset to 0
+    // outside the deadzone in gamepad.js), so keyboard and pad don't fight.
+    let fwd=isActionDown('p1Forward')?1:isActionDown('p1Back')?-1:0;
+    let turn=isActionDown('p1Right')?1:isActionDown('p1Left')?-1:0;
+    if(G.gamepad.fwd)fwd=G.gamepad.fwd;
+    if(G.gamepad.turn)turn=G.gamepad.turn;
     if(!G.p1.isTracked&&G.p1.eng>0){
       G.p1.angle+=turn*G.p1.trv*(G.p1.eng/100);
       if(fwd){const sp=fwd*G.p1.spd*driverMult*(G.p1.eng/100)*0.65,nx=G.p1.x+Math.cos(G.p1.angle)*sp,ny=G.p1.y+Math.sin(G.p1.angle)*sp;if(!solidAt(nx,ny)){G.p1.x=Math.max(22,Math.min(W-22,nx));G.p1.y=Math.max(22,Math.min(H-22,ny));}}
@@ -101,18 +107,25 @@ export function update(dt){
   $('killsV').textContent=G.kills;$('scoreV').textContent=G.score;$('waveV').textContent=G.wave;
   if(G.blueTickets<=0){G.phase='dead';SFX.lose();}if(G.redTickets<=0){G.phase='win';SFX.rankUp();}
   G.smokes.forEach(s=>{if(s.r<s.maxR)s.r=Math.min(s.maxR,s.r+0.85);else s.life-=0.0015;s.x+=s.vx||0;s.y+=s.vy||0;});G.smokes=G.smokes.filter(s=>s.life>0);
+  // Both loops walk backward and release pool slots in place (swap-pop)
+  // instead of Array#splice/filter, so a big fight's worth of projectiles
+  // and particles never reallocates the backing array each frame.
   for(let i=G.projectiles.length-1;i>=0;i--){
-    const p=G.projectiles[i];p.trail.push({x:p.x,y:p.y});if(p.trail.length>10)p.trail.shift();
+    const p=G.projectiles[i];
     p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0||p.x>W||p.y<0||p.y>H){G.projectiles.splice(i,1);continue;}
+    if(p.x<0||p.x>W||p.y<0||p.y>H){projectilePool.releaseAt(i);continue;}
     let hit=false;
-    if(!p.fromAI){for(const t of G.terrain){if(t.solid&&Math.abs(p.x-t.x)<t.w/2&&Math.abs(p.y-t.y)<t.h/2){SFX.shellHit();spawnParticles(p.x,p.y,'#c0c0a0',5,false);G.craters.push({x:p.x,y:p.y,r:3,life:1});if(t.hp>0)t.hp--;if(t.hp<=0)t.solid=false;G.projectiles.splice(i,1);hit=true;break;}}}
+    if(!p.fromAI){for(const t of G.terrain){if(t.solid&&Math.abs(p.x-t.x)<t.w/2&&Math.abs(p.y-t.y)<t.h/2){SFX.shellHit();spawnParticles(p.x,p.y,'#c0c0a0',5,false);G.craters.push({x:p.x,y:p.y,r:3,life:1});if(t.hp>0)t.hp--;if(t.hp<=0)t.solid=false;projectilePool.releaseAt(i);hit=true;break;}}}
     if(hit)continue;
     const targets=p.fromAI?[G.p1,G.p2].filter(v=>v&&!v.dead):G.enemies.filter(v=>!v.dead);
-    for(const v of targets){const hw=(v.cat==='helo'||v.cat==='drone')?v.w/2+6:v.w/2+4,hh=(v.cat==='helo'||v.cat==='drone')?v.h/2+6:v.h/2+4;if(!v.dead&&Math.abs(p.x-v.x)<hw&&Math.abs(p.y-v.y)<hh){applyHit(v,p,p.x,p.y);G.projectiles.splice(i,1);hit=true;break;}}
+    for(const v of targets){const hw=(v.cat==='helo'||v.cat==='drone')?v.w/2+6:v.w/2+4,hh=(v.cat==='helo'||v.cat==='drone')?v.h/2+6:v.h/2+4;if(!v.dead&&Math.abs(p.x-v.x)<hw&&Math.abs(p.y-v.y)<hh){applyHit(v,p,p.x,p.y);projectilePool.releaseAt(i);hit=true;break;}}
     if(hit)continue;
   }
-  G.particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vx*=0.88;p.vy*=0.88;p.life-=0.022;});G.particles=G.particles.filter(p=>p.life>0);
+  for(let i=G.particles.length-1;i>=0;i--){
+    const p=G.particles[i];
+    p.x+=p.vx;p.y+=p.vy;p.vx*=0.88;p.vy*=0.88;p.life-=0.022;
+    if(p.life<=0)particlePool.releaseAt(i);
+  }
   if(G.enemies.length&&G.enemies.every(e=>e.dead)&&!G.spawnQueue.length){
     G.waveTimer++;
     if(G.waveTimer>110){
