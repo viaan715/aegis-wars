@@ -48,4 +48,9 @@ export const G={
   crateSpawnTimer:600,
 
   viewMode:'topdown', // 'topdown' | 'cockpit'
+
+  // Squadmate command for the solo-mode AI ally (G.p2 doubling as a
+  // friendly unit): {type:'move',x,y} or {type:'focus',target:enemyRef}
+  allyCommand:null,
+  allySquadmate:false,
 };

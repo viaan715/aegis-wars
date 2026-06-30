@@ -84,7 +84,7 @@ export function update(dt){
     const fwd2=isActionDown('p2Forward')?1:isActionDown('p2Back')?-1:0,turn2=isActionDown('p2Right')?1:isActionDown('p2Left')?-1:0;
     if(!G.p2.isTracked&&G.p2.eng>0){G.p2.angle+=turn2*G.p2.trv;if(fwd2){const sp=fwd2*G.p2.spd*0.65,nx=G.p2.x+Math.cos(G.p2.angle)*sp,ny=G.p2.y+Math.sin(G.p2.angle)*sp;if(!solidAt(nx,ny)){G.p2.x=Math.max(22,Math.min(W-22,nx));G.p2.y=Math.max(22,Math.min(H-22,ny));}}}
     G.p2.tAngle=G.p2.angle;
-  }else if(G.p2&&G.gameMode==='online')p2AiUpdate();
+  }else if(G.p2&&(G.gameMode==='online'||G.p2.isAlly))p2AiUpdate();
   G.enemies.forEach(e=>aiUpdate(e));
   G.captureZones.forEach(z=>{
     const pl=[G.p1,G.p2].filter(p=>p&&!p.dead&&Math.hypot(p.x-z.x,p.y-z.y)<z.r);

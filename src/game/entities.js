@@ -4,23 +4,25 @@ import {ETYPES} from '../data/enemies.js';
 import {G} from './state.js';
 import {pal} from '../theme.js';
 import {getCustomization, getPaint} from '../customization.js';
+import {getPersonality} from './aiPersonality.js';
 
-export function makePlayerFromTank(key,isP2){
+export function makePlayerFromTank(key,isP2,isAlly){
   const m=MAPS[G.mapIdx];const sp=isP2?m.spawnP2:m.spawnP;
   const t=ALL_TANKS[key]||ALL_TANKS.aegis;
   const paint=isP2?null:getPaint(getCustomization().paint);
+  const recolor=isP2&&!isAlly;
   return{x:sp.x+(Math.random()-0.5)*20,y:sp.y,angle:isP2?-Math.PI/4:-Math.PI/2,tAngle:isP2?-Math.PI/4:-Math.PI/2,
     spd:t.spd,trv:t.trv,w:t.w,h:t.h,
-    col:isP2?pal().redMid:(paint&&paint.col?paint.col:t.col),
-    drk:isP2?pal().redDark:(paint&&paint.drk?paint.drk:t.drk),
+    col:recolor?pal().redMid:(paint&&paint.col?paint.col:t.col),
+    drk:recolor?pal().redDark:(paint&&paint.drk?paint.drk:t.drk),
     af:isP2?[...t.af]:t.af.map(v=>G.difficulty===-1?Math.round(v*1.5):v),
     as:isP2?[...t.as]:t.as.map(v=>G.difficulty===-1?Math.round(v*1.5):v),
     ar:isP2?[...t.ar]:t.ar.map(v=>G.difficulty===-1?Math.round(v*1.5):v),
     crew:t.crew,maxCrew:t.crew,eng:100,gun:100,trk:100,
-    dead:false,burning:false,burnTick:0,isPlayer:true,isP2,
-    isTracked:false,trackedTimer:0,team:isP2?'red':'blue',
+    dead:false,burning:false,burnTick:0,isPlayer:true,isP2,isAlly:!!isAlly,
+    isTracked:false,trackedTimer:0,team:recolor?'red':'blue',
     apsActive:t.ability==='aps'||t.ability==='aps360',apsCd:0,
-    tankName:t.name,era:t.era,nation:t.nation,
+    tankName:(isAlly?'ALLY ':'')+t.name,era:t.era,nation:t.nation,
     decal:isP2?'none':getCustomization().decal};
 }
 
@@ -33,5 +35,6 @@ export function makeEnemy(typeKey,x,y){
     pts:t.pts,role:t.role,cd:(t.cd||2000)*(1-Math.max(0,G.difficulty)*0.12)*(G.difficulty===-1?1.6:1),pm:t.pm||1,
     lastShot:0,dead:false,burning:false,burnTick:0,isTracked:false,trackedTimer:0,
     team:'red',isAI:true,ability:t.ability||null,abilityCd:0,maxAbilityCd:t.abilityCd||t.maxAbilityCd||400,
-    apsActive:t.apsActive||false,apsCd:0,bobPhase:Math.random()*Math.PI*2,diving:false};
+    apsActive:t.apsActive||false,apsCd:0,bobPhase:Math.random()*Math.PI*2,diving:false,
+    flankSide:Math.random()<0.5?1:-1,personality:getPersonality(t.role),retreating:false};
 }

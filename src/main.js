@@ -12,6 +12,7 @@ import {runLoadingScreen} from './ui/loading.js';
 import {initSettingsControls} from './ui/settingsScreen.js';
 import {pauseGame} from './ui/pauseMenu.js';
 import {getSettings, onSettingsChange} from './settings.js';
+import {G} from './game/state.js';
 
 // ── Wire up screen navigation / menu buttons (replaces the original's
 // inline onclick="..." attributes, which don't work against module-scoped
@@ -46,6 +47,11 @@ $('dH').addEventListener('click',()=>setDiff(1));
 $('dB').addEventListener('click',()=>setDiff(2));
 $('soloDeploy').addEventListener('click',()=>startSolo());
 $('soloBack').addEventListener('click',()=>showScreen('sMenu'));
+$('squadmateToggle').addEventListener('click',()=>{
+  G.allySquadmate=!G.allySquadmate;
+  $('squadmateToggle').textContent='AI SQUADMATE: '+(G.allySquadmate?'ON':'OFF');
+  $('squadmateToggle').classList.toggle('sel',G.allySquadmate);
+});
 
 // ── Init ─────────────────────────────────────────────────
 buildTankSelect();

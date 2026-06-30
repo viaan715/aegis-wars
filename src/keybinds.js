@@ -16,6 +16,7 @@ export const DEFAULT_KEYBINDS = {
   p2Ammo1:'4', p2Ammo2:'5', p2Ammo3:'6',
   pause:'Escape',
   viewToggle:'v',
+  allyFocus:'t',
 };
 
 export const ACTION_LABELS = {
@@ -29,6 +30,7 @@ export const ACTION_LABELS = {
   p2Ammo1:'P2 Ammo Slot 1', p2Ammo2:'P2 Ammo Slot 2', p2Ammo3:'P2 Ammo Slot 3',
   pause:'Pause',
   viewToggle:'Toggle Gunner Scope',
+  allyFocus:'Ally: Focus Target (at cursor)',
 };
 
 const ARROW_FALLBACK = {p1Forward:'ArrowUp', p1Back:'ArrowDown', p1Left:'ArrowLeft', p1Right:'ArrowRight'};

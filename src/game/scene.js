@@ -47,8 +47,11 @@ export function startGame(){
   G.weather=rollWeather();
   if(G.weather.type==='rain')notify('RAIN — visibility reduced','#7ecfb3');
   buildScene();
+  G.allyCommand=null;
   G.p1=makePlayerFromTank(G.selectedTankKey,false);
-  G.p2=G.localMode||G.gameMode==='online'?makePlayerFromTank('t34',true):null;
+  G.p2=G.localMode||G.gameMode==='online'?makePlayerFromTank('t34',true)
+      :(G.gameMode==='solo'&&G.allySquadmate)?makePlayerFromTank('sherman',true,true)
+      :null;
   buildWave(1);updateAmmoHUD();updateZones(G.p1);updateXPBar();
   $('pTankName').textContent=ALL_TANKS[G.selectedTankKey]?.name||'AEGIS';
   $('tankLabel').textContent=(ALL_TANKS[G.selectedTankKey]?.era||'FUTURE')+' · '+(ALL_TANKS[G.selectedTankKey]?.nation||'🇺🇸')+(G.weather.type==='rain'?' · 🌧 RAIN':'');
