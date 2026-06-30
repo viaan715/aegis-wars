@@ -4,6 +4,7 @@ import {MAPS} from '../data/maps.js';
 import {getPlayerXP, buildProgScreen} from '../progression.js';
 import {notify} from './notify.js';
 import {buildTankSelect} from './tankSelect.js';
+import {buildSettingsScreen} from './settingsScreen.js';
 import {G} from '../game/state.js';
 
 // Build map selection buttons (runs once, at module load — mirrors the
@@ -37,8 +38,9 @@ export function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
   if(id==='sProg'){buildProgScreen();}
   if(id==='sSolo'){buildTankSelect();updateMapBtns();}
+  if(id==='sSettings'){buildSettingsScreen();}
   if($(id))$(id).classList.remove('hidden');
-  const gameElements=['statsbl','capbar','killshud','artbar','zonepanel','ammohud','mmwrap','dmglog','xpbar-wrap','tankLabel','controls','respPanel'];
+  const gameElements=['statsbl','capbar','killshud','artbar','zonepanel','ammohud','mmwrap','dmglog','xpbar-wrap','tankLabel','controls','respPanel','pauseBtn'];
   gameElements.forEach(el=>{const e=$(el);if(e)e.style.display=id==='__game'?'':'none';});
   if(id==='__game'){
     $('statsbl').style.display='';$('capbar').style.display='';$('killshud').style.display='';

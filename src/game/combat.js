@@ -5,6 +5,7 @@ import {notify} from '../ui/notify.js';
 import {addXP} from '../progression.js';
 import {ART_CD, W, H} from '../constants.js';
 import {G} from './state.js';
+import {addShake} from './shake.js';
 
 // ── ARMOR ─────────────────────────────────────────────────
 export function getArmor(v,hitA){
@@ -29,8 +30,9 @@ export function applyHit(v,proj,hx,hy){
   G.craters.push({x:hx,y:hy,r:am===AMMO['HE-GP']?14:4,life:1});
   if(!penned){logDmg(`${face} ${Math.round(pen)}/${Math.round(armor)}mm RICO`,'#4a4a38');SFX.ricochet();return;}
   SFX.shellHit();
-  const r=Math.random();let msg='';
   const isPlayerVeh=v===G.p1||v===G.p2;
+  addShake(isPlayerVeh?4:1.5);
+  const r=Math.random();let msg='';
   const easyMode=G.difficulty===-1&&isPlayerVeh;
   if(am===AMMO['HE-GP']){v.eng=Math.max(0,v.eng-(easyMode?12:30));v.gun=Math.max(0,v.gun-(easyMode?10:25));if(r<(easyMode?0.1:0.4))v.crew=Math.max(0,v.crew-1);msg='HE DMG';}
   else if(r<0.22){if(!easyMode||Math.random()<0.3)v.crew=Math.max(0,v.crew-1);msg='CREW';}
@@ -44,13 +46,13 @@ export function applyHit(v,proj,hx,hy){
   else if(v.isAI){
     if(v.crew<=0||(v.eng<=0&&v.burning)){
       const xpAmt=v.pts;const ex=v.x,ey=v.y;
-      setTimeout(()=>{if(!v.dead){v.dead=true;SFX.explosion();spawnParticles(ex,ey,'#e07030',30,true);G.kills++;G.score+=xpAmt;addXP(Math.round(xpAmt/5),ex,ey);}},300);
+      setTimeout(()=>{if(!v.dead){v.dead=true;SFX.explosion();addShake(5);spawnParticles(ex,ey,'#e07030',30,true);G.kills++;G.score+=xpAmt;addXP(Math.round(xpAmt/5),ex,ey);}},300);
     }
   }
 }
 
 export function killPlayer(v){
-  v.dead=true;SFX.explosion();
+  v.dead=true;SFX.explosion();addShake(6);
   if(v===G.p1){
     G.p1Lives--;
     if(G.p1Lives<=0){G.phase='dead';SFX.lose();}
@@ -65,7 +67,7 @@ export function callArty(tx,ty,slot){
     if(G.phase!=='playing'){clearInterval(iv);return;}
     const ix=Math.max(10,Math.min(W-10,tx+(Math.random()-0.5)*88));
     const iy=Math.max(10,Math.min(H-10,ty+(Math.random()-0.5)*88));
-    SFX.arty();spawnParticles(ix,iy,'#e07030',18,true);G.craters.push({x:ix,y:iy,r:16,life:1});
+    SFX.arty();addShake(3);spawnParticles(ix,iy,'#e07030',18,true);G.craters.push({x:ix,y:iy,r:16,life:1});
     [G.p1,G.p2,...G.enemies].filter(v=>v&&!v.dead).forEach(v=>{
       if(Math.hypot(v.x-ix,v.y-iy)<30){v.eng=Math.max(0,v.eng-18);if(Math.random()<0.3)v.crew=Math.max(0,v.crew-1);
         if(v===G.p1||v===G.p2){updateZones(v);if(v.crew<=0)killPlayer(v);}

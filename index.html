@@ -8,8 +8,19 @@
 
 <div id="notif"></div>
 
+<!-- LOADING -->
+<div class="screen" id="sLoading">
+  <div class="title" style="font-size:30px">⚔</div>
+  <div class="sub" id="loadingStatus">INITIALIZING TACTICAL SYSTEMS...</div>
+  <div style="width:260px;margin-top:10px">
+    <div style="width:100%;height:6px;background:#1a1a10;border:1px solid #2a2a18">
+      <div id="loadingFill" style="height:100%;width:0%;background:linear-gradient(90deg,#c8b870,#e8d880);transition:width 0.15s"></div>
+    </div>
+  </div>
+</div>
+
 <!-- MENU -->
-<div class="screen" id="sMenu">
+<div class="screen hidden" id="sMenu">
   <div class="title" style="font-size:36px">⚔</div>
   <div class="sub">FULL SPECTRUM WARFARE</div>
   <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
@@ -17,8 +28,34 @@
     <button class="btn b" id="btnFriends">[ FRIENDS & LOBBY ]</button>
     <button class="btn" id="btnLocal">[ LOCAL SPLITSCREEN ]</button>
     <button class="btn y" id="btnProg">[ PROGRESSION & XP ]</button>
+    <button class="btn" id="btnSettings">[ SETTINGS ]</button>
   </div>
   <div style="margin-top:14px;font-size:9px;color:#3a3a20;letter-spacing:1px" id="menuRank"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen hidden" id="sSettings" style="padding:10px;align-items:flex-start;overflow-y:auto">
+  <div style="width:100%;max-width:660px">
+    <div style="font-size:18px;color:#e8d880;letter-spacing:3px;margin-bottom:4px;text-align:center">SETTINGS</div>
+    <div style="font-size:9px;color:#4a4a30;letter-spacing:3px;margin-bottom:14px;text-align:center">AUDIO · ACCESSIBILITY · CONTROLS</div>
+    <div class="prog-grid">
+      <div class="prog-card">
+        <h3>Audio &amp; Accessibility</h3>
+        <div class="setting-row"><span>Volume</span><input type="range" id="volumeSlider" min="0" max="100" value="80"></div>
+        <div class="setting-row"><span>Mute SFX</span><input type="checkbox" id="muteToggle"></div>
+        <div class="setting-row"><span>Colorblind Mode</span><input type="checkbox" id="colorblindToggle"></div>
+        <div class="setting-row"><span>Screen Shake</span><input type="checkbox" id="screenShakeToggle"></div>
+      </div>
+      <div class="prog-card">
+        <h3>Keybinds</h3>
+        <div id="keybindList"></div>
+        <button class="btn" style="width:100%;margin-top:8px;min-width:0" id="keybindReset">RESET TO DEFAULTS</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="btn" id="settingsBack">← BACK</button>
+    </div>
+  </div>
 </div>
 
 <!-- PROGRESSION SCREEN -->
@@ -149,8 +186,10 @@
   <div id="xpbar-rank">PRIVATE · 0 XP</div>
 </div>
 <div id="tankLabel" style="display:none"></div>
-<div id="respPanel"><div style="font-size:12px;color:#c8b870;letter-spacing:2px;margin-bottom:6px">TANK DESTROYED</div><div id="respCD">5</div><div style="font-size:9px;color:#5a5a38;margin-top:6px">LIVES: <span id="livesV">3</span></div></div>
-<div id="controls" style="display:none">WASD+MOUSE+CLICK · G=FIRE · F=SMOKE · X/C=ARTY · 1/2/3=AMMO · R=RANGE · M=MAP</div>
+<div id="respPanel"><span style="font-size:9px;color:#c8b870;letter-spacing:1px">SPECTATING · RESPAWN</span><span id="respCD">5</span><span style="font-size:9px;color:#5a5a38">LIVES: <span id="livesV">3</span></span></div>
+<div id="controls" style="display:none">WASD+MOUSE+CLICK · G=FIRE · F=SMOKE · X/C=ARTY · 1/2/3=AMMO · R=RANGE · M=MAP · ESC=PAUSE</div>
+<button id="pauseBtn" class="btn" style="display:none;position:absolute;top:8px;right:152px;min-width:0;padding:2px 8px;font-size:9px;z-index:15">II</button>
+<div id="tooltipPopup" style="display:none"></div>
 <div id="gameOverlay"></div>
 
 <script type="module" src="/src/main.js"></script>

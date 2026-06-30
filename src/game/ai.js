@@ -3,6 +3,7 @@ import {AMMO, AMMO_KEYS} from '../data/ammo.js';
 import {W, H} from '../constants.js';
 import {G} from './state.js';
 import {fireAI, deploySmoke, inSmoke, solidAt, logDmg, fire, spawnParticles, updateZones, killPlayer} from './combat.js';
+import {addShake} from './shake.js';
 
 // ── AI ─────────────────────────────────────────────────────
 export function aiUpdate(e){
@@ -38,7 +39,7 @@ export function aiUpdate(e){
   if(e.cat==='drone'){
     e.bobPhase+=0.06;SFX.drone();
     if(!e.diving){e.x+=Math.cos(toP)*e.spd*0.6;e.y+=Math.sin(toP)*e.spd*0.6;e.x=Math.max(18,Math.min(W-18,e.x));e.y=Math.max(18,Math.min(H-18,e.y));if(dist<55){e.diving=true;logDmg('DRONE DIVING!','#e05050');}}
-    else{e.x+=Math.cos(toP)*e.spd*1.8;e.y+=Math.sin(toP)*e.spd*1.8;if(dist<18){targets.forEach(t=>{if(Math.hypot(t.x-e.x,t.y-e.y)<22){t.crew=Math.max(0,t.crew-2);t.eng=Math.max(0,t.eng-50);if(t===G.p1||t===G.p2){updateZones(t);if(t.crew<=0)killPlayer(t);}logDmg('DRONE IMPACT!','#c03030');}});SFX.explosion();spawnParticles(e.x,e.y,'#e07030',30,true);G.craters.push({x:e.x,y:e.y,r:20,life:1});e.dead=true;}}
+    else{e.x+=Math.cos(toP)*e.spd*1.8;e.y+=Math.sin(toP)*e.spd*1.8;if(dist<18){targets.forEach(t=>{if(Math.hypot(t.x-e.x,t.y-e.y)<22){t.crew=Math.max(0,t.crew-2);t.eng=Math.max(0,t.eng-50);if(t===G.p1||t===G.p2){updateZones(t);if(t.crew<=0)killPlayer(t);}logDmg('DRONE IMPACT!','#c03030');}});SFX.explosion();addShake(5);spawnParticles(e.x,e.y,'#e07030',30,true);G.craters.push({x:e.x,y:e.y,r:20,life:1});e.dead=true;}}
     e.angle=toP;return;
   }
   if(e.cat==='infantry'){

@@ -9,6 +9,8 @@ import {aiUpdate, p2AiUpdate} from './ai.js';
 import {buildWave, startGame} from './scene.js';
 import {addXP} from '../progression.js';
 import {showScreen} from '../ui/screens.js';
+import {decayShake} from './shake.js';
+import {isActionDown} from '../keybinds.js';
 
 function buildGameOverlay(state,xpEarned){
   const overlay=$('gameOverlay');
@@ -33,14 +35,15 @@ function buildGameOverlay(state,xpEarned){
 // ── UPDATE ─────────────────────────────────────────────────
 export function update(dt){
   if(G.phase!=='playing')return;
+  decayShake();
   G.spawnTimer+=dt;if(G.spawnQueue.length&&G.spawnTimer>1250){const s=G.spawnQueue.shift();G.enemies.push(makeEnemy(s.type,s.x,s.y));G.spawnTimer=0;}
   G.p1Reload=Math.max(0,G.p1Reload-1);G.p2Reload=Math.max(0,G.p2Reload-1);G.p1SmokeCD=Math.max(0,G.p1SmokeCD-1);
   G.artCDs=G.artCDs.map(c=>Math.max(0,c-1));
   [0,1].forEach(i=>{const r=G.artCDs[i]<=0;$('aCD'+i).textContent=r?'READY':Math.ceil(G.artCDs[i]/60)+'s';$('aCD'+i).style.color=r?'#3a8a30':'#3a3a28';$('aSlot'+i).className='aslot'+(r?' aready':'');});
   if(G.p1RespTimer>0){G.p1RespTimer--;$('respCD').textContent=Math.ceil(G.p1RespTimer/60);if(G.p1RespTimer<=0){G.p1=makePlayerFromTank(G.selectedTankKey,false);if(G.difficulty===-1)G.p1Stock=[99,40,60];updateAmmoHUD();$('respPanel').classList.remove('active');updateZones(G.p1);}}
   if(G.p1&&!G.p1.dead){
-    const fwd=(G.keys['w']||G.keys['ArrowUp'])?1:(G.keys['s']||G.keys['ArrowDown'])?-1:0;
-    const turn=(G.keys['d']||G.keys['ArrowRight'])?1:(G.keys['a']||G.keys['ArrowLeft'])?-1:0;
+    const fwd=isActionDown('p1Forward')?1:isActionDown('p1Back')?-1:0;
+    const turn=isActionDown('p1Right')?1:isActionDown('p1Left')?-1:0;
     if(!G.p1.isTracked&&G.p1.eng>0){
       G.p1.angle+=turn*G.p1.trv*(G.p1.eng/100);
       if(fwd){const sp=fwd*G.p1.spd*(G.p1.eng/100)*0.65,nx=G.p1.x+Math.cos(G.p1.angle)*sp,ny=G.p1.y+Math.sin(G.p1.angle)*sp;if(!solidAt(nx,ny)){G.p1.x=Math.max(22,Math.min(W-22,nx));G.p1.y=Math.max(22,Math.min(H-22,ny));}}
@@ -55,7 +58,7 @@ export function update(dt){
     G.engineTick++;if(G.engineTick%8===0){if(vel>0.5)SFX.engineRev();else SFX.engineIdle();}
   }
   if(G.p2&&!G.p2.dead&&G.localMode){
-    const fwd2=G.keys['i']?1:G.keys['k']?-1:0,turn2=G.keys['l']?1:G.keys['j']?-1:0;
+    const fwd2=isActionDown('p2Forward')?1:isActionDown('p2Back')?-1:0,turn2=isActionDown('p2Right')?1:isActionDown('p2Left')?-1:0;
     if(!G.p2.isTracked&&G.p2.eng>0){G.p2.angle+=turn2*G.p2.trv;if(fwd2){const sp=fwd2*G.p2.spd*0.65,nx=G.p2.x+Math.cos(G.p2.angle)*sp,ny=G.p2.y+Math.sin(G.p2.angle)*sp;if(!solidAt(nx,ny)){G.p2.x=Math.max(22,Math.min(W-22,nx));G.p2.y=Math.max(22,Math.min(H-22,ny));}}}
     G.p2.tAngle=G.p2.angle;
   }else if(G.p2&&G.gameMode==='online')p2AiUpdate();

@@ -4,6 +4,8 @@ import {MAPS} from '../data/maps.js';
 import {AMMO, AMMO_KEYS} from '../data/ammo.js';
 import {$} from '../dom.js';
 import {G} from './state.js';
+import {pal} from '../theme.js';
+import {shakeOffset} from './shake.js';
 
 // ── DRAW ───────────────────────────────────────────────────
 export function drawVehicle(v){
@@ -105,8 +107,8 @@ export function drawFog(){
 }
 
 export function drawCaptureZones(){G.captureZones.forEach(z=>{
-  const col=z.owner==='blue'?'rgba(58,122,222,0.1)':z.owner==='red'?'rgba(192,48,48,0.1)':'rgba(200,184,112,0.06)';
-  const sc=z.owner==='blue'?'#3a7ade':z.owner==='red'?'#c03030':'#c8b870';
+  const col=z.owner==='blue'?'rgba(58,122,222,0.1)':z.owner==='red'?pal().redRgba(0.1):'rgba(200,184,112,0.06)';
+  const sc=z.owner==='blue'?'#3a7ade':z.owner==='red'?pal().red:'#c8b870';
   ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
   ctx.strokeStyle=sc;ctx.lineWidth=1.2;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
   ctx.fillStyle=sc;ctx.font='bold 12px Courier New';ctx.textAlign='center';ctx.fillText(z.label,z.x,z.y+4);
@@ -120,9 +122,9 @@ export function drawMinimap(){
   for(let y=0;y<90;y+=12){mmx.beginPath();mmx.moveTo(0,y);mmx.lineTo(120,y);mmx.stroke();}
   const sx=120/W,sy=90/H;
   G.terrain.forEach(t=>{if(t.solid){mmx.fillStyle='#2a2818';mmx.fillRect(t.x*sx-1,t.y*sy-1,t.w*sx+1,t.h*sy+1);}});
-  G.captureZones.forEach(z=>{mmx.beginPath();mmx.arc(z.x*sx,z.y*sy,z.r*sx,0,Math.PI*2);mmx.fillStyle=z.owner==='blue'?'rgba(58,122,222,0.25)':z.owner==='red'?'rgba(192,48,48,0.25)':'rgba(200,184,112,0.1)';mmx.fill();mmx.strokeStyle=z.owner==='blue'?'#3a7ade':z.owner==='red'?'#c03030':'#c8b870';mmx.lineWidth=0.6;mmx.stroke();mmx.fillStyle=z.owner==='blue'?'#3a7ade':z.owner==='red'?'#c03030':'#c8b870';mmx.font='bold 5px Courier New';mmx.textAlign='center';mmx.fillText(z.label,z.x*sx,z.y*sy+2);});
+  G.captureZones.forEach(z=>{mmx.beginPath();mmx.arc(z.x*sx,z.y*sy,z.r*sx,0,Math.PI*2);mmx.fillStyle=z.owner==='blue'?'rgba(58,122,222,0.25)':z.owner==='red'?pal().redRgba(0.25):'rgba(200,184,112,0.1)';mmx.fill();mmx.strokeStyle=z.owner==='blue'?'#3a7ade':z.owner==='red'?pal().red:'#c8b870';mmx.lineWidth=0.6;mmx.stroke();mmx.fillStyle=z.owner==='blue'?'#3a7ade':z.owner==='red'?pal().red:'#c8b870';mmx.font='bold 5px Courier New';mmx.textAlign='center';mmx.fillText(z.label,z.x*sx,z.y*sy+2);});
   G.smokes.forEach(s=>{mmx.fillStyle='rgba(140,140,130,0.2)';mmx.beginPath();mmx.arc(s.x*sx,s.y*sy,s.r*sx,0,Math.PI*2);mmx.fill();});
-  G.enemies.filter(e=>!e.dead).forEach(e=>{mmx.save();mmx.translate(e.x*sx,e.y*sy);if(e.cat==='helo'||e.cat==='drone'){mmx.fillStyle=e.cat==='drone'?'#e05050':'#b04040';mmx.beginPath();mmx.moveTo(0,-4);mmx.lineTo(3,3);mmx.lineTo(-3,3);mmx.closePath();mmx.fill();}else{mmx.rotate(e.angle);mmx.fillStyle='#b03030';mmx.fillRect(-3,-2,6,4);}mmx.restore();});
+  G.enemies.filter(e=>!e.dead).forEach(e=>{mmx.save();mmx.translate(e.x*sx,e.y*sy);if(e.cat==='helo'||e.cat==='drone'){mmx.fillStyle=e.cat==='drone'?pal().redLight:pal().redMid;mmx.beginPath();mmx.moveTo(0,-4);mmx.lineTo(3,3);mmx.lineTo(-3,3);mmx.closePath();mmx.fill();}else{mmx.rotate(e.angle);mmx.fillStyle=pal().red;mmx.fillRect(-3,-2,6,4);}mmx.restore();});
   if(G.p2&&!G.p2.dead){mmx.save();mmx.translate(G.p2.x*sx,G.p2.y*sy);mmx.rotate(G.p2.angle);mmx.fillStyle='#3a7ade';mmx.fillRect(-3,-2,6,4);mmx.restore();}
   if(G.p1&&!G.p1.dead){mmx.save();mmx.translate(G.p1.x*sx,G.p1.y*sy);mmx.rotate(G.p1.angle);mmx.fillStyle='#3a8a30';mmx.fillRect(-4,-3,8,6);mmx.fillStyle='#5aba50';mmx.fillRect(2,-1,5,2);mmx.restore();
     mmx.save();mmx.translate(G.p1.x*sx,G.p1.y*sy);mmx.beginPath();mmx.moveTo(0,0);mmx.arc(0,0,16,G.p1.tAngle-0.35,G.p1.tAngle+0.35);mmx.closePath();mmx.fillStyle='rgba(90,186,80,0.08)';mmx.fill();mmx.restore();}
@@ -130,6 +132,8 @@ export function drawMinimap(){
 }
 
 export function draw(){
+  const off=shakeOffset();
+  ctx.save();ctx.translate(off.x,off.y);
   drawGround();
   G.craters.forEach(c=>{ctx.globalAlpha=c.life*0.5;ctx.fillStyle='#060605';ctx.beginPath();ctx.arc(c.x,c.y,c.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;});
   drawCaptureZones();drawTerrain();
@@ -140,6 +144,7 @@ export function draw(){
   G.projectiles.forEach(p=>{const am=AMMO[p.ammoType]||AMMO['APFSDS-T'];for(let i=0;i<p.trail.length;i++){const t=p.trail[i];ctx.globalAlpha=(i/p.trail.length)*0.55;ctx.fillStyle=am.col;ctx.fillRect(t.x-1,t.y-1,2,2);}ctx.globalAlpha=1;ctx.fillStyle=am.col;ctx.fillRect(p.x-2,p.y-2,4,4);});
   G.particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.col;ctx.fillRect(p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz);});ctx.globalAlpha=1;
   drawFog();
+  ctx.restore();
   if(G.phase==='playing'&&G.p1&&!G.p1.dead){
     const a=G.p1.tAngle;
     ctx.strokeStyle='rgba(180,164,92,0.3)';ctx.lineWidth=0.8;ctx.setLineDash([4,6]);

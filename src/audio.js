@@ -1,13 +1,34 @@
 // ── SOUND ENGINE ─────────────────────────────────────────
+import {getSettings, onSettingsChange} from './settings.js';
+
 const AudioCtx=window.AudioContext||window.webkitAudioContext;
 let audioCtx=null;
-export function getAudioCtx(){if(!audioCtx){try{audioCtx=new AudioCtx();}catch(e){}}return audioCtx;}
+let masterGain=null;
+
+function effectiveVolume(){
+  const s=getSettings();
+  return s.muted?0:s.volume;
+}
+
+export function getAudioCtx(){
+  if(!audioCtx){
+    try{
+      audioCtx=new AudioCtx();
+      masterGain=audioCtx.createGain();
+      masterGain.gain.value=effectiveVolume();
+      masterGain.connect(audioCtx.destination);
+    }catch(e){}
+  }
+  return audioCtx;
+}
+
+onSettingsChange(()=>{if(masterGain)masterGain.gain.value=effectiveVolume();});
 
 function playTone(freq,type,vol,dur,pitchEnd){
   const ac=getAudioCtx();if(!ac)return;
   try{
     const o=ac.createOscillator(),g=ac.createGain();
-    o.connect(g);g.connect(ac.destination);
+    o.connect(g);g.connect(masterGain);
     o.type=type||'sine';o.frequency.setValueAtTime(freq,ac.currentTime);
     if(pitchEnd)o.frequency.exponentialRampToValueAtTime(pitchEnd,ac.currentTime+dur);
     g.gain.setValueAtTime(vol,ac.currentTime);
@@ -24,7 +45,7 @@ function playNoise(vol,dur,filter){
     const src=ac.createBufferSource(),g=ac.createGain();
     if(filter){const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=filter;src.connect(f);f.connect(g);}
     else src.connect(g);
-    g.connect(ac.destination);
+    g.connect(masterGain);
     src.buffer=buf;g.gain.setValueAtTime(vol,ac.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
     src.start();src.stop(ac.currentTime+dur);

@@ -2,12 +2,13 @@ import {MAPS} from '../data/maps.js';
 import {ALL_TANKS} from '../data/tanks.js';
 import {ETYPES} from '../data/enemies.js';
 import {G} from './state.js';
+import {pal} from '../theme.js';
 
 export function makePlayerFromTank(key,isP2){
   const m=MAPS[G.mapIdx];const sp=isP2?m.spawnP2:m.spawnP;
   const t=ALL_TANKS[key]||ALL_TANKS.aegis;
   return{x:sp.x+(Math.random()-0.5)*20,y:sp.y,angle:isP2?-Math.PI/4:-Math.PI/2,tAngle:isP2?-Math.PI/4:-Math.PI/2,
-    spd:t.spd,trv:t.trv,w:t.w,h:t.h,col:isP2?'#8a3030':t.col,drk:isP2?'#5a2020':t.drk,
+    spd:t.spd,trv:t.trv,w:t.w,h:t.h,col:isP2?pal().redMid:t.col,drk:isP2?pal().redDark:t.drk,
     af:isP2?[...t.af]:t.af.map(v=>G.difficulty===-1?Math.round(v*1.5):v),
     as:isP2?[...t.as]:t.as.map(v=>G.difficulty===-1?Math.round(v*1.5):v),
     ar:isP2?[...t.ar]:t.ar.map(v=>G.difficulty===-1?Math.round(v*1.5):v),

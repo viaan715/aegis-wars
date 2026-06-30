@@ -6,7 +6,7 @@ export function startLoop(){
   function loop(ts){
     const dt=ts-G.last;G.last=ts;
     if(G.phase==='playing'){update(dt);draw();}
-    else if(G.phase==='over'){draw();}
+    else if(G.phase==='over'||G.phase==='paused'){draw();}
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);

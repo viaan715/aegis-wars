@@ -35,4 +35,5 @@ export const G={
   p2AiTick:0,
 
   last:0,
+  shakeAmt:0,
 };

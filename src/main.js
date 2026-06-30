@@ -7,6 +7,10 @@ import {buildTankSelect} from './ui/tankSelect.js';
 import {startSolo, startLocal} from './game/scene.js';
 import {initInput} from './game/input.js';
 import {startLoop} from './game/loop.js';
+import {runLoadingScreen} from './ui/loading.js';
+import {initSettingsControls} from './ui/settingsScreen.js';
+import {pauseGame} from './ui/pauseMenu.js';
+import {getSettings, onSettingsChange} from './settings.js';
 
 // ── Wire up screen navigation / menu buttons (replaces the original's
 // inline onclick="..." attributes, which don't work against module-scoped
@@ -15,6 +19,9 @@ $('btnSolo').addEventListener('click',()=>showScreen('sSolo'));
 $('btnFriends').addEventListener('click',()=>showScreen('sFriends'));
 $('btnLocal').addEventListener('click',()=>showScreen('sLocal'));
 $('btnProg').addEventListener('click',()=>showScreen('sProg'));
+$('btnSettings').addEventListener('click',()=>showScreen('sSettings'));
+$('settingsBack').addEventListener('click',()=>showScreen('sMenu'));
+$('pauseBtn').addEventListener('click',()=>pauseGame());
 
 $('progBack').addEventListener('click',()=>showScreen('sMenu'));
 $('progReset').addEventListener('click',()=>resetXP());
@@ -42,8 +49,15 @@ $('soloBack').addEventListener('click',()=>showScreen('sMenu'));
 // ── Init ─────────────────────────────────────────────────
 buildTankSelect();
 initInput();
+initSettingsControls();
 startLoop();
 updateXPBar();
 buildProgScreen();
 renderFriends();
-showScreen('sMenu');
+
+// Colorblind mode swaps team-red for orange across canvas-drawn UI (theme.js)
+// and DOM-driven indicators (body.colorblind CSS rules in style.css).
+document.body.classList.toggle('colorblind', getSettings().colorblind);
+onSettingsChange(s=>document.body.classList.toggle('colorblind', s.colorblind));
+
+runLoadingScreen();
