@@ -7,6 +7,7 @@ import {buildTankSelect} from './ui/tankSelect.js';
 import {startSolo, startLocal} from './game/scene.js';
 import {initInput} from './game/input.js';
 import {startLoop} from './game/loop.js';
+import {initRender3D} from './game/render3d.js';
 import {runLoadingScreen} from './ui/loading.js';
 import {initSettingsControls} from './ui/settingsScreen.js';
 import {pauseGame} from './ui/pauseMenu.js';
@@ -48,6 +49,7 @@ $('soloBack').addEventListener('click',()=>showScreen('sMenu'));
 
 // ── Init ─────────────────────────────────────────────────
 buildTankSelect();
+initRender3D();
 initInput();
 initSettingsControls();
 startLoop();

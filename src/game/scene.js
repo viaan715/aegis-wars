@@ -10,12 +10,14 @@ import {updateXPBar} from '../progression.js';
 import {showScreen} from '../ui/screens.js';
 import {notify} from '../ui/notify.js';
 import {rollWeather} from '../weather.js';
+import {rebuildWorld3D} from './render3d.js';
 
 export function buildScene(){
   G.terrain=MAPS[G.mapIdx].objects.map(o=>{const d=OBJDEF[o.t]||{w:20,h:16,solid:true};return{x:o.x,y:o.y,type:o.t,w:d.w,h:d.h,solid:d.solid,hp:3};});
   G.captureZones=MAPS[G.mapIdx].zones.map(z=>({x:z.x,y:z.y,r:36,owner:'neu',progress:0,label:z.label}));
   G.captureZones[0].owner='blue';G.captureZones[0].progress=100;G.captureZones[2].owner='red';G.captureZones[2].progress=100;
   G.fogOfWar=MAPS[G.mapIdx].fog||false;
+  rebuildWorld3D();
 }
 
 export function buildWave(w){

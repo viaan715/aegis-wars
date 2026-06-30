@@ -1,5 +1,6 @@
 import {gc} from '../canvas.js';
-import {W, H, COCKPIT_ZOOM} from '../constants.js';
+import {W, H} from '../constants.js';
+import {screenToGround} from './render3d.js';
 import {AMMO, AMMO_KEYS} from '../data/ammo.js';
 import {MAPS} from '../data/maps.js';
 import {G} from './state.js';
@@ -15,12 +16,11 @@ export function initInput(){
   gc.addEventListener('mousemove',e=>{
     const r=gc.getBoundingClientRect(),sx=W/r.width;
     const px=(e.clientX-r.left)*sx, py=(e.clientY-r.top)*sx;
-    if(G.viewMode==='cockpit'&&G.p1&&!G.p1.dead){
-      G.mouseX=G.p1.x+(px-W/2)/COCKPIT_ZOOM;
-      G.mouseY=G.p1.y+(py-H/2)/COCKPIT_ZOOM;
-    }else{
-      G.mouseX=px;G.mouseY=py;
-    }
+    // Raycast the mouse against the 3D ground plane to get the world (game
+    // x/y) point under the cursor -- works for both the top-down tactical
+    // camera and the first-person gunner scope camera.
+    const hit=screenToGround(px,py);
+    if(hit){G.mouseX=hit.x;G.mouseY=hit.y;}
   });
   gc.addEventListener('click',e=>{
     if(G.phase!=='playing'||!G.p1||G.p1.dead||G.p1Reload>0)return;
