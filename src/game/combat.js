@@ -7,6 +7,7 @@ import {ART_CD, W, H} from '../constants.js';
 import {G} from './state.js';
 import {addShake} from './shake.js';
 import {addCrewXP, getGunnerPenMult} from '../crew.js';
+import {unlockAchievement} from '../achievements.js';
 
 // ── ARMOR ─────────────────────────────────────────────────
 export function getArmor(v,hitA){
@@ -48,7 +49,7 @@ export function applyHit(v,proj,hx,hy){
   else if(v.isAI){
     if(v.crew<=0||(v.eng<=0&&v.burning)){
       const xpAmt=v.pts;const ex=v.x,ey=v.y;
-      setTimeout(()=>{if(!v.dead){v.dead=true;SFX.explosion();addShake(5);spawnParticles(ex,ey,'#e07030',30,true);G.kills++;G.score+=xpAmt;addXP(Math.round(xpAmt/5),ex,ey);}},300);
+      setTimeout(()=>{if(!v.dead){v.dead=true;SFX.explosion();addShake(5);spawnParticles(ex,ey,'#e07030',30,true);G.kills++;G.score+=xpAmt;addXP(Math.round(xpAmt/5),ex,ey);unlockAchievement('first_blood');}},300);
     }
   }
 }
@@ -73,7 +74,7 @@ export function callArty(tx,ty,slot){
     [G.p1,G.p2,...G.enemies].filter(v=>v&&!v.dead).forEach(v=>{
       if(Math.hypot(v.x-ix,v.y-iy)<30){v.eng=Math.max(0,v.eng-18);if(Math.random()<0.3)v.crew=Math.max(0,v.crew-1);
         if(v===G.p1||v===G.p2){updateZones(v);if(v.crew<=0)killPlayer(v);}
-        else if(v.isAI&&v.crew<=0){v.dead=true;G.kills++;G.score+=v.pts;addXP(Math.round(v.pts/5),v.x,v.y);}}});
+        else if(v.isAI&&v.crew<=0){v.dead=true;G.kills++;G.score+=v.pts;addXP(Math.round(v.pts/5),v.x,v.y);unlockAchievement('first_blood');}}});
     n++;if(n>=7)clearInterval(iv);
   },190);
 }

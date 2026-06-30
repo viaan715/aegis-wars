@@ -13,6 +13,9 @@ import {initSettingsControls} from './ui/settingsScreen.js';
 import {pauseGame} from './ui/pauseMenu.js';
 import {getSettings, onSettingsChange} from './settings.js';
 import {G} from './game/state.js';
+import {notify} from './ui/notify.js';
+import {SFX} from './audio.js';
+import {IS_DEMO} from './demo.js';
 
 // ── Wire up screen navigation / menu buttons (replaces the original's
 // inline onclick="..." attributes, which don't work against module-scoped
@@ -67,5 +70,12 @@ renderFriends();
 // and DOM-driven indicators (body.colorblind CSS rules in style.css).
 document.body.classList.toggle('colorblind', getSettings().colorblind);
 onSettingsChange(s=>document.body.classList.toggle('colorblind', s.colorblind));
+
+if(IS_DEMO)$('demoBanner').classList.remove('hidden');
+
+window.addEventListener('aegis-achievement-unlocked', e=>{
+  notify('🏆 ACHIEVEMENT: '+e.detail.name,'#e8d880');
+  SFX.rankUp();
+});
 
 runLoadingScreen();

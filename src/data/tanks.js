@@ -11,4 +11,5 @@ export const ALL_TANKS={
   chieftain:{name:'Chieftain',era:'COLD WAR',nation:'🇬🇧',w:36,h:19,spd:1.4,trv:0.017,col:'#585848',drk:'#343430',af:[500,420],as:[270,210],ar:[110,80],crew:4,pts:450,role:'fortress',ability:null,playable:true,unlockXp:3000},
   t62:{name:'T-62',era:'COLD WAR',nation:'🇷🇺',w:31,h:16,spd:1.65,trv:0.020,col:'#5a4e2e',drk:'#3a3018',af:[400,340],as:[215,170],ar:[85,62],crew:4,pts:370,role:'assault',ability:null,playable:true,unlockXp:3500},
   leclerc:{name:'Leclerc',era:'MODERN',nation:'🇫🇷',w:34,h:17,spd:2.1,trv:0.026,col:'#5a5840',drk:'#383620',af:[530,450],as:[275,225],ar:[105,75],crew:3,pts:530,role:'assault',ability:null,playable:true,unlockXp:4000},
+  vanguard:{name:'XM-9 Vanguard',era:'FUTURE',nation:'⭐',w:38,h:20,spd:2.5,trv:0.028,col:'#8a6020',drk:'#5a3c10',af:[660,540],as:[330,270],ar:[140,100],crew:3,pts:0,role:'player',ability:'aps360',playable:true,unlockXp:Infinity,supporterOnly:true},
 };

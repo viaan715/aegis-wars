@@ -5,6 +5,7 @@ import {$} from './dom.js';
 import {notify} from './ui/notify.js';
 import {getCrew, getCrewTier, getCrewNextTier, resetCrew, TIERS} from './crew.js';
 import {PAINTS, DECALS} from './customization.js';
+import {unlockAchievement, getAllAchievements} from './achievements.js';
 
 let playerXP=parseInt(localStorage.getItem('aegisXP')||'0');
 let playerName=localStorage.getItem('aegisName')||'Commander';
@@ -21,7 +22,7 @@ export function addXP(amount,x,y){
   playerXP+=amount;saveXP();
   const newRank=getRank(playerXP);
   SFX.xpGain();
-  if(newRank.name!==oldRank.name){SFX.rankUp();notify('RANK UP: '+newRank.name,'#e8d880');}
+  if(newRank.name!==oldRank.name){SFX.rankUp();notify('RANK UP: '+newRank.name,'#e8d880');if(playerXP>=RANKS[1].xp)unlockAchievement('rank_corporal');}
   updateXPBar();
   if(x&&y)showXPPopup('+'+amount+' XP',x,y);
 }
@@ -77,8 +78,8 @@ export function buildProgScreen(){
   html+=`</div><div style="background:#0a0c06;border:1px solid #2a2a18;padding:10px 12px">
     <div class="ct">Unlocks</div>`;
   const cosmeticEntries=[
-    ...PAINTS.filter(p=>p.key!=='standard').map(p=>({type:'paint',name:p.name,xp:p.unlockXp})),
-    ...DECALS.filter(d=>d.key!=='none').map(d=>({type:'decal',name:d.name,xp:d.unlockXp})),
+    ...PAINTS.filter(p=>p.key!=='standard'&&!p.pack).map(p=>({type:'paint',name:p.name,xp:p.unlockXp})),
+    ...DECALS.filter(d=>d.key!=='none'&&!d.pack).map(d=>({type:'decal',name:d.name,xp:d.unlockXp})),
   ];
   [...UNLOCKS,...cosmeticEntries].forEach(u=>{
     const done=playerXP>=u.xp;
@@ -105,6 +106,18 @@ export function buildProgScreen(){
       <div style="font-size:8px;color:#5a5a38;margin:2px 0">${member.desc}</div>
       <div style="background:#1a1a10;height:4px;border:1px solid #2a2a18">
         <div style="height:100%;background:#7a9a70;width:${cpct}%"></div>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+  html+=`<div style="background:#0a0c06;border:1px solid #2a2a18;padding:10px 12px;margin-top:8px">
+    <div class="ct">Achievements</div>`;
+  getAllAchievements().forEach(a=>{
+    html+=`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #111;font-size:10px">
+      <span style="font-size:13px">${a.unlocked?'🏆':'🔒'}</span>
+      <div style="flex:1">
+        <div style="color:${a.unlocked?'#c8b870':'#3a3a28'}">${a.name}</div>
+        <div style="font-size:8px;color:#5a5a38">${a.desc}</div>
       </div>
     </div>`;
   });

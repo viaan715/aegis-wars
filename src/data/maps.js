@@ -41,6 +41,12 @@ export const MAPS=[
    zones:[{x:80,y:140,label:'A'},{x:340,y:160,label:'B'},{x:600,y:140,label:'C'}],
    objects:[{x:60,y:100,t:'snowrock'},{x:120,y:60,t:'snowrock'},{x:200,y:80,t:'snowrock'},{x:60,y:260,t:'snowrock'},{x:120,y:320,t:'snowrock'},{x:560,y:80,t:'snowrock'},{x:620,y:140,t:'snowrock'},{x:580,y:280,t:'snowrock'},{x:620,y:360,t:'snowrock'},{x:200,y:180,t:'bunker'},{x:480,y:180,t:'bunker'},{x:340,y:120,t:'bunker'},{x:240,y:300,t:'snowrock'},{x:440,y:300,t:'snowrock'}],
    unlockXp:20000,fog:false},
+  {name:'VANGUARD RIDGE',ground:'#1c1808',grid:'#1c1808',gridColor:'#201c0a',
+   patches:[{x:200,y:170,rx:90,ry:45,c:'#221e0c'},{x:480,y:240,rx:90,ry:45,c:'#1e1a0a'}],
+   spawnP:{x:340,y:390},spawnP2:{x:300,y:375},spawnE:[{x:60,y:55},{x:220,y:40},{x:340,y:40},{x:460,y:40},{x:620,y:55}],
+   zones:[{x:90,y:150,label:'A'},{x:340,y:170,label:'B'},{x:590,y:150,label:'C'}],
+   objects:[{x:80,y:100,t:'rock'},{x:160,y:60,t:'bunker'},{x:340,y:120,t:'bunker'},{x:520,y:60,t:'bunker'},{x:600,y:100,t:'rock'},{x:240,y:280,t:'rock'},{x:440,y:280,t:'rock'},{x:340,y:320,t:'rubble'}],
+   unlockXp:Infinity,supporterOnly:true,fog:false},
 ];
 
 export const OBJDEF={rock:{w:22,h:16,solid:true},bunker:{w:44,h:26,solid:true},tree:{w:14,h:14,solid:false},building:{w:48,h:36,solid:true},rubble:{w:32,h:20,solid:true},snowrock:{w:24,h:18,solid:true}};

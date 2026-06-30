@@ -1,6 +1,8 @@
 // Crew skill system — a small persistent roster (Gunner/Loader/Driver) that
 // levels up from play and grants modest combat buffs. This is account-wide
 // meta-progression, separate from the per-match tank stats.
+import {unlockAchievement} from './achievements.js';
+
 const STORAGE_KEY = 'aegisCrew';
 
 export const TIERS = [
@@ -40,6 +42,7 @@ export function addCrewXP(role, amount){
   if(!crew[role]) return;
   crew[role].xp += amount;
   save();
+  if(role==='gunner'&&crew.gunner.xp>=TIERS[2].xp)unlockAchievement('ace_gunner');
 }
 export function resetCrew(){
   crew = JSON.parse(JSON.stringify(DEFAULT_CREW));

@@ -16,6 +16,19 @@ npm run build      # outputs a static build to dist/
 npm run preview    # serves the dist/ build locally to sanity-check it
 ```
 
+### Demo build
+
+```bash
+npm run build:demo     # outputs a restricted demo build to dist-demo/
+npm run preview:demo   # serves the dist-demo/ build locally
+```
+
+The demo build (`vite build --mode demo`) only allows 2 maps and 3 starter
+tanks (see `DEMO_TANK_KEYS`/`DEMO_MAP_NAMES` in `src/demo.js`) and shows a
+"DEMO VERSION" banner on the menu; everything else is locked behind "full
+version" regardless of in-demo XP. It's a separate build, not a runtime
+toggle, so a demo player can't unlock the full game by editing localStorage.
+
 The build is fully static (no server/backend required) and uses relative
 asset paths (`base: './'` in `vite.config.js`), so the contents of `dist/`
 can be hosted from any subpath — a CDN, a subfolder on your own domain, or

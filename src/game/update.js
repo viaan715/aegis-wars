@@ -14,6 +14,7 @@ import {isActionDown} from '../keybinds.js';
 import {addCrewXP, getDriverSpeedMult} from '../crew.js';
 import {AMMO_KEYS, AMMO} from '../data/ammo.js';
 import {notify} from '../ui/notify.js';
+import {unlockAchievement} from '../achievements.js';
 
 function buildGameOverlay(state,xpEarned){
   const overlay=$('gameOverlay');
@@ -89,7 +90,7 @@ export function update(dt){
   G.captureZones.forEach(z=>{
     const pl=[G.p1,G.p2].filter(p=>p&&!p.dead&&Math.hypot(p.x-z.x,p.y-z.y)<z.r);
     const ai=G.enemies.filter(e=>!e.dead&&e.cat!=='helo'&&e.cat!=='drone'&&Math.hypot(e.x-z.x,e.y-z.y)<z.r);
-    if(pl.length&&!ai.length){z.progress=Math.min(100,z.progress+0.3);if(z.progress>=100&&z.owner!=='blue'){z.owner='blue';logDmg('Zone '+z.label+' CAPTURED','#3a7ade');SFX.capture();addXP(50,z.x,z.y);}}
+    if(pl.length&&!ai.length){z.progress=Math.min(100,z.progress+0.3);if(z.progress>=100&&z.owner!=='blue'){z.owner='blue';logDmg('Zone '+z.label+' CAPTURED','#3a7ade');SFX.capture();addXP(50,z.x,z.y);unlockAchievement('capture_zone');}}
     else if(ai.length&&!pl.length){z.progress=Math.max(0,z.progress-0.2);if(z.progress<=0&&z.owner!=='red'){z.owner='red';z.progress=100;logDmg('Zone '+z.label+' LOST!','#c03030');SFX.lose();}}
   });
   const bl=G.captureZones.filter(z=>z.owner==='blue').length,rl=G.captureZones.filter(z=>z.owner==='red').length;
@@ -116,11 +117,16 @@ export function update(dt){
     G.waveTimer++;
     if(G.waveTimer>110){
       addXP(G.wave*100,W/2,H/2);addCrewXP('driver',10);G.wave++;G.waveTimer=0;
+      if(G.wave>=5)unlockAchievement('survive_wave5');
       if(G.wave>WCOMPS.length){G.phase='win';SFX.rankUp();addXP(500,W/2,H/2);}
       else{G.enemies=[];buildWave(G.wave);}
     }
   }
   if(G.phase==='dead'||G.phase==='win'){
+    if(G.phase==='win'){
+      if(G.difficulty===2)unlockAchievement('win_brutal');
+      if(G.p2&&G.p2.isAlly)unlockAchievement('squad_leader');
+    }
     const xpEarned=Math.round(G.score/10);
     if(xpEarned>0)addXP(xpEarned,W/2,200);
     buildGameOverlay(G.phase,xpEarned);

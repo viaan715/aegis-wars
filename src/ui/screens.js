@@ -6,20 +6,31 @@ import {notify} from './notify.js';
 import {buildTankSelect} from './tankSelect.js';
 import {buildSettingsScreen} from './settingsScreen.js';
 import {G} from '../game/state.js';
+import {isSupporter} from '../supporter.js';
+import {IS_DEMO, isMapLocked} from '../demo.js';
+
+function mapLocked(m){
+  const normalLocked = m.supporterOnly ? !isSupporter() : (m.unlockXp>0&&getPlayerXP()<m.unlockXp);
+  return isMapLocked(m.name, normalLocked);
+}
+function mapLockMsg(m){
+  if(IS_DEMO) return 'Full version only';
+  return m.supporterOnly ? 'Supporter Edition exclusive' : 'Unlock at '+m.unlockXp+' XP';
+}
 
 // Build map selection buttons (runs once, at module load — mirrors the
 // original inline script which built these immediately on page load).
 const mb=$('mapBtns');
 MAPS.forEach((m,i)=>{
   const b=document.createElement('button');b.className='btn';b.style.cssText='min-width:0;padding:5px 8px;font-size:9px;position:relative';
-  b.textContent=m.name;
-  if(m.unlockXp>0){b.style.opacity='0.5';b.setAttribute('data-xp',m.unlockXp);}
+  b.textContent=m.name+(m.supporterOnly?' ⭐':'');
+  if(mapLocked(m))b.style.opacity='0.5';
   b.onclick=()=>{
-    if(m.unlockXp>0&&getPlayerXP()<m.unlockXp){notify('Unlock at '+m.unlockXp+' XP','#e05050');return;}
-    G.mapIdx=i;mb.querySelectorAll('.btn').forEach(x=>{x.style.borderColor='';x.textContent=MAPS[MAPS.findIndex(mm=>mm.name===x.textContent.replace('🔒 ',''))].name;});
+    if(mapLocked(m)){notify(mapLockMsg(m),'#e05050');return;}
+    G.mapIdx=i;mb.querySelectorAll('.btn').forEach(x=>x.style.borderColor='');
     b.style.borderColor='#c8b870';
   };
-  if(m.unlockXp>0)b.textContent='🔒 '+m.name;
+  if(mapLocked(m))b.textContent='🔒 '+b.textContent;
   mb.appendChild(b);
 });
 mb.children[0].style.borderColor='#c8b870';
@@ -28,9 +39,9 @@ export function setDiff(d){G.difficulty=d;['dE','dN','dH','dB'].forEach((id,i)=>
 
 export function updateMapBtns(){
   mb.querySelectorAll('.btn').forEach((b,i)=>{
-    const m=MAPS[i];const locked=m.unlockXp>0&&getPlayerXP()<m.unlockXp;
+    const m=MAPS[i];const locked=mapLocked(m);
     b.style.opacity=locked?'0.5':'1';
-    b.textContent=(locked?'🔒 ':'')+m.name;
+    b.textContent=(locked?'🔒 ':'')+m.name+(m.supporterOnly?' ⭐':'');
   });
 }
 

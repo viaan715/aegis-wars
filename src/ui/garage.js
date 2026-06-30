@@ -3,7 +3,10 @@ import {ALL_TANKS} from '../data/tanks.js';
 import {getPlayerXP} from '../progression.js';
 import {notify} from './notify.js';
 import {G} from '../game/state.js';
-import {PAINTS, DECALS, getCustomization, getPaint, getDecal, setPaint, setDecal} from '../customization.js';
+import {PAINTS, DECALS, getCustomization, getPaint, getDecal, setPaint, setDecal, isPaintUnlocked, isDecalUnlocked} from '../customization.js';
+import {PACKS, isPackOwned, redeemCode} from '../dlc.js';
+import {isSupporter, redeemSupporterCode} from '../supporter.js';
+import {IS_DEMO, isTankLocked} from '../demo.js';
 
 const gcanvas = $('garageCanvas');
 const gctx = gcanvas.getContext('2d');
@@ -45,13 +48,14 @@ function loop(){
 function buildTankBtns(){
   const c=$('garageTankBtns');c.innerHTML='';
   Object.entries(ALL_TANKS).forEach(([key,t])=>{
-    const locked=getPlayerXP()<t.unlockXp;
+    const normalLocked=t.supporterOnly?!isSupporter():getPlayerXP()<t.unlockXp;
+    const locked=isTankLocked(key,normalLocked);
     const b=document.createElement('button');
     b.className='btn'+(key===G.selectedTankKey?' sel':'');
     b.style.cssText='min-width:0;padding:4px 7px;font-size:9px';
-    b.textContent=(locked?'🔒 ':'')+t.nation+' '+t.name.split(' ').slice(-1)[0];
+    b.textContent=(locked?'🔒 ':'')+t.nation+' '+t.name.split(' ').slice(-1)[0]+(t.supporterOnly?' ⭐':'');
     b.onclick=()=>{
-      if(locked){notify('Unlock at '+t.unlockXp+' XP','#e05050');return;}
+      if(locked){notify(IS_DEMO?'Full version only':t.supporterOnly?'Supporter Edition exclusive':'Unlock at '+t.unlockXp+' XP','#e05050');return;}
       G.selectedTankKey=key;refreshGarage();
     };
     c.appendChild(b);
@@ -61,15 +65,16 @@ function buildTankBtns(){
 function buildPaintBtns(){
   const c=$('garagePaintBtns');c.innerHTML='';
   const custom=getCustomization();
+  const xp=getPlayerXP();
   PAINTS.forEach(p=>{
-    const locked=getPlayerXP()<p.unlockXp;
+    const locked=!isPaintUnlocked(p,xp);
     const b=document.createElement('button');
     b.className='btn'+(p.key===custom.paint?' sel':'');
     b.style.cssText='min-width:0;padding:4px 7px;font-size:9px';
     b.style.borderColor=locked?'':(p.col||'#c8b870');
-    b.textContent=(locked?'🔒 ':'')+p.name;
+    b.textContent=(locked?'🔒 ':'')+p.name+(p.pack?' (DLC)':'');
     b.onclick=()=>{
-      if(locked){notify('Unlock at '+p.unlockXp+' XP','#e05050');return;}
+      if(locked){notify(p.pack?'Requires the '+(PACKS.find(k=>k.key===p.pack)||{}).name:'Unlock at '+p.unlockXp+' XP','#e05050');return;}
       setPaint(p.key);refreshGarage();
     };
     c.appendChild(b);
@@ -79,18 +84,35 @@ function buildPaintBtns(){
 function buildDecalBtns(){
   const c=$('garageDecalBtns');c.innerHTML='';
   const custom=getCustomization();
+  const xp=getPlayerXP();
   DECALS.forEach(d=>{
-    const locked=getPlayerXP()<d.unlockXp;
+    const locked=!isDecalUnlocked(d,xp);
     const b=document.createElement('button');
     b.className='btn'+(d.key===custom.decal?' sel':'');
     b.style.cssText='min-width:0;padding:4px 7px;font-size:9px';
-    b.textContent=(locked?'🔒 ':'')+d.name;
+    b.textContent=(locked?'🔒 ':'')+d.name+(d.pack?' (DLC)':'');
     b.onclick=()=>{
-      if(locked){notify('Unlock at '+d.unlockXp+' XP','#e05050');return;}
+      if(locked){notify(d.pack?'Requires the matching DLC pack':'Unlock at '+d.unlockXp+' XP','#e05050');return;}
       setDecal(d.key);refreshGarage();
     };
     c.appendChild(b);
   });
+}
+
+function buildPackList(){
+  const c=$('garagePacks');c.innerHTML='';
+  PACKS.forEach(p=>{
+    const owned=isPackOwned(p.key);
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;justify-content:space-between;gap:6px';
+    row.innerHTML=`<span style="color:${owned?'#7a9a70':'#5a5a38'}">${owned?'✔':'🔒'} ${p.name}</span><span style="color:#3a3a28">${p.desc}</span>`;
+    c.appendChild(row);
+  });
+  const supRow=document.createElement('div');
+  const sup=isSupporter();
+  supRow.style.cssText='display:flex;justify-content:space-between;gap:6px;border-top:1px solid #1c1c10;padding-top:4px;margin-top:2px';
+  supRow.innerHTML=`<span style="color:${sup?'#e8d880':'#5a5a38'}">${sup?'✔':'🔒'} Supporter Edition</span><span style="color:#3a3a28">⭐ Vanguard Ridge + XM-9 Vanguard</span>`;
+  c.appendChild(supRow);
 }
 
 export function refreshGarage(){
@@ -100,8 +122,17 @@ export function refreshGarage(){
   buildTankBtns();
   buildPaintBtns();
   buildDecalBtns();
+  buildPackList();
 }
 
 export function initGarage(){
   requestAnimationFrame(loop);
+  $('garageRedeemBtn').addEventListener('click',()=>{
+    const input=$('garageRedeemInput');
+    const packRes=redeemCode(input.value);
+    if(packRes.ok){notify('Unlocked: '+packRes.pack.name,'#7a9a70');input.value='';refreshGarage();return;}
+    const supRes=redeemSupporterCode(input.value);
+    if(supRes.ok){notify('Supporter Edition unlocked!','#e8d880');input.value='';refreshGarage();return;}
+    notify(input.value.trim()?packRes.msg:'Enter a code','#e05050');
+  });
 }
