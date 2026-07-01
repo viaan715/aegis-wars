@@ -1,0 +1,54 @@
+:root {
+  /* Core palette */
+  --forge-charcoal: #1b1e24;
+  --steel-panel: #262a32;
+  --steel-panel-raised: #2f333c;
+  --steel-line: #3a3f4a;
+  --temper-gold: #c99a46;
+  --temper-gold-bright: #e0b866;
+  --quench-blue: #4a6c8c;
+  --quench-blue-bright: #6c93b6;
+  --chalk: #f3eee4;
+  --chalk-dim: #cfc9bc;
+  --slag-red: #b4432e;
+  --slag-red-bright: #d3573f;
+
+  /* Temper gradient (straw -> gold -> bronze -> plum -> quench blue) */
+  --temper-0: #d9b36c;
+  --temper-1: #c99a46;
+  --temper-2: #a8703e;
+  --temper-3: #7a5570;
+  --temper-4: #4a6c8c;
+  --temper-gradient: linear-gradient(
+    90deg,
+    var(--temper-0),
+    var(--temper-1) 30%,
+    var(--temper-2) 55%,
+    var(--temper-3) 78%,
+    var(--temper-4)
+  );
+
+  /* Type */
+  --font-display: 'Big Shoulders', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Motion */
+  --ease-forge: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-med: 260ms;
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-med: 0ms;
+  }
+}

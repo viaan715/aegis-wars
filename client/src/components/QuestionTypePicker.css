@@ -1,0 +1,69 @@
+.type-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.type-picker-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  border: none;
+  z-index: 20;
+  cursor: default;
+}
+
+.type-picker-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 300px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 21;
+}
+
+.type-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  color: var(--chalk);
+}
+
+.type-picker-item:hover {
+  background: var(--steel-panel-raised);
+}
+
+.type-picker-tag {
+  border: 1px solid var(--steel-line);
+  border-radius: var(--radius-sm);
+  padding: 3px 6px;
+  color: var(--temper-gold-bright);
+  min-width: 42px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.type-picker-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.type-picker-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.type-picker-hint {
+  font-size: 12px;
+}

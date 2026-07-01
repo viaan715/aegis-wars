@@ -1,0 +1,48 @@
+.app-nav {
+  border-bottom: 1px solid var(--steel-line);
+  background: var(--forge-charcoal);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-nav-inner {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--chalk);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+}
+
+.app-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plan-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--steel-line);
+  color: var(--chalk-dim);
+}
+
+.plan-pill[data-plan='pro'] {
+  color: var(--temper-gold-bright);
+  border-color: var(--temper-gold);
+}

@@ -1,0 +1,80 @@
+.dashboard {
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.dashboard-header h1 {
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+
+.usage-banner {
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-color: var(--temper-gold);
+}
+
+.usage-banner-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.empty-state {
+  padding: 56px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.form-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-card-status {
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.form-card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.form-card-desc {
+  min-height: 20px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-card-count {
+  color: var(--quench-blue-bright);
+}
+
+.form-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form-card-delete:hover {
+  color: var(--slag-red-bright);
+}
