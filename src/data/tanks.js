@@ -1,0 +1,15 @@
+export const ALL_TANKS={
+  aegis:{name:'M1A4 Aegis',era:'FUTURE',nation:'🇺🇸',w:38,h:20,spd:2.4,trv:0.026,col:'#5a6040',drk:'#3a4028',af:[600,480],as:[300,250],ar:[120,80],crew:3,pts:0,role:'player',ability:'aps360',playable:true,unlockXp:0},
+  tiger1:{name:'Tiger I',era:'WW2',nation:'🇩🇪',w:38,h:20,spd:1.2,trv:0.016,col:'#7a7058',drk:'#4a4038',af:[500,420],as:[280,230],ar:[100,80],crew:5,pts:550,role:'fortress',ability:null,playable:true,unlockXp:500},
+  tiger2:{name:'Tiger II',era:'WW2',nation:'🇩🇪',w:42,h:22,spd:1.0,trv:0.013,col:'#6a6848',drk:'#3a3828',af:[620,540],as:[340,280],ar:[140,100],crew:5,pts:700,role:'boss',ability:'smokeBarrage',playable:true,unlockXp:1800},
+  panther:{name:'Panther',era:'WW2',nation:'🇩🇪',w:36,h:18,spd:1.6,trv:0.019,col:'#7a7050',drk:'#4a4030',af:[560,460],as:[220,160],ar:[90,60],crew:5,pts:480,role:'sniper',ability:null,playable:true,unlockXp:1500},
+  sherman:{name:'M4 Sherman',era:'WW2',nation:'🇺🇸',w:32,h:17,spd:1.8,trv:0.022,col:'#6a7050',drk:'#3a4030',af:[280,240],as:[160,120],ar:[80,60],crew:5,pts:280,role:'assault',ability:'rapidFire',playable:true,unlockXp:800},
+  t34:{name:'T-34/85',era:'WW2',nation:'🇷🇺',w:30,h:16,spd:1.9,trv:0.024,col:'#5a6040',drk:'#3a3e28',af:[320,280],as:[180,140],ar:[80,60],crew:5,pts:300,role:'assault',ability:null,playable:true,unlockXp:1000},
+  churchill:{name:'Churchill IV',era:'WW2',nation:'🇬🇧',w:40,h:18,spd:0.9,trv:0.014,col:'#5a5848',drk:'#363430',af:[420,380],as:[260,220],ar:[120,90],crew:5,pts:420,role:'fortress',ability:null,playable:true,unlockXp:1200},
+  t55:{name:'T-55',era:'COLD WAR',nation:'🇷🇺',w:30,h:16,spd:1.7,trv:0.021,col:'#5a5030',drk:'#3a3220',af:[380,320],as:[200,160],ar:[80,60],crew:4,pts:350,role:'assault',ability:null,playable:true,unlockXp:2000},
+  m60:{name:'M60 Patton',era:'COLD WAR',nation:'🇺🇸',w:34,h:18,spd:1.6,trv:0.020,col:'#6a6850',drk:'#3a3830',af:[420,360],as:[230,180],ar:[90,65],crew:4,pts:400,role:'assault',ability:null,playable:true,unlockXp:2500},
+  chieftain:{name:'Chieftain',era:'COLD WAR',nation:'🇬🇧',w:36,h:19,spd:1.4,trv:0.017,col:'#585848',drk:'#343430',af:[500,420],as:[270,210],ar:[110,80],crew:4,pts:450,role:'fortress',ability:null,playable:true,unlockXp:3000},
+  t62:{name:'T-62',era:'COLD WAR',nation:'🇷🇺',w:31,h:16,spd:1.65,trv:0.020,col:'#5a4e2e',drk:'#3a3018',af:[400,340],as:[215,170],ar:[85,62],crew:4,pts:370,role:'assault',ability:null,playable:true,unlockXp:3500},
+  leclerc:{name:'Leclerc',era:'MODERN',nation:'🇫🇷',w:34,h:17,spd:2.1,trv:0.026,col:'#5a5840',drk:'#383620',af:[530,450],as:[275,225],ar:[105,75],crew:3,pts:530,role:'assault',ability:null,playable:true,unlockXp:4000},
+  vanguard:{name:'XM-9 Vanguard',era:'FUTURE',nation:'⭐',w:38,h:20,spd:2.5,trv:0.028,col:'#8a6020',drk:'#5a3c10',af:[660,540],as:[330,270],ar:[140,100],crew:3,pts:0,role:'player',ability:'aps360',playable:true,unlockXp:Infinity,supporterOnly:true},
+};

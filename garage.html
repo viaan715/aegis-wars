@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>Aegis Wars — Garage</title>
+<link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<div id="notif"></div>
+
+<!-- GARAGE (standalone page) -->
+<div class="screen" id="sGarage" style="padding:10px;align-items:flex-start;overflow-y:auto">
+  <div style="width:100%;max-width:660px">
+    <div style="font-size:18px;color:#e8d880;letter-spacing:3px;margin-bottom:4px;text-align:center">GARAGE</div>
+    <div style="font-size:9px;color:#4a4a30;letter-spacing:3px;margin-bottom:14px;text-align:center">INSPECT · CUSTOMIZE</div>
+    <div id="demoBanner" class="hidden" style="margin:0 auto 12px;width:fit-content;font-size:10px;color:#e8d880;letter-spacing:2px;border:1px solid #c8b870;padding:5px 12px">DEMO VERSION · LIMITED MAPS &amp; TANKS</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <div class="card" style="text-align:center">
+        <canvas id="garageCanvas" width="180" height="180" style="background:#0a0c06;border:1px solid #2a2a18"></canvas>
+        <div id="garageTankName" style="margin-top:6px;font-size:12px;color:#e8d880"></div>
+        <div id="garageTankInfo" style="font-size:9px;color:#5a5a38;margin-top:2px;max-width:180px"></div>
+      </div>
+      <div class="card" style="min-width:240px">
+        <div class="ct">Tank Roster</div>
+        <div id="garageTankBtns" style="display:flex;gap:3px;flex-wrap:wrap;max-width:300px"></div>
+        <div class="sep"></div>
+        <div class="ct">Paint</div>
+        <div id="garagePaintBtns" style="display:flex;gap:3px;flex-wrap:wrap"></div>
+        <div class="sep"></div>
+        <div class="ct">Decal</div>
+        <div id="garageDecalBtns" style="display:flex;gap:3px;flex-wrap:wrap"></div>
+      </div>
+      <div class="card" style="min-width:240px">
+        <div class="ct">DLC Packs</div>
+        <div id="garagePacks" style="font-size:9px;color:#5a5a38;display:flex;flex-direction:column;gap:4px;margin-bottom:8px"></div>
+        <div style="display:flex;gap:4px">
+          <input id="garageRedeemInput" type="text" placeholder="Redeem code" style="flex:1;min-width:0;background:#0e1008;border:1px solid #2a2a18;color:#e8d880;font-family:inherit;font-size:9px;padding:5px 6px">
+          <button class="btn" id="garageRedeemBtn" style="min-width:0;padding:4px 8px;font-size:9px">REDEEM</button>
+        </div>
+      </div>
+    </div>
+    <a class="btn" id="garageBack" href="./index.html" style="margin-top:10px;display:inline-block;text-decoration:none;text-align:center;box-sizing:border-box">← BACK TO BASE</a>
+  </div>
+</div>
+
+<script type="module" src="/src/garage-main.js"></script>
+</body></html>

@@ -1,0 +1,20 @@
+{
+  "name": "aegis-wars",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based top-down tank combat game with wave-based enemy combat, capture zone objectives, an XP/rank progression system, and multiple playable tanks and maps.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "vite build --mode demo",
+    "preview": "vite preview",
+    "preview:demo": "vite preview --outDir dist-demo"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "three": "^0.185.0"
+  }
+}
