@@ -74,6 +74,14 @@
   font-size: 13px;
 }
 
+.responses-table-row {
+  cursor: pointer;
+}
+
+.responses-table-row:hover td {
+  background: var(--steel-panel-raised);
+}
+
 .responses-table th,
 .responses-table td {
   text-align: left;

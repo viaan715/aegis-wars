@@ -3,24 +3,13 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { api, ApiError } from '../lib/api.js';
+import { formatAnswer } from '../lib/formatAnswer.jsx';
 import AppNav from '../components/AppNav.jsx';
+import ResponseDetailModal from '../components/ResponseDetailModal.jsx';
 import './Analytics.css';
 
 const GOLD = '#c99a46';
 const BLUE = '#4a6c8c';
-
-function formatAnswer(value) {
-  if (value === undefined || value === null) return '—';
-  if (Array.isArray(value)) return value.join(', ');
-  if (typeof value === 'object' && 'fileName' in value) {
-    return (
-      <a href={value.url} target="_blank" rel="noreferrer" className="file-link">
-        {value.fileName}
-      </a>
-    );
-  }
-  return String(value);
-}
 
 export default function Analytics() {
   const { id } = useParams();
@@ -30,6 +19,7 @@ export default function Analytics() {
   const [responses, setResponses] = useState(null);
   const [error, setError] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [selectedResponse, setSelectedResponse] = useState(null);
 
   useEffect(() => {
     Promise.all([api.getForm(token, id), api.getAnalytics(token, id), api.getResponses(token, id)])
@@ -164,7 +154,7 @@ export default function Analytics() {
                   {responses.responses.map((r) => {
                     const byQuestion = Object.fromEntries(r.answers.map((a) => [a.questionId, a.value]));
                     return (
-                      <tr key={r.id}>
+                      <tr key={r.id} className="responses-table-row" onClick={() => setSelectedResponse(r)}>
                         <td className="tag-mono">{new Date(r.submittedAt).toLocaleString()}</td>
                         {responses.questions.map((q) => (
                           <td key={q.id}>{formatAnswer(byQuestion[q.id])}</td>
@@ -178,6 +168,14 @@ export default function Analytics() {
           </div>
         )}
       </main>
+
+      {selectedResponse && (
+        <ResponseDetailModal
+          response={selectedResponse}
+          questions={responses.questions}
+          onClose={() => setSelectedResponse(null)}
+        />
+      )}
     </div>
   );
 }

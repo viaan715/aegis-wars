@@ -1,0 +1,36 @@
+.response-detail-card {
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.response-detail-time {
+  margin-top: 2px;
+}
+
+.response-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.response-detail-row {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--steel-line);
+}
+
+.response-detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.response-detail-label {
+  font-size: 13px;
+  color: var(--chalk-dim);
+  margin-bottom: 4px;
+}
+
+.response-detail-value {
+  font-size: 15px;
+  font-weight: 600;
+}

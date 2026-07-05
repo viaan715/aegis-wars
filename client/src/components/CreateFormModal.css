@@ -1,0 +1,73 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 11, 14, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--steel-panel);
+  border: 1px solid var(--steel-line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 560px;
+  padding: 24px;
+  animation: fadeUp var(--duration-med) var(--ease-forge) both;
+}
+
+.modal-header {
+  margin-bottom: 18px;
+}
+
+.modal-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--chalk-dim);
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.template-card {
+  text-align: left;
+  padding: 16px;
+  border: 1px solid var(--steel-line);
+  border-radius: var(--radius-md);
+  background: var(--forge-charcoal);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.template-card:hover:not(:disabled) {
+  border-color: var(--temper-gold);
+}
+
+.template-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.template-card-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.template-card-blurb {
+  font-size: 12px;
+}
+
+@media (max-width: 520px) {
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+}

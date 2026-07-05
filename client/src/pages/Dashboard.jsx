@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { api } from '../lib/api.js';
 import AppNav from '../components/AppNav.jsx';
+import CreateFormModal from '../components/CreateFormModal.jsx';
+import TemperProgress from '../components/TemperProgress.jsx';
 import './Dashboard.css';
 
 function heatState(form) {
@@ -24,6 +26,7 @@ export default function Dashboard() {
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [duplicatingId, setDuplicatingId] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -39,14 +42,21 @@ export default function Dashboard() {
     load();
   }, [load]);
 
-  async function handleCreate() {
+  async function handleCreateFromTemplate(template) {
     setCreating(true);
     setError('');
     try {
-      const { form } = await api.createForm(token, { title: 'Untitled form' });
+      const { form } = await api.createForm(token, {
+        title: template?.title ?? 'Untitled form',
+        description: template?.description ?? '',
+      });
+      if (template?.questions?.length) {
+        await api.updateForm(token, form.id, { questions: template.questions });
+      }
       navigate(`/forms/${form.id}/edit`);
     } catch (err) {
       setError(err.message);
+      setShowCreateModal(false);
     } finally {
       setCreating(false);
     }
@@ -104,7 +114,7 @@ export default function Dashboard() {
             <h1 className="display-heading">Your forms</h1>
             <p className="muted">Every piece on the bench, in one place.</p>
           </div>
-          <button type="button" className="btn btn-primary" onClick={handleCreate} disabled={creating || atFormLimit}>
+          <button type="button" className="btn btn-primary" onClick={() => setShowCreateModal(true)} disabled={creating || atFormLimit}>
             {creating ? 'Creating…' : 'Create form'}
           </button>
         </div>
@@ -131,7 +141,7 @@ export default function Dashboard() {
           <div className="card empty-state">
             <h2>No forms yet.</h2>
             <p className="muted">Build your first one — it takes about two minutes.</p>
-            <button type="button" className="btn btn-primary" onClick={handleCreate} disabled={creating}>
+            <button type="button" className="btn btn-primary" onClick={() => setShowCreateModal(true)} disabled={creating}>
               Create your first form
             </button>
           </div>
@@ -145,9 +155,18 @@ export default function Dashboard() {
                 </div>
                 <h2 className="form-card-title">{form.title}</h2>
                 <p className="muted form-card-desc">{form.description || 'No description yet.'}</p>
-                <p className="tag-mono form-card-count">
-                  {form.responseCount} response{form.responseCount === 1 ? '' : 's'}
-                </p>
+                {usage?.maxResponsesPerForm != null ? (
+                  <div className="form-card-response-limit">
+                    <span className="tag-mono">
+                      {form.responseCount} / {usage.maxResponsesPerForm} RESPONSES
+                    </span>
+                    <TemperProgress percent={(form.responseCount / usage.maxResponsesPerForm) * 100} />
+                  </div>
+                ) : (
+                  <p className="tag-mono form-card-count">
+                    {form.responseCount} response{form.responseCount === 1 ? '' : 's'}
+                  </p>
+                )}
                 <div className="form-card-actions">
                   <Link to={`/forms/${form.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
@@ -184,6 +203,14 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      {showCreateModal && (
+        <CreateFormModal
+          creating={creating}
+          onClose={() => setShowCreateModal(false)}
+          onPick={handleCreateFromTemplate}
+        />
+      )}
     </div>
   );
 }

@@ -57,7 +57,11 @@ router.get('/', (req, res) => {
   const limits = limitsFor(req.user.plan);
   res.json({
     forms,
-    usage: { formCount: forms.length, maxForms: Number.isFinite(limits.maxForms) ? limits.maxForms : null },
+    usage: {
+      formCount: forms.length,
+      maxForms: Number.isFinite(limits.maxForms) ? limits.maxForms : null,
+      maxResponsesPerForm: Number.isFinite(limits.maxResponsesPerForm) ? limits.maxResponsesPerForm : null,
+    },
   });
 });
 
@@ -72,10 +76,11 @@ router.post('/', (req, res) => {
   }
 
   const title = typeof req.body?.title === 'string' && req.body.title.trim() ? req.body.title.trim() : 'Untitled form';
+  const description = typeof req.body?.description === 'string' ? req.body.description : '';
   const slug = nanoid(10);
   const info = db
-    .prepare('INSERT INTO forms (user_id, title, slug) VALUES (?, ?, ?)')
-    .run(req.user.id, title, slug);
+    .prepare('INSERT INTO forms (user_id, title, description, slug) VALUES (?, ?, ?, ?)')
+    .run(req.user.id, title, description, slug);
   const form = db.prepare('SELECT * FROM forms WHERE id = ?').get(info.lastInsertRowid);
   res.status(201).json({ form: serializeForm(form), questions: [] });
 });
