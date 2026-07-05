@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
+import PasswordField from '../components/PasswordField.jsx';
 import './AuthPages.css';
 
 export default function Signup() {
@@ -53,12 +54,9 @@ export default function Signup() {
         </div>
         <div className="field">
           <label htmlFor="password">Password</label>
-          <input
+          <PasswordField
             id="password"
-            className="input"
-            type="password"
             autoComplete="new-password"
-            required
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}

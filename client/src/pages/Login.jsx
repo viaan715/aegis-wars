@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
+import PasswordField from '../components/PasswordField.jsx';
 import './AuthPages.css';
 
 export default function Login() {
@@ -49,12 +50,9 @@ export default function Login() {
         </div>
         <div className="field">
           <label htmlFor="password">Password</label>
-          <input
+          <PasswordField
             id="password"
-            className="input"
-            type="password"
             autoComplete="current-password"
-            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
