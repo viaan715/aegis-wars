@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PORT, UPLOADS_DIR } from './config.js';
+import { initDb } from './db.js';
 import authRoutes from './routes/auth.js';
 import billingRoutes from './routes/billing.js';
 import formsRoutes from './routes/forms.js';
@@ -40,6 +41,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-app.listen(PORT, () => {
-  console.log(`FormForge API listening on http://localhost:${PORT}`);
-});
+initDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`FormForge API listening on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err);
+    process.exit(1);
+  });

@@ -1,4 +1,4 @@
-import db from './db.js';
+import { pool } from './db.js';
 
 export const STARTER_CREDITS = 100;
 
@@ -15,18 +15,19 @@ export function hasUnlimitedCredits(plan) {
 }
 
 // user only needs {id, plan} — pass req.user or a lighter row (e.g. a form's owner).
-export function chargeCredits(user, action) {
+export async function chargeCredits(user, action) {
   const cost = CREDIT_COSTS[action];
   if (hasUnlimitedCredits(user.plan)) return { ok: true, cost: 0 };
-  const info = db
-    .prepare('UPDATE users SET credits = credits - ? WHERE id = ? AND credits >= ?')
-    .run(cost, user.id, cost);
-  return { ok: info.changes > 0, cost };
+  const result = await pool.query(
+    'UPDATE users SET credits = credits - $1 WHERE id = $2 AND credits >= $1',
+    [cost, user.id]
+  );
+  return { ok: result.rowCount > 0, cost };
 }
 
-export function refundCredits(user, cost) {
+export async function refundCredits(user, cost) {
   if (!cost || hasUnlimitedCredits(user.plan)) return;
-  db.prepare('UPDATE users SET credits = credits + ? WHERE id = ?').run(cost, user.id);
+  await pool.query('UPDATE users SET credits = credits + $1 WHERE id = $2', [cost, user.id]);
 }
 
 export function insufficientCreditsResponse(res, cost) {
