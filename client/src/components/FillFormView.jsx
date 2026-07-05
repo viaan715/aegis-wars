@@ -181,6 +181,14 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
     if (index > 0) setIndex(index - 1);
   }
 
+  function handleTypeformKeyDown(e) {
+    if (e.key !== 'Enter') return;
+    const isTextarea = e.target.tagName === 'TEXTAREA';
+    if (isTextarea && !(e.metaKey || e.ctrlKey)) return;
+    e.preventDefault();
+    goNext();
+  }
+
   async function handleSubmit() {
     if (mode === 'preview') {
       setSubmitted(true);
@@ -197,13 +205,14 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
   }
 
   if (submitted) {
+    const thankYouTitle = form.thankYouTitle?.trim() || "Thanks — that's recorded.";
+    const thankYouMessage = form.thankYouMessage?.trim() || (mode === 'preview' ? '' : 'You can close this tab now.');
     return (
       <div className="fill-view" style={{ '--fill-accent': accent }}>
         <div className="fill-thanks">
-          <h1 className="fill-thanks-title">Thanks — that's recorded.</h1>
-          <p className="fill-thanks-sub">
-            {mode === 'preview' ? 'This is what respondents see after submitting.' : 'You can close this tab now.'}
-          </p>
+          <h1 className="fill-thanks-title">{thankYouTitle}</h1>
+          {thankYouMessage && <p className="fill-thanks-sub">{thankYouMessage}</p>}
+          {mode === 'preview' && <p className="fill-thanks-sub fill-thanks-preview-note">This is what respondents see after submitting.</p>}
         </div>
       </div>
     );
@@ -227,7 +236,7 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
           <TemperProgress percent={percent} />
         </div>
         <div className="fill-typeform">
-          <div className="fill-typeform-inner" key={currentQuestion.id}>
+          <div className="fill-typeform-inner" key={currentQuestion.id} onKeyDown={handleTypeformKeyDown}>
             <p className="fill-counter">
               QUESTION {index + 1} OF {questions.length}
             </p>
@@ -248,6 +257,7 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
               <button type="button" className="fill-btn-primary" onClick={goNext} disabled={submitting}>
                 {index === questions.length - 1 ? (submitting ? 'Submitting…' : 'Submit') : 'Next'}
               </button>
+              <span className="fill-enter-hint">press Enter ↵</span>
             </div>
           </div>
         </div>

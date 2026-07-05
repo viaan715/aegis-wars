@@ -55,6 +55,8 @@ export default function Builder() {
         description: meta.description,
         layout: meta.layout,
         themeColor: meta.themeColor,
+        thankYouTitle: meta.thankYouTitle,
+        thankYouMessage: meta.thankYouMessage,
         questions,
       });
       // Local state is already the source of truth for what was just saved —
@@ -82,7 +84,17 @@ export default function Builder() {
     }, 1200);
     return () => clearTimeout(saveTimer.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meta?.title, meta?.description, meta?.layout, meta?.themeColor, questions]);
+  }, [meta?.title, meta?.description, meta?.layout, meta?.themeColor, meta?.thankYouTitle, meta?.thankYouMessage, questions]);
+
+  useEffect(() => {
+    if (saveStatus !== 'unsaved' && saveStatus !== 'saving') return;
+    function handleBeforeUnload(e) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [saveStatus]);
 
   function updateMeta(patch) {
     setMeta((prev) => ({ ...prev, ...patch }));
@@ -98,6 +110,15 @@ export default function Builder() {
 
   function removeQuestion(index) {
     setQuestions((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function duplicateQuestion(index) {
+    setQuestions((prev) => {
+      const copy = { ...prev[index], id: `new-${Math.random().toString(36).slice(2, 10)}` };
+      const next = [...prev];
+      next.splice(index + 1, 0, copy);
+      return next;
+    });
   }
 
   function moveQuestion(index, direction) {
@@ -223,6 +244,7 @@ export default function Builder() {
                   onChange={(updated) => updateQuestion(index, updated)}
                   onRemove={() => removeQuestion(index)}
                   onMove={(direction) => moveQuestion(index, direction)}
+                  onDuplicate={() => duplicateQuestion(index)}
                 />
               </div>
             ))}
@@ -270,6 +292,27 @@ export default function Builder() {
                   value={meta.themeColor}
                   onChange={(e) => updateMeta({ themeColor: e.target.value })}
                   aria-label="Custom color"
+                />
+              </div>
+            </div>
+
+            <div className="card sidebar-card">
+              <h2 className="sidebar-title">Thank-you screen</h2>
+              <div className="field">
+                <input
+                  className="input"
+                  value={meta.thankYouTitle}
+                  onChange={(e) => updateMeta({ thankYouTitle: e.target.value })}
+                  placeholder="Thanks — that's recorded."
+                />
+              </div>
+              <div className="field">
+                <textarea
+                  className="textarea"
+                  rows={2}
+                  value={meta.thankYouMessage}
+                  onChange={(e) => updateMeta({ thankYouMessage: e.target.value })}
+                  placeholder="Optional message shown after submitting (e.g. what happens next)"
                 />
               </div>
             </div>

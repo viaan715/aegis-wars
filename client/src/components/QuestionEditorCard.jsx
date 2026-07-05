@@ -8,6 +8,7 @@ export default function QuestionEditorCard({
   onChange,
   onRemove,
   onMove,
+  onDuplicate,
   dragHandleProps,
 }) {
   const meta = questionMeta(question.type);
@@ -52,6 +53,9 @@ export default function QuestionEditorCard({
             ↓
           </button>
         </div>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={onDuplicate}>
+          Duplicate
+        </button>
         <button type="button" className="btn btn-ghost btn-sm question-card-remove" onClick={onRemove}>
           Remove
         </button>

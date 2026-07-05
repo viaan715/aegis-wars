@@ -41,6 +41,8 @@ router.get('/forms/:slug', (req, res) => {
       description: form.description,
       layout: form.layout,
       themeColor: form.theme_color,
+      thankYouTitle: form.thank_you_title,
+      thankYouMessage: form.thank_you_message,
       slug: form.slug,
     },
     questions: questionsForForm(form.id).map((q) => ({

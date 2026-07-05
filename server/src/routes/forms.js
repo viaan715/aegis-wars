@@ -31,6 +31,8 @@ function serializeForm(form) {
     layout: form.layout,
     themeColor: form.theme_color,
     status: form.status,
+    thankYouTitle: form.thank_you_title,
+    thankYouMessage: form.thank_you_message,
     createdAt: form.created_at,
     updatedAt: form.updated_at,
     responseCount,
@@ -78,6 +80,51 @@ router.post('/', (req, res) => {
   res.status(201).json({ form: serializeForm(form), questions: [] });
 });
 
+router.post('/:id/duplicate', (req, res) => {
+  const source = getOwnedForm(req.params.id, req.user.id);
+  if (!source) return res.status(404).json({ error: 'Form not found' });
+
+  const limits = limitsFor(req.user.plan);
+  const formCount = db.prepare('SELECT COUNT(*) AS n FROM forms WHERE user_id = ?').get(req.user.id).n;
+  if (formCount >= limits.maxForms) {
+    return res.status(403).json({
+      error: `Your ${req.user.plan} plan allows up to ${limits.maxForms} forms. Upgrade to Pro for unlimited forms.`,
+      code: 'PLAN_LIMIT_FORMS',
+    });
+  }
+
+  const tx = db.transaction(() => {
+    const slug = nanoid(10);
+    const info = db
+      .prepare(
+        `INSERT INTO forms (user_id, title, description, slug, layout, theme_color, thank_you_title, thank_you_message)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+      .run(
+        req.user.id,
+        `${source.title} (copy)`,
+        source.description,
+        slug,
+        source.layout,
+        source.theme_color,
+        source.thank_you_title,
+        source.thank_you_message
+      );
+    const newFormId = info.lastInsertRowid;
+    const insertQuestion = db.prepare(
+      'INSERT INTO questions (form_id, type, label, description, options, required, order_index) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    );
+    for (const q of questionsForForm(source.id)) {
+      insertQuestion.run(newFormId, q.type, q.label, q.description, JSON.stringify(q.options), q.required ? 1 : 0, q.order_index);
+    }
+    return newFormId;
+  });
+  const newFormId = tx();
+
+  const form = db.prepare('SELECT * FROM forms WHERE id = ?').get(newFormId);
+  res.status(201).json({ form: serializeForm(form), questions: questionsForForm(newFormId) });
+});
+
 router.get('/:id', (req, res) => {
   const form = getOwnedForm(req.params.id, req.user.id);
   if (!form) return res.status(404).json({ error: 'Form not found' });
@@ -88,7 +135,7 @@ router.put('/:id', (req, res) => {
   const form = getOwnedForm(req.params.id, req.user.id);
   if (!form) return res.status(404).json({ error: 'Form not found' });
 
-  const { title, description, layout, themeColor, questions } = req.body || {};
+  const { title, description, layout, themeColor, thankYouTitle, thankYouMessage, questions } = req.body || {};
 
   if (questions !== undefined) {
     const err = validateQuestions(questions);
@@ -102,6 +149,8 @@ router.put('/:id', (req, res) => {
         description = COALESCE(?, description),
         layout = COALESCE(?, layout),
         theme_color = COALESCE(?, theme_color),
+        thank_you_title = COALESCE(?, thank_you_title),
+        thank_you_message = COALESCE(?, thank_you_message),
         updated_at = datetime('now')
        WHERE id = ?`
     ).run(
@@ -109,6 +158,8 @@ router.put('/:id', (req, res) => {
       typeof description === 'string' ? description : null,
       layout === 'typeform' || layout === 'classic' ? layout : null,
       typeof themeColor === 'string' ? themeColor : null,
+      typeof thankYouTitle === 'string' ? thankYouTitle.trim() || "Thanks — that's recorded." : null,
+      typeof thankYouMessage === 'string' ? thankYouMessage : null,
       form.id
     );
 

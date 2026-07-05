@@ -3,8 +3,8 @@ dist/
 build/
 .env
 .env.local
-server/data/*.db
-server/data/*.db-journal
+server/data/*
+!server/data/.gitkeep
 server/uploads/*
 !server/uploads/.gitkeep
 *.log

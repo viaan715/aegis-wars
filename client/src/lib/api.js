@@ -44,6 +44,7 @@ export const api = {
   getForm: (token, id) => request(`/forms/${id}`, { token }),
   updateForm: (token, id, payload) => request(`/forms/${id}`, { method: 'PUT', body: payload, token }),
   deleteForm: (token, id) => request(`/forms/${id}`, { method: 'DELETE', token }),
+  duplicateForm: (token, id) => request(`/forms/${id}/duplicate`, { method: 'POST', token }),
   publishForm: (token, id) => request(`/forms/${id}/publish`, { method: 'POST', token }),
   unpublishForm: (token, id) => request(`/forms/${id}/unpublish`, { method: 'POST', token }),
 

@@ -30,6 +30,8 @@ db.exec(`
     layout TEXT NOT NULL DEFAULT 'typeform',
     theme_color TEXT NOT NULL DEFAULT '#c99a46',
     status TEXT NOT NULL DEFAULT 'draft',
+    thank_you_title TEXT NOT NULL DEFAULT 'Thanks — that''s recorded.',
+    thank_you_message TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
@@ -63,5 +65,13 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_responses_form ON responses(form_id);
   CREATE INDEX IF NOT EXISTS idx_answers_response ON answers(response_id);
 `);
+
+const formColumns = new Set(db.prepare('PRAGMA table_info(forms)').all().map((c) => c.name));
+if (!formColumns.has('thank_you_title')) {
+  db.exec(`ALTER TABLE forms ADD COLUMN thank_you_title TEXT NOT NULL DEFAULT 'Thanks — that''s recorded.'`);
+}
+if (!formColumns.has('thank_you_message')) {
+  db.exec(`ALTER TABLE forms ADD COLUMN thank_you_message TEXT NOT NULL DEFAULT ''`);
+}
 
 export default db;

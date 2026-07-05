@@ -23,6 +23,7 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [duplicatingId, setDuplicatingId] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -55,6 +56,19 @@ export default function Dashboard() {
     if (!window.confirm(`Delete "${title}"? This also deletes its responses. This can't be undone.`)) return;
     await api.deleteForm(token, formId);
     load();
+  }
+
+  async function handleDuplicate(formId) {
+    setDuplicatingId(formId);
+    setError('');
+    try {
+      await api.duplicateForm(token, formId);
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDuplicatingId(null);
+    }
   }
 
   async function handleTogglePublish(form) {
@@ -149,6 +163,14 @@ export default function Dashboard() {
                       {copiedId === form.id ? 'Copied!' : 'Copy link'}
                     </button>
                   )}
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => handleDuplicate(form.id)}
+                    disabled={duplicatingId === form.id || atFormLimit}
+                  >
+                    {duplicatingId === form.id ? 'Duplicating…' : 'Duplicate'}
+                  </button>
                   <button
                     type="button"
                     className="btn btn-ghost btn-sm form-card-delete"
