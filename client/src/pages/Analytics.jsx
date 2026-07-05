@@ -6,6 +6,7 @@ import { api, ApiError } from '../lib/api.js';
 import { formatAnswer } from '../lib/formatAnswer.jsx';
 import AppNav from '../components/AppNav.jsx';
 import ResponseDetailModal from '../components/ResponseDetailModal.jsx';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './Analytics.css';
 
 const GOLD = '#c99a46';
@@ -20,6 +21,7 @@ export default function Analytics() {
   const [error, setError] = useState('');
   const [exporting, setExporting] = useState(false);
   const [selectedResponse, setSelectedResponse] = useState(null);
+  const rootRef = useRandomTextColors();
 
   useEffect(() => {
     Promise.all([api.getForm(token, id), api.getAnalytics(token, id), api.getResponses(token, id)])
@@ -50,7 +52,7 @@ export default function Analytics() {
 
   if (error) {
     return (
-      <div className="app-shell">
+      <div className="app-shell" ref={rootRef}>
         <AppNav />
         <main className="container">
           <p className="error-text">{error}</p>
@@ -61,14 +63,14 @@ export default function Analytics() {
 
   if (!form || !analytics || !responses) {
     return (
-      <div className="app-shell">
+      <div className="app-shell" ref={rootRef}>
         <AppNav />
       </div>
     );
   }
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" ref={rootRef}>
       <AppNav
         actions={
           <>

@@ -7,6 +7,7 @@ import AppNav from '../components/AppNav.jsx';
 import QuestionEditorCard from '../components/QuestionEditorCard.jsx';
 import QuestionTypePicker from '../components/QuestionTypePicker.jsx';
 import FillFormView from '../components/FillFormView.jsx';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './Builder.css';
 
 const THEME_SWATCHES = ['#c99a46', '#4a6c8c', '#3f7d5c', '#8a5cf5', '#d9534f', '#1b1e24'];
@@ -34,6 +35,7 @@ export default function Builder() {
   const saveTimer = useRef(null);
   const savingRef = useRef(false);
   const skipNextAutosave = useRef(true);
+  const rootRef = useRandomTextColors();
 
   useEffect(() => {
     api
@@ -158,7 +160,7 @@ export default function Builder() {
 
   if (loadError) {
     return (
-      <div className="app-shell">
+      <div className="app-shell" ref={rootRef}>
         <AppNav />
         <main className="container builder-error">
           <p className="error-text">{loadError}</p>
@@ -175,7 +177,7 @@ export default function Builder() {
   const shareUrl = `${window.location.origin}/f/${meta.slug}`;
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" ref={rootRef}>
       <AppNav
         actions={
           <>

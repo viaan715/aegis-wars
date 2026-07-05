@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import TemperProgress from './TemperProgress.jsx';
+import { COLOR_SCOPE_ATTR, LIGHT_BG_PALETTE, useRandomTextColors } from '../lib/randomTextColors.js';
 import './FillFormView.css';
 
 function QuestionField({ question, value, onChange }) {
@@ -151,6 +152,7 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
   const [index, setIndex] = useState(0);
   const [touched, setTouched] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const rootRef = useRandomTextColors(LIGHT_BG_PALETTE);
 
   const accent = form.themeColor || '#c99a46';
   const isTypeform = form.layout !== 'classic';
@@ -204,34 +206,28 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
     }
   }
 
+  let content;
+
   if (submitted) {
     const thankYouTitle = form.thankYouTitle?.trim() || "Thanks — that's recorded.";
     const thankYouMessage = form.thankYouMessage?.trim() || (mode === 'preview' ? '' : 'You can close this tab now.');
-    return (
-      <div className="fill-view" style={{ '--fill-accent': accent }}>
-        <div className="fill-thanks">
-          <h1 className="fill-thanks-title">{thankYouTitle}</h1>
-          {thankYouMessage && <p className="fill-thanks-sub">{thankYouMessage}</p>}
-          {mode === 'preview' && <p className="fill-thanks-sub fill-thanks-preview-note">This is what respondents see after submitting.</p>}
-        </div>
+    content = (
+      <div className="fill-thanks">
+        <h1 className="fill-thanks-title">{thankYouTitle}</h1>
+        {thankYouMessage && <p className="fill-thanks-sub">{thankYouMessage}</p>}
+        {mode === 'preview' && <p className="fill-thanks-sub fill-thanks-preview-note">This is what respondents see after submitting.</p>}
       </div>
     );
-  }
-
-  if (questions.length === 0) {
-    return (
-      <div className="fill-view" style={{ '--fill-accent': accent }}>
-        <div className="fill-thanks">
-          <h1 className="fill-thanks-title">No questions yet</h1>
-          <p className="fill-thanks-sub">Add at least one question to preview or publish this form.</p>
-        </div>
+  } else if (questions.length === 0) {
+    content = (
+      <div className="fill-thanks">
+        <h1 className="fill-thanks-title">No questions yet</h1>
+        <p className="fill-thanks-sub">Add at least one question to preview or publish this form.</p>
       </div>
     );
-  }
-
-  if (isTypeform) {
-    return (
-      <div className="fill-view" style={{ '--fill-accent': accent }}>
+  } else if (isTypeform) {
+    content = (
+      <>
         <div className="fill-progress-bar">
           <TemperProgress percent={percent} />
         </div>
@@ -261,12 +257,10 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
-  }
-
-  return (
-    <div className="fill-view" style={{ '--fill-accent': accent }}>
+  } else {
+    content = (
       <form
         className="fill-classic"
         onSubmit={(e) => {
@@ -299,6 +293,12 @@ export default function FillFormView({ form, questions, mode = 'live', onSubmit,
           {submitting ? 'Submitting…' : 'Submit'}
         </button>
       </form>
+    );
+  }
+
+  return (
+    <div className="fill-view" ref={rootRef} {...{ [COLOR_SCOPE_ATTR]: '' }} style={{ '--fill-accent': accent }}>
+      {content}
     </div>
   );
 }

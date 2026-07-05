@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './AuthPages.css';
 
 export default function NotFound() {
+  const rootRef = useRandomTextColors();
+
   return (
-    <div className="auth-page">
+    <div className="auth-page" ref={rootRef}>
       <div className="card auth-card" style={{ textAlign: 'center' }}>
         <h1 className="display-heading" style={{ fontSize: 40 }}>
           404

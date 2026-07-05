@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import TemperProgress from '../components/TemperProgress.jsx';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './Landing.css';
 
 const FEATURES = [
@@ -22,6 +23,7 @@ const FEATURES = [
 export default function Landing() {
   const { token } = useAuth();
   const [heat, setHeat] = useState(0);
+  const rootRef = useRandomTextColors();
 
   useEffect(() => {
     const id = setInterval(() => setHeat((h) => (h >= 100 ? 0 : h + 2)), 60);
@@ -29,7 +31,7 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="landing">
+    <div className="landing" ref={rootRef}>
       <header className="landing-nav">
         <div className="container landing-nav-inner">
           <span className="landing-brand">FormForge</span>

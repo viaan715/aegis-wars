@@ -5,6 +5,7 @@ import { api } from '../lib/api.js';
 import AppNav from '../components/AppNav.jsx';
 import CreateFormModal from '../components/CreateFormModal.jsx';
 import TemperProgress from '../components/TemperProgress.jsx';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './Dashboard.css';
 
 function heatState(form) {
@@ -27,6 +28,7 @@ export default function Dashboard() {
   const [copiedId, setCopiedId] = useState(null);
   const [duplicatingId, setDuplicatingId] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const rootRef = useRandomTextColors();
 
   const load = useCallback(async () => {
     try {
@@ -106,7 +108,7 @@ export default function Dashboard() {
   const atFormLimit = usage && usage.maxForms !== null && usage.formCount >= usage.maxForms;
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" ref={rootRef}>
       <AppNav />
       <main className="container dashboard">
         <div className="spread dashboard-header">

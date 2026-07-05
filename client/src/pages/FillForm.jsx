@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { api, ApiError } from '../lib/api.js';
 import FillFormView from '../components/FillFormView.jsx';
+import { LIGHT_BG_PALETTE, useRandomTextColors } from '../lib/randomTextColors.js';
 
 export default function FillForm() {
   const { slug } = useParams();
@@ -9,6 +10,7 @@ export default function FillForm() {
   const [loadError, setLoadError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const rootRef = useRandomTextColors(LIGHT_BG_PALETTE);
 
   useEffect(() => {
     api
@@ -19,7 +21,7 @@ export default function FillForm() {
 
   if (loadError) {
     return (
-      <div className="fill-view" style={{ '--fill-accent': '#c99a46' }}>
+      <div className="fill-view" ref={rootRef} style={{ '--fill-accent': '#c99a46' }}>
         <div className="fill-thanks">
           <h1 className="fill-thanks-title">Survey unavailable</h1>
           <p className="fill-thanks-sub">{loadError}</p>

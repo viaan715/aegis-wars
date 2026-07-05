@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import PasswordField from '../components/PasswordField.jsx';
+import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './AuthPages.css';
 
 export default function Signup() {
@@ -12,6 +13,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const rootRef = useRandomTextColors();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -28,7 +30,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="auth-page">
+    <div className="auth-page" ref={rootRef}>
       <Link to="/" className="auth-brand">
         FormForge
       </Link>
