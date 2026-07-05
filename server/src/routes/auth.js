@@ -5,6 +5,7 @@ import db from '../db.js';
 import { JWT_SECRET } from '../config.js';
 import { requireAuth } from '../middleware/auth.js';
 import { rateLimit } from '../middleware/rateLimit.js';
+import { STARTER_CREDITS } from '../credits.js';
 
 const router = Router();
 const authLimiter = rateLimit({ windowMs: 60_000, max: 20 });
@@ -37,8 +38,8 @@ router.post('/register', authLimiter, (req, res) => {
 
   const passwordHash = bcrypt.hashSync(password, 10);
   const info = db
-    .prepare('INSERT INTO users (email, password_hash, name, plan) VALUES (?, ?, ?, ?)')
-    .run(normalizedEmail, passwordHash, name.trim(), 'free');
+    .prepare('INSERT INTO users (email, password_hash, name, plan, credits) VALUES (?, ?, ?, ?, ?)')
+    .run(normalizedEmail, passwordHash, name.trim(), 'free', STARTER_CREDITS);
 
   const user = db.prepare('SELECT id, email, name, plan, credits FROM users WHERE id = ?').get(info.lastInsertRowid);
   const token = issueToken(user.id);

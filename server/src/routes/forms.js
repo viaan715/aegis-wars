@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { nanoid } from 'nanoid';
 import db from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
-import { limitsFor } from '../plans.js';
+import { chargeCredits, insufficientCreditsResponse } from '../credits.js';
+import { questionsForForm, serializeForm } from '../formHelpers.js';
 import { QUESTION_TYPES } from '../questionTypes.js';
 
 const router = Router();
@@ -10,33 +11,6 @@ router.use(requireAuth);
 
 function getOwnedForm(formId, userId) {
   return db.prepare('SELECT * FROM forms WHERE id = ? AND user_id = ?').get(formId, userId);
-}
-
-function questionsForForm(formId) {
-  return db
-    .prepare('SELECT * FROM questions WHERE form_id = ? ORDER BY order_index ASC')
-    .all(formId)
-    .map((q) => ({ ...q, options: JSON.parse(q.options || '[]'), required: !!q.required }));
-}
-
-function serializeForm(form) {
-  const responseCount = db
-    .prepare('SELECT COUNT(*) AS n FROM responses WHERE form_id = ?')
-    .get(form.id).n;
-  return {
-    id: form.id,
-    title: form.title,
-    description: form.description,
-    slug: form.slug,
-    layout: form.layout,
-    themeColor: form.theme_color,
-    status: form.status,
-    thankYouTitle: form.thank_you_title,
-    thankYouMessage: form.thank_you_message,
-    createdAt: form.created_at,
-    updatedAt: form.updated_at,
-    responseCount,
-  };
 }
 
 function validateQuestions(questions) {
@@ -54,26 +28,12 @@ router.get('/', (req, res) => {
     .prepare('SELECT * FROM forms WHERE user_id = ? ORDER BY updated_at DESC')
     .all(req.user.id)
     .map(serializeForm);
-  const limits = limitsFor(req.user.plan);
-  res.json({
-    forms,
-    usage: {
-      formCount: forms.length,
-      maxForms: Number.isFinite(limits.maxForms) ? limits.maxForms : null,
-      maxResponsesPerForm: Number.isFinite(limits.maxResponsesPerForm) ? limits.maxResponsesPerForm : null,
-    },
-  });
+  res.json({ forms });
 });
 
 router.post('/', (req, res) => {
-  const limits = limitsFor(req.user.plan);
-  const formCount = db.prepare('SELECT COUNT(*) AS n FROM forms WHERE user_id = ?').get(req.user.id).n;
-  if (formCount >= limits.maxForms) {
-    return res.status(403).json({
-      error: `Your ${req.user.plan} plan allows up to ${limits.maxForms} forms. Upgrade to Pro for unlimited forms.`,
-      code: 'PLAN_LIMIT_FORMS',
-    });
-  }
+  const charge = chargeCredits(req.user, 'createForm');
+  if (!charge.ok) return insufficientCreditsResponse(res, charge.cost);
 
   const title = typeof req.body?.title === 'string' && req.body.title.trim() ? req.body.title.trim() : 'Untitled form';
   const description = typeof req.body?.description === 'string' ? req.body.description : '';
@@ -89,14 +49,8 @@ router.post('/:id/duplicate', (req, res) => {
   const source = getOwnedForm(req.params.id, req.user.id);
   if (!source) return res.status(404).json({ error: 'Form not found' });
 
-  const limits = limitsFor(req.user.plan);
-  const formCount = db.prepare('SELECT COUNT(*) AS n FROM forms WHERE user_id = ?').get(req.user.id).n;
-  if (formCount >= limits.maxForms) {
-    return res.status(403).json({
-      error: `Your ${req.user.plan} plan allows up to ${limits.maxForms} forms. Upgrade to Pro for unlimited forms.`,
-      code: 'PLAN_LIMIT_FORMS',
-    });
-  }
+  const charge = chargeCredits(req.user, 'duplicateForm');
+  if (!charge.ok) return insufficientCreditsResponse(res, charge.cost);
 
   const tx = db.transaction(() => {
     const slug = nanoid(10);

@@ -68,16 +68,6 @@
   color: var(--quench-blue-bright);
 }
 
-.form-card-response-limit {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-card-response-limit .tag-mono {
-  color: var(--quench-blue-bright);
-}
-
 .form-card-actions {
   display: flex;
   flex-wrap: wrap;

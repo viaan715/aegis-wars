@@ -4,7 +4,8 @@ import path from 'node:path';
 import { nanoid } from 'nanoid';
 import db from '../db.js';
 import { UPLOADS_DIR } from '../config.js';
-import { limitsFor } from '../plans.js';
+import { chargeCredits } from '../credits.js';
+import { questionsForForm } from '../formHelpers.js';
 import { rateLimit } from '../middleware/rateLimit.js';
 
 const router = Router();
@@ -20,13 +21,6 @@ const upload = multer({
   }),
   limits: { fileSize: 10 * 1024 * 1024, files: 10 },
 });
-
-function questionsForForm(formId) {
-  return db
-    .prepare('SELECT * FROM questions WHERE form_id = ? ORDER BY order_index ASC')
-    .all(formId)
-    .map((q) => ({ ...q, options: JSON.parse(q.options || '[]'), required: !!q.required }));
-}
 
 router.get('/forms/:slug', (req, res) => {
   const form = db
@@ -61,13 +55,6 @@ router.post('/forms/:slug/responses', submitLimiter, upload.any(), (req, res) =>
     .prepare("SELECT * FROM forms WHERE slug = ? AND status = 'published'")
     .get(req.params.slug);
   if (!form) return res.status(404).json({ error: 'This survey is not available' });
-
-  const owner = db.prepare('SELECT plan FROM users WHERE id = ?').get(form.user_id);
-  const limits = limitsFor(owner?.plan ?? 'free');
-  const responseCount = db.prepare('SELECT COUNT(*) AS n FROM responses WHERE form_id = ?').get(form.id).n;
-  if (responseCount >= limits.maxResponsesPerForm) {
-    return res.status(403).json({ error: 'This survey is no longer accepting responses' });
-  }
 
   const questions = questionsForForm(form.id);
 
@@ -132,6 +119,12 @@ router.post('/forms/:slug/responses', submitLimiter, upload.any(), (req, res) =>
     }
 
     answersToInsert.push({ questionId: q.id, value: JSON.stringify(raw) });
+  }
+
+  const owner = db.prepare('SELECT id, plan FROM users WHERE id = ?').get(form.user_id);
+  const charge = chargeCredits(owner, 'collectResponse');
+  if (!charge.ok) {
+    return res.status(403).json({ error: 'This survey is not currently accepting responses' });
   }
 
   const tx = db.transaction(() => {

@@ -26,8 +26,8 @@ export default function AppNav({ actions }) {
           {actions}
           {user && (
             <>
-              <span className="credits-pill" title="AI generation credits remaining">
-                {user.credits} AI credit{user.credits === 1 ? '' : 's'}
+              <span className="credits-pill" title="Credits cover creating/duplicating forms, collecting responses, and AI features">
+                {user.plan === 'pro' ? 'Unlimited credits' : `${user.credits} credit${user.credits === 1 ? '' : 's'}`}
               </span>
               <span className="plan-pill" data-plan={user.plan}>
                 {user.plan === 'pro' ? 'Pro' : 'Free'}

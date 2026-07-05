@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { api, ApiError } from '../lib/api.js';
+import { CREDIT_COSTS } from '../lib/credits.js';
 import { CHOICE_TYPES, questionMeta } from '../lib/questionTypes.js';
 import './QuestionEditorCard.css';
 
@@ -79,6 +80,7 @@ export default function QuestionEditorCard({
           className="btn btn-ghost btn-sm"
           onClick={handleImprove}
           disabled={improving || !question.label.trim()}
+          title={`Costs ${CREDIT_COSTS.improveQuestion} credit`}
         >
           {improving ? 'Improving…' : 'Improve with AI'}
         </button>

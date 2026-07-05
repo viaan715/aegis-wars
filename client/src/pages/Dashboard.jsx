@@ -2,10 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { api } from '../lib/api.js';
-import { AI_CREDIT_COSTS } from '../lib/aiCredits.js';
+import { CREDIT_COSTS } from '../lib/credits.js';
 import AppNav from '../components/AppNav.jsx';
 import CreateFormModal from '../components/CreateFormModal.jsx';
-import TemperProgress from '../components/TemperProgress.jsx';
 import { useRandomTextColors } from '../lib/randomTextColors.js';
 import './Dashboard.css';
 
@@ -23,7 +22,6 @@ export default function Dashboard() {
   const { token, user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [forms, setForms] = useState(null);
-  const [usage, setUsage] = useState(null);
   const [error, setError] = useState('');
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
@@ -35,7 +33,6 @@ export default function Dashboard() {
     try {
       const data = await api.listForms(token);
       setForms(data.forms);
-      setUsage(data.usage);
     } catch (err) {
       setError(err.message);
     }
@@ -56,6 +53,7 @@ export default function Dashboard() {
       if (template?.questions?.length) {
         await api.updateForm(token, form.id, { questions: template.questions });
       }
+      await refreshUser();
       navigate(`/forms/${form.id}/edit`);
     } catch (err) {
       setError(err.message);
@@ -67,9 +65,7 @@ export default function Dashboard() {
 
   async function handleGenerateWithAi(prompt) {
     setError('');
-    const draft = await api.generateFormWithAi(token, prompt);
-    const { form } = await api.createForm(token, { title: draft.title, description: draft.description });
-    await api.updateForm(token, form.id, { questions: draft.questions });
+    const { form } = await api.generateFormWithAi(token, prompt);
     await refreshUser();
     navigate(`/forms/${form.id}/edit`);
   }
@@ -85,6 +81,7 @@ export default function Dashboard() {
     setError('');
     try {
       await api.duplicateForm(token, formId);
+      await refreshUser();
       await load();
     } catch (err) {
       setError(err.message);
@@ -115,8 +112,6 @@ export default function Dashboard() {
     setTimeout(() => setCopiedId(null), 1600);
   }
 
-  const atFormLimit = usage && usage.maxForms !== null && usage.formCount >= usage.maxForms;
-
   return (
     <div className="app-shell" ref={rootRef}>
       <AppNav />
@@ -126,18 +121,19 @@ export default function Dashboard() {
             <h1 className="display-heading">Your forms</h1>
             <p className="muted">Every piece on the bench, in one place.</p>
           </div>
-          <button type="button" className="btn btn-primary" onClick={() => setShowCreateModal(true)} disabled={creating || atFormLimit}>
+          <button type="button" className="btn btn-primary" onClick={() => setShowCreateModal(true)} disabled={creating}>
             {creating ? 'Creating…' : 'Create form'}
           </button>
         </div>
 
-        {usage && user?.plan === 'free' && (
+        {user?.plan === 'free' && (
           <div className="card usage-banner">
             <div>
-              <p className="usage-banner-title">
-                {usage.formCount} of {usage.maxForms} forms used on the Free plan
+              <p className="usage-banner-title">{user.credits} credits remaining</p>
+              <p className="muted">
+                Creating a form, duplicating one, collecting a response, and using AI all draw from this balance.
+                Upgrade to Pro for unlimited credits.
               </p>
-              <p className="muted">Upgrade to Pro for unlimited forms and responses.</p>
             </div>
             <button type="button" className="btn btn-secondary btn-sm" onClick={handleUpgrade}>
               Upgrade to Pro
@@ -167,18 +163,9 @@ export default function Dashboard() {
                 </div>
                 <h2 className="form-card-title">{form.title}</h2>
                 <p className="muted form-card-desc">{form.description || 'No description yet.'}</p>
-                {usage?.maxResponsesPerForm != null ? (
-                  <div className="form-card-response-limit">
-                    <span className="tag-mono">
-                      {form.responseCount} / {usage.maxResponsesPerForm} RESPONSES
-                    </span>
-                    <TemperProgress percent={(form.responseCount / usage.maxResponsesPerForm) * 100} />
-                  </div>
-                ) : (
-                  <p className="tag-mono form-card-count">
-                    {form.responseCount} response{form.responseCount === 1 ? '' : 's'}
-                  </p>
-                )}
+                <p className="tag-mono form-card-count">
+                  {form.responseCount} response{form.responseCount === 1 ? '' : 's'}
+                </p>
                 <div className="form-card-actions">
                   <Link to={`/forms/${form.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
@@ -198,7 +185,8 @@ export default function Dashboard() {
                     type="button"
                     className="btn btn-ghost btn-sm"
                     onClick={() => handleDuplicate(form.id)}
-                    disabled={duplicatingId === form.id || atFormLimit}
+                    disabled={duplicatingId === form.id}
+                    title={`Costs ${CREDIT_COSTS.duplicateForm} credits`}
                   >
                     {duplicatingId === form.id ? 'Duplicating…' : 'Duplicate'}
                   </button>
@@ -222,7 +210,8 @@ export default function Dashboard() {
           onClose={() => setShowCreateModal(false)}
           onPick={handleCreateFromTemplate}
           onGenerateAi={handleGenerateWithAi}
-          aiCreditCost={AI_CREDIT_COSTS.generateForm}
+          aiCreditCost={CREDIT_COSTS.generateForm}
+          createCreditCost={CREDIT_COSTS.createForm}
         />
       )}
     </div>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FORM_TEMPLATES } from '../lib/formTemplates.js';
 import './CreateFormModal.css';
 
-export default function CreateFormModal({ onClose, onPick, onGenerateAi, creating, aiCreditCost }) {
+export default function CreateFormModal({ onClose, onPick, onGenerateAi, creating, aiCreditCost, createCreditCost }) {
   const [prompt, setPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
   const [aiError, setAiError] = useState('');
@@ -46,7 +46,7 @@ export default function CreateFormModal({ onClose, onPick, onGenerateAi, creatin
         {aiError && <p className="error-text ai-generate-error">{aiError}</p>}
 
         <div className="modal-divider">
-          <span>or pick a starting point</span>
+          <span>or pick a starting point{createCreditCost ? ` — ${createCreditCost} credit${createCreditCost === 1 ? '' : 's'} each` : ''}</span>
         </div>
 
         <div className="template-grid">

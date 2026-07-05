@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import Anthropic from '@anthropic-ai/sdk';
@@ -6,7 +7,8 @@ import db from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { rateLimit } from '../middleware/rateLimit.js';
 import { anthropic, AI_MODEL } from '../aiClient.js';
-import { AI_CREDIT_COSTS } from '../aiCredits.js';
+import { chargeCredits, refundCredits, insufficientCreditsResponse } from '../credits.js';
+import { questionsForForm, serializeForm } from '../formHelpers.js';
 import { QUESTION_TYPES } from '../questionTypes.js';
 
 const router = Router();
@@ -32,34 +34,18 @@ const ImprovedQuestion = z.object({
   description: z.string(),
 });
 
-function chargeCredits(userId, cost) {
-  const info = db
-    .prepare('UPDATE users SET credits = credits - ? WHERE id = ? AND credits >= ?')
-    .run(cost, userId, cost);
-  return info.changes > 0;
-}
-
-function refundCredits(userId, cost) {
-  db.prepare('UPDATE users SET credits = credits + ? WHERE id = ?').run(cost, userId);
-}
-
-function insufficientCreditsResponse(res, cost) {
-  return res.status(402).json({
-    error: `This action costs ${cost} AI credit${cost === 1 ? '' : 's'}, and you don't have enough left. Upgrade to Pro for more credits.`,
-    code: 'INSUFFICIENT_CREDITS',
-  });
+function aiUnavailableResponse(res) {
+  return res.status(503).json({ error: 'AI generation is not configured on this server', code: 'AI_UNAVAILABLE' });
 }
 
 router.post('/generate-form', async (req, res) => {
-  if (!anthropic) {
-    return res.status(503).json({ error: 'AI generation is not configured on this server', code: 'AI_UNAVAILABLE' });
-  }
+  if (!anthropic) return aiUnavailableResponse(res);
 
   const prompt = typeof req.body?.prompt === 'string' ? req.body.prompt.trim() : '';
   if (!prompt) return res.status(400).json({ error: 'Describe the form you want to generate' });
 
-  const cost = AI_CREDIT_COSTS.generateForm;
-  if (!chargeCredits(req.user.id, cost)) return insufficientCreditsResponse(res, cost);
+  const charge = chargeCredits(req.user, 'generateForm');
+  if (!charge.ok) return insufficientCreditsResponse(res, charge.cost);
 
   try {
     const response = await anthropic.messages.parse({
@@ -76,17 +62,35 @@ router.post('/generate-form', async (req, res) => {
     });
 
     if (!response.parsed_output) {
-      refundCredits(req.user.id, cost);
+      refundCredits(req.user, charge.cost);
       return res.status(502).json({ error: 'AI generation failed to produce a valid form. Try rephrasing your prompt.' });
     }
 
+    // Persist the draft in the same request — folding "generate" and "create"
+    // into one atomic action means the user is charged once for the whole
+    // outcome, and there's no dangling AI-generated draft that failed to save.
+    const { title, description, questions } = response.parsed_output;
+    const slug = nanoid(10);
+    const formId = db.transaction(() => {
+      const info = db
+        .prepare('INSERT INTO forms (user_id, title, description, slug) VALUES (?, ?, ?, ?)')
+        .run(req.user.id, title.trim() || 'Untitled form', description, slug);
+      const newFormId = info.lastInsertRowid;
+      const insertQuestion = db.prepare(
+        'INSERT INTO questions (form_id, type, label, description, options, required, order_index) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      );
+      questions.forEach((q, index) => {
+        insertQuestion.run(newFormId, q.type, q.label.trim(), q.description, JSON.stringify(q.options), q.required ? 1 : 0, index);
+      });
+      return newFormId;
+    })();
+
+    const form = db.prepare('SELECT * FROM forms WHERE id = ?').get(formId);
     const user = db.prepare('SELECT credits FROM users WHERE id = ?').get(req.user.id);
-    res.json({ ...response.parsed_output, creditsRemaining: user.credits });
+    res.status(201).json({ form: serializeForm(form), questions: questionsForForm(formId), creditsRemaining: user.credits });
   } catch (err) {
-    refundCredits(req.user.id, cost);
-    if (err instanceof Anthropic.AuthenticationError) {
-      return res.status(503).json({ error: 'AI generation is not configured on this server', code: 'AI_UNAVAILABLE' });
-    }
+    refundCredits(req.user, charge.cost);
+    if (err instanceof Anthropic.AuthenticationError) return aiUnavailableResponse(res);
     if (err instanceof Anthropic.APIError) {
       return res.status(502).json({ error: 'AI generation is temporarily unavailable. Try again shortly.' });
     }
@@ -95,17 +99,15 @@ router.post('/generate-form', async (req, res) => {
 });
 
 router.post('/improve-question', async (req, res) => {
-  if (!anthropic) {
-    return res.status(503).json({ error: 'AI generation is not configured on this server', code: 'AI_UNAVAILABLE' });
-  }
+  if (!anthropic) return aiUnavailableResponse(res);
 
   const { label, description, type } = req.body || {};
   if (typeof label !== 'string' || !label.trim()) {
     return res.status(400).json({ error: 'Write a draft question first, then let AI improve it' });
   }
 
-  const cost = AI_CREDIT_COSTS.improveQuestion;
-  if (!chargeCredits(req.user.id, cost)) return insufficientCreditsResponse(res, cost);
+  const charge = chargeCredits(req.user, 'improveQuestion');
+  if (!charge.ok) return insufficientCreditsResponse(res, charge.cost);
 
   try {
     const response = await anthropic.messages.parse({
@@ -126,17 +128,15 @@ router.post('/improve-question', async (req, res) => {
     });
 
     if (!response.parsed_output) {
-      refundCredits(req.user.id, cost);
+      refundCredits(req.user, charge.cost);
       return res.status(502).json({ error: 'AI could not improve this question. Try again.' });
     }
 
     const user = db.prepare('SELECT credits FROM users WHERE id = ?').get(req.user.id);
     res.json({ ...response.parsed_output, creditsRemaining: user.credits });
   } catch (err) {
-    refundCredits(req.user.id, cost);
-    if (err instanceof Anthropic.AuthenticationError) {
-      return res.status(503).json({ error: 'AI generation is not configured on this server', code: 'AI_UNAVAILABLE' });
-    }
+    refundCredits(req.user, charge.cost);
+    if (err instanceof Anthropic.AuthenticationError) return aiUnavailableResponse(res);
     if (err instanceof Anthropic.APIError) {
       return res.status(502).json({ error: 'AI generation is temporarily unavailable. Try again shortly.' });
     }

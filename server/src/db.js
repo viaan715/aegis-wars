@@ -18,7 +18,7 @@ db.exec(`
     password_hash TEXT NOT NULL,
     name TEXT NOT NULL,
     plan TEXT NOT NULL DEFAULT 'free',
-    credits INTEGER NOT NULL DEFAULT 20,
+    credits INTEGER NOT NULL DEFAULT 100,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
@@ -77,7 +77,12 @@ if (!formColumns.has('thank_you_message')) {
 
 const userColumns = new Set(db.prepare('PRAGMA table_info(users)').all().map((c) => c.name));
 if (!userColumns.has('credits')) {
-  db.exec(`ALTER TABLE users ADD COLUMN credits INTEGER NOT NULL DEFAULT 20`);
+  db.exec(`ALTER TABLE users ADD COLUMN credits INTEGER NOT NULL DEFAULT 100`);
+} else {
+  // The starter balance was raised from 20 to 100 credits after this column
+  // first shipped — top up any free-plan account still sitting at the old
+  // default so existing accounts aren't stuck below what a new signup gets.
+  db.prepare("UPDATE users SET credits = 100 WHERE plan = 'free' AND credits = 20").run();
 }
 
 export default db;
