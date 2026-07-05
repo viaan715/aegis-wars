@@ -18,6 +18,7 @@ db.exec(`
     password_hash TEXT NOT NULL,
     name TEXT NOT NULL,
     plan TEXT NOT NULL DEFAULT 'free',
+    credits INTEGER NOT NULL DEFAULT 20,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
@@ -72,6 +73,11 @@ if (!formColumns.has('thank_you_title')) {
 }
 if (!formColumns.has('thank_you_message')) {
   db.exec(`ALTER TABLE forms ADD COLUMN thank_you_message TEXT NOT NULL DEFAULT ''`);
+}
+
+const userColumns = new Set(db.prepare('PRAGMA table_info(users)').all().map((c) => c.name));
+if (!userColumns.has('credits')) {
+  db.exec(`ALTER TABLE users ADD COLUMN credits INTEGER NOT NULL DEFAULT 20`);
 }
 
 export default db;

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { api } from '../lib/api.js';
+import { AI_CREDIT_COSTS } from '../lib/aiCredits.js';
 import AppNav from '../components/AppNav.jsx';
 import CreateFormModal from '../components/CreateFormModal.jsx';
 import TemperProgress from '../components/TemperProgress.jsx';
@@ -62,6 +63,15 @@ export default function Dashboard() {
     } finally {
       setCreating(false);
     }
+  }
+
+  async function handleGenerateWithAi(prompt) {
+    setError('');
+    const draft = await api.generateFormWithAi(token, prompt);
+    const { form } = await api.createForm(token, { title: draft.title, description: draft.description });
+    await api.updateForm(token, form.id, { questions: draft.questions });
+    await refreshUser();
+    navigate(`/forms/${form.id}/edit`);
   }
 
   async function handleDelete(formId, title) {
@@ -211,6 +221,8 @@ export default function Dashboard() {
           creating={creating}
           onClose={() => setShowCreateModal(false)}
           onPick={handleCreateFromTemplate}
+          onGenerateAi={handleGenerateWithAi}
+          aiCreditCost={AI_CREDIT_COSTS.generateForm}
         />
       )}
     </div>

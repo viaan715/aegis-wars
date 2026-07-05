@@ -26,6 +26,9 @@ export default function AppNav({ actions }) {
           {actions}
           {user && (
             <>
+              <span className="credits-pill" title="AI generation credits remaining">
+                {user.credits} AI credit{user.credits === 1 ? '' : 's'}
+              </span>
               <span className="plan-pill" data-plan={user.plan}>
                 {user.plan === 'pro' ? 'Pro' : 'Free'}
               </span>

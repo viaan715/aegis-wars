@@ -63,6 +63,14 @@ export const api = {
   getPublicForm: (slug) => request(`/public/forms/${slug}`),
   submitResponse: (slug, formData) =>
     request(`/public/forms/${slug}/responses`, { method: 'POST', body: formData, isForm: true }),
+
+  generateFormWithAi: (token, prompt) => request('/ai/generate-form', { method: 'POST', body: { prompt }, token }),
+  improveQuestionWithAi: (token, question) =>
+    request('/ai/improve-question', {
+      method: 'POST',
+      body: { label: question.label, description: question.description, type: question.type },
+      token,
+    }),
 };
 
 export { ApiError };

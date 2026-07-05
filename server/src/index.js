@@ -8,6 +8,7 @@ import billingRoutes from './routes/billing.js';
 import formsRoutes from './routes/forms.js';
 import responsesRoutes from './routes/responses.js';
 import publicRoutes from './routes/public.js';
+import aiRoutes from './routes/ai.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +22,7 @@ app.use('/api/billing', billingRoutes);
 app.use('/api/forms', formsRoutes);
 app.use('/api/forms', responsesRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

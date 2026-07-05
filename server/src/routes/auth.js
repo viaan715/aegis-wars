@@ -12,7 +12,7 @@ const authLimiter = rateLimit({ windowMs: 60_000, max: 20 });
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function publicUser(user) {
-  return { id: user.id, email: user.email, name: user.name, plan: user.plan };
+  return { id: user.id, email: user.email, name: user.name, plan: user.plan, credits: user.credits };
 }
 
 function issueToken(userId) {
@@ -40,7 +40,7 @@ router.post('/register', authLimiter, (req, res) => {
     .prepare('INSERT INTO users (email, password_hash, name, plan) VALUES (?, ?, ?, ?)')
     .run(normalizedEmail, passwordHash, name.trim(), 'free');
 
-  const user = db.prepare('SELECT id, email, name, plan FROM users WHERE id = ?').get(info.lastInsertRowid);
+  const user = db.prepare('SELECT id, email, name, plan, credits FROM users WHERE id = ?').get(info.lastInsertRowid);
   const token = issueToken(user.id);
   res.status(201).json({ token, user: publicUser(user) });
 });

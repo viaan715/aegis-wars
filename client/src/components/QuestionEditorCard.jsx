@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { useAuth } from '../auth/AuthContext.jsx';
+import { api, ApiError } from '../lib/api.js';
 import { CHOICE_TYPES, questionMeta } from '../lib/questionTypes.js';
 import './QuestionEditorCard.css';
 
@@ -11,11 +14,29 @@ export default function QuestionEditorCard({
   onDuplicate,
   dragHandleProps,
 }) {
+  const { token, refreshUser } = useAuth();
   const meta = questionMeta(question.type);
   const isChoice = CHOICE_TYPES.has(question.type);
+  const [improving, setImproving] = useState(false);
+  const [improveError, setImproveError] = useState('');
 
   function update(patch) {
     onChange({ ...question, ...patch });
+  }
+
+  async function handleImprove() {
+    if (!question.label.trim() || improving) return;
+    setImproving(true);
+    setImproveError('');
+    try {
+      const result = await api.improveQuestionWithAi(token, question);
+      update({ label: result.label, description: result.description });
+      await refreshUser();
+    } catch (err) {
+      setImproveError(err instanceof ApiError ? err.message : 'Could not improve this question');
+    } finally {
+      setImproving(false);
+    }
   }
 
   function updateOption(i, value) {
@@ -53,6 +74,14 @@ export default function QuestionEditorCard({
             ↓
           </button>
         </div>
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={handleImprove}
+          disabled={improving || !question.label.trim()}
+        >
+          {improving ? 'Improving…' : 'Improve with AI'}
+        </button>
         <button type="button" className="btn btn-ghost btn-sm" onClick={onDuplicate}>
           Duplicate
         </button>
@@ -67,6 +96,7 @@ export default function QuestionEditorCard({
         value={question.label}
         onChange={(e) => update({ label: e.target.value })}
       />
+      {improveError && <p className="error-text question-improve-error">{improveError}</p>}
       <input
         className="input question-desc-input"
         placeholder="Description (optional)"

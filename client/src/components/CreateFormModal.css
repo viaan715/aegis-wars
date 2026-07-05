@@ -30,6 +30,40 @@
   color: var(--chalk-dim);
 }
 
+.ai-generate-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-generate-row .input {
+  flex: 1;
+}
+
+.ai-generate-error {
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+
+.modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--chalk-dim);
+}
+
+.modal-divider::before,
+.modal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--steel-line);
+}
+
 .template-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

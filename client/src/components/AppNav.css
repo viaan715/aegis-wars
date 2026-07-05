@@ -31,7 +31,8 @@
   gap: 12px;
 }
 
-.plan-pill {
+.plan-pill,
+.credits-pill {
   font-family: var(--font-mono);
   font-size: 11px;
   text-transform: uppercase;
@@ -40,6 +41,7 @@
   border-radius: 999px;
   border: 1px solid var(--steel-line);
   color: var(--chalk-dim);
+  white-space: nowrap;
 }
 
 .plan-pill[data-plan='pro'] {
