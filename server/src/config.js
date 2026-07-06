@@ -18,4 +18,3 @@ function loadOrCreateSecret() {
 
 export const JWT_SECRET = loadOrCreateSecret();
 export const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
-export const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');

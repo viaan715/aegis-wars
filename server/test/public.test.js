@@ -92,6 +92,22 @@ describe('public fill + responses', () => {
     expect(after.body.user.credits).toBe(before.body.user.credits);
   });
 
+  it('rejects a file answer with a friendly error when storage is not configured', async () => {
+    // No S3_* env vars are set in the test environment, so uploads are unavailable.
+    const { token } = await registerUser();
+    const form = await publishedForm(token, [
+      { type: 'file_upload', label: 'Resume', description: '', options: [], required: true },
+    ]);
+    const questions = (await request(app).get(`/api/public/forms/${form.slug}`)).body.questions;
+
+    const res = await request(app)
+      .post(`/api/public/forms/${form.slug}/responses`)
+      .field('answers', JSON.stringify({}))
+      .attach(`file_${questions[0].id}`, Buffer.from('fake file contents'), 'resume.pdf');
+
+    expect(res.status).toBe(503);
+  });
+
   it('stops accepting responses once the owner is out of credits', async () => {
     const { token } = await registerUser();
     const form = await publishedForm(token, [{ type: 'short_text', label: 'Name', description: '', options: [], required: false }]);

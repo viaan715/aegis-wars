@@ -3,23 +3,17 @@ import multer from 'multer';
 import path from 'node:path';
 import { nanoid } from 'nanoid';
 import { queryOne, withTransaction } from '../db.js';
-import { UPLOADS_DIR } from '../config.js';
 import { chargeCredits } from '../credits.js';
 import { questionsForForm } from '../formHelpers.js';
 import { rateLimit } from '../middleware/rateLimit.js';
 import { asyncHandler } from '../asyncHandler.js';
+import { s3Client, uploadFile } from '../storage.js';
 
 const router = Router();
 const submitLimiter = rateLimit({ windowMs: 60_000, max: 30 });
 
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: UPLOADS_DIR,
-    filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname).slice(0, 20);
-      cb(null, `${nanoid(24)}${ext}`);
-    },
-  }),
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024, files: 10 },
 });
 
@@ -85,9 +79,14 @@ router.post(
           return res.status(400).json({ error: `"${q.label}" is required` });
         }
         if (file) {
+          if (!s3Client) {
+            return res.status(503).json({ error: 'File uploads are not configured on this server' });
+          }
+          const ext = path.extname(file.originalname).slice(0, 20);
+          const url = await uploadFile(`responses/${nanoid(24)}${ext}`, file.buffer, file.mimetype);
           answersToInsert.push({
             questionId: q.id,
-            value: JSON.stringify({ fileName: file.originalname, url: `/uploads/${file.filename}` }),
+            value: JSON.stringify({ fileName: file.originalname, url }),
           });
         }
         continue;

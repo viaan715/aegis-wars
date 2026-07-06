@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { UPLOADS_DIR } from './config.js';
 import authRoutes from './routes/auth.js';
 import billingRoutes from './routes/billing.js';
 import formsRoutes from './routes/forms.js';
@@ -15,7 +14,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(UPLOADS_DIR));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/billing', billingRoutes);
