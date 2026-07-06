@@ -19,8 +19,8 @@ export async function chargeCredits(user, action) {
   const cost = CREDIT_COSTS[action];
   if (hasUnlimitedCredits(user.plan)) return { ok: true, cost: 0 };
   const result = await pool.query(
-    'UPDATE users SET credits = credits - $1 WHERE id = $2 AND credits >= $1',
-    [cost, user.id]
+    'UPDATE users SET credits = credits + $1 WHERE id = $2 AND credits >= $3',
+    [-cost, user.id, cost]
   );
   return { ok: result.rowCount > 0, cost };
 }
