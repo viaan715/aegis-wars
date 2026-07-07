@@ -18,6 +18,10 @@ the resulting grocery list directly to Instacart for delivery.
   the generated grocery list.
 - **Grocery list** — ingredients aggregated across the week, grouped by aisle
   category, with a checklist for shopping.
+- **Shopping mode** — a full-screen, large-text, thumb-friendly version of the
+  grocery checklist for use while actually walking around a store.
+- **Recipe detail view** — click any planned meal to see its full ingredient
+  list, step-by-step instructions, and nutrition.
 - **Instacart sync** — one-click button that calls the Instacart Developer
   Platform to turn your grocery list into a shoppable Instacart cart link.
 
@@ -66,3 +70,42 @@ every other feature works fully offline with no external API required.
 
 Set `GOOGLE_CLIENT_ID` in `server/.env` and `client/.env` (`VITE_GOOGLE_CLIENT_ID`)
 to enable "Sign in with Google". Email/password auth works without any setup.
+
+## Running tests
+
+```bash
+cd server
+npm test
+```
+
+Covers the meal-plan generator (diet-restriction filtering, household-size
+scaling, unfulfillable-slot handling) and the grocery-list/nutrition math
+(ingredient aggregation, pantry deduction, per-person nutrition — including
+that nutrition must *not* scale with household size the way grocery
+quantities do).
+
+## Deploying to Render
+
+`render.yaml` in the repo root is a [Render Blueprint](https://render.com/docs/blueprint-spec)
+that deploys the API as a Docker web service and the frontend as a static site.
+
+1. In the Render dashboard: **New → Blueprint**, connect this repo. Render reads `render.yaml`.
+2. It'll prompt for each env var marked "generate later" — at minimum, set `JWT_SECRET`
+   to a random string (`openssl rand -hex 32`). You can leave `CLIENT_ORIGIN` and
+   `VITE_API_BASE_URL` blank for now — they need URLs that don't exist until step 3.
+3. Once both services deploy, copy their public URLs from the dashboard, then:
+   - On `meal-planner-server` → Environment: set `CLIENT_ORIGIN` to the client's URL
+     (e.g. `https://meal-planner-client.onrender.com`).
+   - On `meal-planner-client` → Environment: set `VITE_API_BASE_URL` to the server's
+     URL + `/api` (e.g. `https://meal-planner-server.onrender.com/api`). This is a
+     build-time variable, so changing it triggers a rebuild of the static site.
+4. Optionally set `GOOGLE_CLIENT_ID` (both services) and `INSTACART_API_KEY`
+   (server only), same as local setup.
+
+**Free-tier caveats**, worth knowing before you rely on this:
+- Free web services spin down after 15 minutes of inactivity and take a few
+  seconds to cold-start on the next request.
+- Free services have no persistent disk, so the SQLite database resets on
+  every restart or redeploy — fine for trying the app out, not for real use.
+  For real persistence, upgrade `meal-planner-server`'s plan in the Render
+  dashboard and uncomment the `disk:` block in `render.yaml`.

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/client.js';
+import { categoryColor } from '../theme/colors.js';
+
+const pantryColor = categoryColor('pantry');
 
 export default function PantryPage() {
   const [items, setItems] = useState([]);
@@ -83,7 +86,11 @@ export default function PantryPage() {
             className="w-28 rounded border border-gray-300 px-2 py-1"
           />
         </div>
-        <button type="submit" className="rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">
+        <button
+          type="submit"
+          className="rounded px-4 py-2 font-medium hover:brightness-95"
+          style={{ backgroundColor: pantryColor.dot, color: pantryColor.text }}
+        >
           Add
         </button>
       </form>
@@ -96,7 +103,7 @@ export default function PantryPage() {
         <p className="text-gray-500">Your pantry is empty.</p>
       ) : (
         <table className="w-full overflow-hidden rounded-lg bg-white shadow">
-          <thead className="bg-gray-50 text-left text-sm text-gray-500">
+          <thead className="text-left text-sm" style={{ backgroundColor: pantryColor.bg, color: pantryColor.text }}>
             <tr>
               <th className="px-4 py-2">Ingredient</th>
               <th className="px-4 py-2">Quantity</th>

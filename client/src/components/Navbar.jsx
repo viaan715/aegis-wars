@@ -2,11 +2,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const links = [
-  { to: '/plan', label: 'Meal Plan' },
-  { to: '/grocery', label: 'Grocery List' },
-  { to: '/pantry', label: 'Pantry' },
-  { to: '/favorites', label: 'Favorites' },
-  { to: '/profile', label: 'Profile' },
+  { to: '/plan', label: 'Meal Plan', dot: '#F5A524' },
+  { to: '/grocery', label: 'Grocery List', dot: '#84CC16' },
+  { to: '/pantry', label: 'Pantry', dot: '#38BDF8' },
+  { to: '/favorites', label: 'Favorites', dot: '#F472B6' },
+  { to: '/profile', label: 'Profile', dot: '#A78BFA' },
 ];
 
 export default function Navbar() {
@@ -17,17 +17,19 @@ export default function Navbar() {
 
   return (
     <nav className="bg-brand-700 text-white">
+      <div className="rainbow-strip h-1.5 w-full" />
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-        <span className="font-semibold">🥗 Meal Planner</span>
+        <span className="font-display text-lg font-semibold">🥗 Meal Planner</span>
         <div className="flex flex-wrap items-center gap-4 text-sm">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                isActive ? 'font-semibold underline' : 'text-brand-100 hover:text-white'
+                `flex items-center gap-1.5 ${isActive ? 'font-semibold underline' : 'text-brand-100 hover:text-white'}`
               }
             >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: link.dot }} />
               {link.label}
             </NavLink>
           ))}

@@ -1,5 +1,12 @@
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+const STAT_COLORS = {
+  calories: { bg: '#FFF1D6', text: '#92400E' },
+  protein: { bg: '#FDE2E1', text: '#991B1B' },
+  carbs: { bg: '#FBF0CF', text: '#854D0E' },
+  fat: { bg: '#E0F2FE', text: '#075985' },
+};
+
 export default function NutritionSummary({ nutrition }) {
   if (!nutrition) return null;
 
@@ -8,9 +15,11 @@ export default function NutritionSummary({ nutrition }) {
       <h2 className="mb-3 font-semibold text-brand-800">Nutrition summary (per person)</h2>
       <div className="mb-4 grid grid-cols-4 gap-3 text-center">
         {['calories', 'protein', 'carbs', 'fat'].map((key) => (
-          <div key={key} className="rounded bg-brand-50 p-2">
-            <div className="text-lg font-bold text-brand-800">{nutrition.week[key]}</div>
-            <div className="text-xs uppercase text-gray-500">
+          <div key={key} className="rounded-lg p-2" style={{ backgroundColor: STAT_COLORS[key].bg }}>
+            <div className="text-lg font-bold" style={{ color: STAT_COLORS[key].text }}>
+              {nutrition.week[key]}
+            </div>
+            <div className="text-xs uppercase" style={{ color: STAT_COLORS[key].text, opacity: 0.7 }}>
               {key === 'calories' ? 'kcal / week' : `${key} (g) / week`}
             </div>
           </div>

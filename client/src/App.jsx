@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import MealPlanPage from './pages/MealPlanPage.jsx';
 import GroceryListPage from './pages/GroceryListPage.jsx';
+import ShoppingModePage from './pages/ShoppingModePage.jsx';
 import PantryPage from './pages/PantryPage.jsx';
 import FavoritesPage from './pages/FavoritesPage.jsx';
 
@@ -30,6 +31,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <GroceryListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shopping"
+            element={
+              <ProtectedRoute>
+                <ShoppingModePage />
               </ProtectedRoute>
             }
           />

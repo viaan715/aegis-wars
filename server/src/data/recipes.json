@@ -614,7 +614,7 @@
       { "name": "spaghetti squash", "quantity": 1, "unit": "each", "category": "produce" },
       { "name": "ground turkey", "quantity": 1, "unit": "lb", "category": "meat" },
       { "name": "marinara sauce", "quantity": 2, "unit": "cup", "category": "pantry" },
-      { "name": "egg", "quantity": 1, "unit": "each", "category": "dairy" }
+      { "name": "eggs", "quantity": 1, "unit": "each", "category": "dairy" }
     ]
   },
   {
@@ -836,6 +836,232 @@
       { "name": "banana", "quantity": 1, "unit": "each", "category": "produce" },
       { "name": "plant-based protein powder", "quantity": 2, "unit": "scoop", "category": "pantry" },
       { "name": "oat milk", "quantity": 1.5, "unit": "cup", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "b13",
+    "name": "Keto Coconut Chia Pudding",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 280, "protein": 5, "carbs": 8, "fat": 24 },
+    "instructions": [
+      "Whisk chia seeds into canned coconut milk with monk fruit sweetener and vanilla.",
+      "Refrigerate at least 4 hours, top with shredded coconut before serving."
+    ],
+    "ingredients": [
+      { "name": "chia seeds", "quantity": 4, "unit": "tbsp", "category": "pantry" },
+      { "name": "coconut milk", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "monk fruit sweetener", "quantity": 1, "unit": "tbsp", "category": "pantry" },
+      { "name": "unsweetened shredded coconut", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "vanilla extract", "quantity": 1, "unit": "tsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b14",
+    "name": "Tofu & Avocado Keto Scramble",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 320, "protein": 16, "carbs": 7, "fat": 26 },
+    "instructions": [
+      "Crumble tofu into a hot skillet with turmeric and olive oil, cook until warmed through.",
+      "Fold in spinach until wilted, top with sliced avocado."
+    ],
+    "ingredients": [
+      { "name": "firm tofu", "quantity": 14, "unit": "oz", "category": "other" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "baby spinach", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "turmeric", "quantity": 0.5, "unit": "tsp", "category": "spices" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b15",
+    "name": "Coconut Flax Berry Porridge",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "low-carb", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 260, "protein": 6, "carbs": 14, "fat": 20 },
+    "instructions": [
+      "Whisk ground flaxseed into warmed coconut milk until it thickens into a porridge.",
+      "Top with mixed berries and a dash of cinnamon."
+    ],
+    "ingredients": [
+      { "name": "ground flaxseed", "quantity": 0.5, "unit": "cup", "category": "pantry" },
+      { "name": "coconut milk", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "mixed berries", "quantity": 0.5, "unit": "cup", "category": "produce" },
+      { "name": "cinnamon", "quantity": 0.5, "unit": "tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "l13",
+    "name": "Vegan Keto Tofu Buddha Bowl",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 380, "protein": 18, "carbs": 10, "fat": 30 },
+    "instructions": [
+      "Pan-fry cubed tofu until golden.",
+      "Serve over cauliflower rice with avocado and sunflower seeds."
+    ],
+    "ingredients": [
+      { "name": "firm tofu", "quantity": 14, "unit": "oz", "category": "other" },
+      { "name": "cauliflower rice", "quantity": 2, "unit": "cup", "category": "frozen" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "sunflower seeds", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l14",
+    "name": "Coconut Cauliflower Rice Curry Bowl",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 360, "protein": 12, "carbs": 12, "fat": 28 },
+    "instructions": [
+      "Saute onion and curry powder, add tofu and cook until golden.",
+      "Stir in coconut milk and cauliflower rice, simmer until tender."
+    ],
+    "ingredients": [
+      { "name": "cauliflower rice", "quantity": 3, "unit": "cup", "category": "frozen" },
+      { "name": "coconut milk", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "firm tofu", "quantity": 10, "unit": "oz", "category": "other" },
+      { "name": "curry powder", "quantity": 1, "unit": "tbsp", "category": "spices" },
+      { "name": "yellow onion", "quantity": 0.5, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "l15",
+    "name": "Zucchini Ribbon Salad with Avocado Dressing",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 300, "protein": 4, "carbs": 11, "fat": 27 },
+    "instructions": [
+      "Peel zucchini into ribbons with a vegetable peeler.",
+      "Blend avocado, lemon juice, and olive oil into a dressing and toss with the ribbons."
+    ],
+    "ingredients": [
+      { "name": "zucchini", "quantity": 3, "unit": "each", "category": "produce" },
+      { "name": "avocado", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "lemon", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l16",
+    "name": "Caprese Zoodle Salad",
+    "mealType": "lunch",
+    "diets": ["vegetarian", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 310, "protein": 13, "carbs": 9, "fat": 24 },
+    "instructions": [
+      "Spiralize zucchini into noodles.",
+      "Toss with fresh mozzarella, cherry tomatoes, and basil, drizzle with olive oil and balsamic glaze."
+    ],
+    "ingredients": [
+      { "name": "zucchini", "quantity": 3, "unit": "each", "category": "produce" },
+      { "name": "fresh mozzarella", "quantity": 6, "unit": "oz", "category": "dairy" },
+      { "name": "cherry tomatoes", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "fresh basil", "quantity": 0.25, "unit": "cup", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "balsamic glaze", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d13",
+    "name": "Vegan Alfredo Zoodles",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 320, "protein": 8, "carbs": 13, "fat": 26 },
+    "instructions": [
+      "Steam cauliflower until soft, blend with nutritional yeast, garlic, and olive oil into a creamy sauce.",
+      "Spiralize zucchini into noodles and toss with the warm sauce."
+    ],
+    "ingredients": [
+      { "name": "zucchini", "quantity": 4, "unit": "each", "category": "produce" },
+      { "name": "cauliflower", "quantity": 1, "unit": "head", "category": "produce" },
+      { "name": "nutritional yeast", "quantity": 3, "unit": "tbsp", "category": "pantry" },
+      { "name": "garlic", "quantity": 3, "unit": "cloves", "category": "produce" },
+      { "name": "olive oil", "quantity": 3, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d14",
+    "name": "Garlic Tofu & Broccoli Stir-Fry",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 300, "protein": 18, "carbs": 12, "fat": 20 },
+    "instructions": [
+      "Pan-fry cubed tofu until golden and crisp.",
+      "Stir-fry broccoli and garlic, combine with tofu and tamari."
+    ],
+    "ingredients": [
+      { "name": "firm tofu", "quantity": 28, "unit": "oz", "category": "other" },
+      { "name": "broccoli", "quantity": 3, "unit": "cup", "category": "produce" },
+      { "name": "tamari", "quantity": 3, "unit": "tbsp", "category": "pantry" },
+      { "name": "garlic", "quantity": 4, "unit": "cloves", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d15",
+    "name": "Cauliflower Fried Rice with Vegetables",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "paleo", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 260, "protein": 7, "carbs": 16, "fat": 18 },
+    "instructions": [
+      "Saute onion in olive oil, add cauliflower rice and mixed vegetables.",
+      "Stir in coconut aminos and cook until tender."
+    ],
+    "ingredients": [
+      { "name": "cauliflower rice", "quantity": 4, "unit": "cup", "category": "frozen" },
+      { "name": "mixed vegetables", "quantity": 2, "unit": "cup", "category": "frozen" },
+      { "name": "coconut aminos", "quantity": 3, "unit": "tbsp", "category": "pantry" },
+      { "name": "yellow onion", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d16",
+    "name": "Zucchini Lasagna with Ricotta",
+    "mealType": "dinner",
+    "diets": ["vegetarian", "gluten-free", "keto", "low-carb", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 340, "protein": 20, "carbs": 13, "fat": 22 },
+    "instructions": [
+      "Slice zucchini lengthwise into thin lasagna-style sheets.",
+      "Layer with ricotta, mozzarella, and low-sugar marinara, bake at 375F for 30 minutes."
+    ],
+    "ingredients": [
+      { "name": "zucchini", "quantity": 4, "unit": "each", "category": "produce" },
+      { "name": "ricotta cheese", "quantity": 2, "unit": "cup", "category": "dairy" },
+      { "name": "mozzarella cheese", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "marinara sauce", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "parmesan cheese", "quantity": 0.5, "unit": "cup", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "s13",
+    "name": "Coconut Fat Bombs",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "keto", "low-carb", "paleo", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 150, "protein": 2, "carbs": 3, "fat": 15 },
+    "instructions": [
+      "Melt coconut oil and whisk in cocoa powder and monk fruit sweetener.",
+      "Pour into a mold and freeze until solid."
+    ],
+    "ingredients": [
+      { "name": "coconut oil", "quantity": 0.5, "unit": "cup", "category": "pantry" },
+      { "name": "unsweetened cocoa powder", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "monk fruit sweetener", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "unsweetened shredded coconut", "quantity": 0.25, "unit": "cup", "category": "pantry" }
     ]
   }
 ]

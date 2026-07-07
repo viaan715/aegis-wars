@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../api/client.js';
+import { dietColor } from '../theme/colors.js';
 
 export default function ProfilePage() {
   const { user, refreshUser } = useAuth();
@@ -60,24 +61,29 @@ export default function ProfilePage() {
             Recipes must satisfy every restriction you select.
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {diets.map((diet) => (
-              <label
-                key={diet}
-                className={`flex cursor-pointer items-center gap-2 rounded border px-3 py-2 text-sm ${
-                  selectedDiets.includes(diet)
-                    ? 'border-brand-600 bg-brand-50 text-brand-800'
-                    : 'border-gray-300'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedDiets.includes(diet)}
-                  onChange={() => toggleDiet(diet)}
-                  className="accent-brand-600"
-                />
-                {diet}
-              </label>
-            ))}
+            {diets.map((diet) => {
+              const c = dietColor(diet);
+              const active = selectedDiets.includes(diet);
+              return (
+                <label
+                  key={diet}
+                  className="flex cursor-pointer items-center gap-2 rounded border-2 px-3 py-2 text-sm"
+                  style={
+                    active
+                      ? { borderColor: c.dot, backgroundColor: c.bg, color: c.text }
+                      : { borderColor: '#e5e7eb', color: '#374151' }
+                  }
+                >
+                  <input
+                    type="checkbox"
+                    checked={active}
+                    onChange={() => toggleDiet(diet)}
+                    style={{ accentColor: c.dot }}
+                  />
+                  {diet}
+                </label>
+              );
+            })}
           </div>
         </div>
 

@@ -37,8 +37,11 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm rounded-lg bg-white p-8 shadow">
-      <h1 className="mb-6 text-2xl font-bold text-brand-800">Create your account</h1>
+    <div className="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow">
+      <div className="rainbow-strip h-1.5 w-full" />
+      <div className="p-8">
+      <p className="mb-1 text-center text-2xl">🥗</p>
+      <h1 className="mb-6 text-center text-2xl font-bold text-brand-800">Create your account</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium">Name</label>
@@ -92,6 +95,7 @@ export default function SignupPage() {
           Log in
         </Link>
       </p>
+      </div>
     </div>
   );
 }

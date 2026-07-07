@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../api/client.js';
-
-function groupByCategory(items) {
-  const groups = {};
-  for (const item of items) {
-    if (!groups[item.category]) groups[item.category] = [];
-    groups[item.category].push(item);
-  }
-  return Object.entries(groups).sort(([a], [b]) => a.localeCompare(b));
-}
+import { groupByCategory } from '../utils/grocery.js';
+import { categoryColor } from '../theme/colors.js';
 
 export default function GroceryListPage() {
   const [items, setItems] = useState([]);
@@ -61,13 +55,23 @@ export default function GroceryListPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-brand-800">Grocery list</h1>
-        <button
-          onClick={handleSendToInstacart}
-          disabled={sending || items.length === 0}
-          className="rounded bg-orange-500 px-4 py-2 font-medium text-white hover:bg-orange-600 disabled:opacity-50"
-        >
-          {sending ? 'Sending...' : 'Send to Instacart'}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          {items.length > 0 && (
+            <Link
+              to="/shopping"
+              className="rounded border border-brand-600 px-4 py-2 font-medium text-brand-700 hover:bg-brand-50"
+            >
+              Enter shopping mode
+            </Link>
+          )}
+          <button
+            onClick={handleSendToInstacart}
+            disabled={sending || items.length === 0}
+            className="rounded bg-orange-500 px-4 py-2 font-medium text-white hover:bg-orange-600 disabled:opacity-50"
+          >
+            {sending ? 'Sending...' : 'Send to Instacart'}
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -89,26 +93,35 @@ export default function GroceryListPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {groups.map(([category, categoryItems]) => (
-          <div key={category} className="rounded-lg bg-white p-4 shadow">
-            <h2 className="mb-2 font-semibold capitalize text-brand-800">{category}</h2>
-            <ul className="space-y-1">
-              {categoryItems.map((item) => (
-                <li key={item.id} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={item.checked}
-                    onChange={() => handleToggle(item)}
-                    className="accent-brand-600"
-                  />
-                  <span className={item.checked ? 'text-gray-400 line-through' : ''}>
-                    {item.quantity} {item.unit} {item.name}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {groups.map(([category, categoryItems]) => {
+          const c = categoryColor(category);
+          return (
+            <div key={category} className="overflow-hidden rounded-lg bg-white shadow">
+              <h2
+                className="flex items-center gap-2 px-4 py-2 font-semibold capitalize"
+                style={{ backgroundColor: c.bg, color: c.text }}
+              >
+                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: c.dot }} />
+                {category}
+              </h2>
+              <ul className="space-y-1 p-4">
+                {categoryItems.map((item) => (
+                  <li key={item.id} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={item.checked}
+                      onChange={() => handleToggle(item)}
+                      className="accent-brand-600"
+                    />
+                    <span className={item.checked ? 'text-gray-400 line-through' : ''}>
+                      {item.quantity} {item.unit} {item.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -3,5 +3,29 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-paper-light text-ink;
+}
+
+.rainbow-strip {
+  background: linear-gradient(
+    90deg,
+    #f5a524,
+    #84cc16,
+    #2dd4bf,
+    #38bdf8,
+    #a78bfa,
+    #f472b6,
+    #fb7185,
+    #eab308
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

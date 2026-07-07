@@ -1,0 +1,52 @@
+# Render Blueprint — deploys the API and the frontend as two services.
+# See README.md "Deploying to Render" for the manual steps this can't automate
+# (cross-service URLs, and attaching a persistent disk if you want the SQLite
+# database to survive restarts — that requires upgrading off the free plan).
+services:
+  - name: meal-planner-server
+    type: web
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    plan: free
+    envVars:
+      - key: PORT
+        value: 4000
+      # Free plan has no persistent disk, so the SQLite file resets whenever
+      # the service restarts or redeploys. Fine for trying the app out; for
+      # real use, upgrade this service's plan in the Render dashboard, attach
+      # a disk mounted at /var/data, and change this to /var/data/app.db.
+      - key: DB_PATH
+        value: ./data/app.db
+      - key: JWT_SECRET
+        sync: false
+      # Fill in after the client service below gets its public URL on first deploy.
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: INSTACART_API_KEY
+        sync: false
+      - key: INSTACART_ENV
+        value: production
+    # Uncomment once you've upgraded this service off the free plan:
+    # disk:
+    #   name: meal-planner-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+
+  - name: meal-planner-client
+    type: web
+    runtime: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Fill in after the server service above gets its public URL on first deploy.
+      - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false

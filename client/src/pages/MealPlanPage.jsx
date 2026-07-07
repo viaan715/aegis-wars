@@ -2,6 +2,8 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import { api } from '../api/client.js';
 import MealSlot from '../components/MealSlot.jsx';
 import NutritionSummary, { DAY_LABELS } from '../components/NutritionSummary.jsx';
+import RecipeDetailModal from '../components/RecipeDetailModal.jsx';
+import { mealTypeColor } from '../theme/colors.js';
 
 const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snack'];
 
@@ -14,6 +16,7 @@ export default function MealPlanPage() {
   const [generating, setGenerating] = useState(false);
   const [swappingKey, setSwappingKey] = useState(null);
   const [error, setError] = useState('');
+  const [detailRecipe, setDetailRecipe] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -124,10 +127,17 @@ export default function MealPlanPage() {
                   {label}
                 </div>
               ))}
-              {MEAL_TYPES.map((mealType) => (
+              {MEAL_TYPES.map((mealType) => {
+                const color = mealTypeColor(mealType);
+                return (
                 <Fragment key={mealType}>
-                  <div className="flex items-center font-medium capitalize text-gray-600">
-                    {mealType}
+                  <div className="flex items-center">
+                    <span
+                      className="rounded-full px-2 py-1 text-xs font-semibold capitalize"
+                      style={{ backgroundColor: color.bg, color: color.text }}
+                    >
+                      {mealType}
+                    </span>
                   </div>
                   {DAY_LABELS.map((_, dayIndex) => {
                     const item = items.find((i) => i.dayIndex === dayIndex && i.mealType === mealType);
@@ -141,17 +151,28 @@ export default function MealPlanPage() {
                           swapping={swappingKey === key}
                           onSwap={() => handleSwap(dayIndex, mealType)}
                           onToggleFavorite={handleToggleFavorite}
+                          onOpenDetail={setDetailRecipe}
                         />
                       </div>
                     );
                   })}
                 </Fragment>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           <NutritionSummary nutrition={nutrition} />
         </>
+      )}
+
+      {detailRecipe && (
+        <RecipeDetailModal
+          recipe={detailRecipe}
+          isFavorite={favoriteIds.has(detailRecipe.id)}
+          onToggleFavorite={handleToggleFavorite}
+          onClose={() => setDetailRecipe(null)}
+        />
       )}
     </div>
   );

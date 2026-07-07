@@ -1,23 +1,34 @@
-export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, swapping }) {
+import { mealTypeColor } from '../theme/colors.js';
+
+export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, onOpenDetail, swapping }) {
   const { recipe } = item;
+  const color = mealTypeColor(item.mealType);
 
   if (!recipe) {
     return (
-      <div className="flex h-full flex-col justify-between rounded border border-dashed border-red-300 bg-red-50 p-2 text-xs text-red-700">
+      <div className="flex h-full flex-col justify-between rounded-lg border border-dashed border-red-300 bg-red-50 p-2 text-xs text-red-700">
         <span>No recipe matches your current diet restrictions for this slot.</span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full flex-col justify-between rounded border border-gray-200 bg-white p-2 text-xs shadow-sm">
+    <div
+      className="flex h-full flex-col justify-between rounded-lg border-l-4 bg-white p-2 text-xs shadow-sm"
+      style={{ borderLeftColor: color.dot }}
+    >
       <div>
         <div className="flex items-start justify-between gap-1">
-          <span className="font-medium leading-tight">{recipe.name}</span>
+          <button
+            onClick={() => onOpenDetail(recipe)}
+            className="text-left font-medium leading-tight hover:text-brand-700 hover:underline"
+          >
+            {recipe.name}
+          </button>
           <button
             onClick={() => onToggleFavorite(recipe.id)}
             title={isFavorite ? 'Remove favorite' : 'Add favorite'}
-            className={isFavorite ? 'text-yellow-500' : 'text-gray-300 hover:text-yellow-400'}
+            className={isFavorite ? 'flex-none text-yellow-500' : 'flex-none text-gray-300 hover:text-yellow-400'}
           >
             ★
           </button>
@@ -27,7 +38,8 @@ export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, s
       <button
         onClick={onSwap}
         disabled={swapping}
-        className="mt-2 rounded bg-brand-50 px-2 py-1 text-brand-700 hover:bg-brand-100 disabled:opacity-50"
+        className="mt-2 rounded px-2 py-1 font-medium hover:brightness-95 disabled:opacity-50"
+        style={{ backgroundColor: color.bg, color: color.text }}
       >
         {swapping ? 'Swapping...' : 'Swap'}
       </button>
