@@ -1,0 +1,841 @@
+[
+  {
+    "id": "b01",
+    "name": "Veggie Scramble with Avocado",
+    "mealType": "breakfast",
+    "diets": ["vegetarian", "gluten-free", "dairy-free", "low-carb", "keto", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 320, "protein": 16, "carbs": 10, "fat": 25 },
+    "instructions": [
+      "Whisk eggs and season with salt and pepper.",
+      "Saute bell pepper and spinach in olive oil until soft.",
+      "Add eggs and scramble until just set.",
+      "Top with sliced avocado."
+    ],
+    "ingredients": [
+      { "name": "eggs", "quantity": 4, "unit": "each", "category": "dairy" },
+      { "name": "bell pepper", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "baby spinach", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b02",
+    "name": "Greek Yogurt Parfait with Berries & Granola",
+    "mealType": "breakfast",
+    "diets": ["vegetarian", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 290, "protein": 18, "carbs": 38, "fat": 7 },
+    "instructions": [
+      "Layer yogurt, berries, and granola in a glass.",
+      "Repeat layers and serve immediately."
+    ],
+    "ingredients": [
+      { "name": "greek yogurt", "quantity": 2, "unit": "cup", "category": "dairy" },
+      { "name": "mixed berries", "quantity": 1.5, "unit": "cup", "category": "produce" },
+      { "name": "granola (nut-free)", "quantity": 0.75, "unit": "cup", "category": "pantry" },
+      { "name": "honey", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b03",
+    "name": "Overnight Oats with Chia & Almond Milk",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 310, "protein": 9, "carbs": 46, "fat": 11 },
+    "instructions": [
+      "Combine oats, chia seeds, and almond milk in a jar.",
+      "Refrigerate overnight.",
+      "Top with sliced banana before serving."
+    ],
+    "ingredients": [
+      { "name": "rolled oats (gluten-free)", "quantity": 1, "unit": "cup", "category": "pantry" },
+      { "name": "chia seeds", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "almond milk", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "banana", "quantity": 1, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "b04",
+    "name": "Tofu Scramble Breakfast Bowl",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 260, "protein": 17, "carbs": 14, "fat": 16 },
+    "instructions": [
+      "Crumble tofu into a hot skillet with turmeric and olive oil.",
+      "Add spinach and cherry tomatoes, cook until warmed through.",
+      "Season with salt, pepper, and nutritional yeast."
+    ],
+    "ingredients": [
+      { "name": "firm tofu", "quantity": 14, "unit": "oz", "category": "other" },
+      { "name": "baby spinach", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "cherry tomatoes", "quantity": 0.5, "unit": "cup", "category": "produce" },
+      { "name": "turmeric", "quantity": 0.5, "unit": "tsp", "category": "spices" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b05",
+    "name": "Smoked Salmon & Cream Cheese Bagel",
+    "mealType": "breakfast",
+    "diets": ["nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 400, "protein": 22, "carbs": 42, "fat": 16 },
+    "instructions": [
+      "Toast bagels.",
+      "Spread with cream cheese and top with smoked salmon, capers, and red onion."
+    ],
+    "ingredients": [
+      { "name": "bagels", "quantity": 2, "unit": "each", "category": "bakery" },
+      { "name": "smoked salmon", "quantity": 4, "unit": "oz", "category": "seafood" },
+      { "name": "cream cheese", "quantity": 4, "unit": "tbsp", "category": "dairy" },
+      { "name": "capers", "quantity": 1, "unit": "tbsp", "category": "pantry" },
+      { "name": "red onion", "quantity": 0.25, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "b06",
+    "name": "Keto Bacon & Egg Cups",
+    "mealType": "breakfast",
+    "diets": ["gluten-free", "dairy-free", "low-carb", "keto", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 280, "protein": 19, "carbs": 2, "fat": 21 },
+    "instructions": [
+      "Line a muffin tin with bacon strips.",
+      "Crack an egg into each bacon cup, season, and bake at 375F for 15-18 minutes."
+    ],
+    "ingredients": [
+      { "name": "bacon", "quantity": 6, "unit": "slices", "category": "meat" },
+      { "name": "eggs", "quantity": 6, "unit": "each", "category": "dairy" },
+      { "name": "chives", "quantity": 1, "unit": "tbsp", "category": "produce" }
+    ]
+  },
+  {
+    "id": "b07",
+    "name": "Banana Nut Pancakes",
+    "mealType": "breakfast",
+    "diets": ["vegetarian"],
+    "baseServings": 2,
+    "nutrition": { "calories": 420, "protein": 11, "carbs": 55, "fat": 17 },
+    "instructions": [
+      "Mash banana into pancake batter along with chopped walnuts.",
+      "Cook on a griddle until golden on both sides."
+    ],
+    "ingredients": [
+      { "name": "pancake mix", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "banana", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "walnuts", "quantity": 0.33, "unit": "cup", "category": "pantry" },
+      { "name": "milk", "quantity": 1, "unit": "cup", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "b08",
+    "name": "Gluten-Free Blueberry Pancakes",
+    "mealType": "breakfast",
+    "diets": ["vegetarian", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 350, "protein": 8, "carbs": 52, "fat": 12 },
+    "instructions": [
+      "Mix gluten-free pancake mix with milk and egg.",
+      "Fold in blueberries and cook on a griddle until golden."
+    ],
+    "ingredients": [
+      { "name": "gluten-free pancake mix", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "blueberries", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "milk", "quantity": 1, "unit": "cup", "category": "dairy" },
+      { "name": "eggs", "quantity": 1, "unit": "each", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "b09",
+    "name": "Breakfast Burrito with Black Beans & Cheese",
+    "mealType": "breakfast",
+    "diets": ["vegetarian", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 460, "protein": 20, "carbs": 48, "fat": 20 },
+    "instructions": [
+      "Scramble eggs and warm black beans.",
+      "Fill tortillas with eggs, beans, cheese, and salsa, then roll up."
+    ],
+    "ingredients": [
+      { "name": "flour tortillas", "quantity": 2, "unit": "each", "category": "bakery" },
+      { "name": "eggs", "quantity": 4, "unit": "each", "category": "dairy" },
+      { "name": "black beans", "quantity": 1, "unit": "cup", "category": "pantry" },
+      { "name": "shredded cheddar", "quantity": 0.5, "unit": "cup", "category": "dairy" },
+      { "name": "salsa", "quantity": 0.25, "unit": "cup", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b10",
+    "name": "Chia Seed Pudding with Coconut Milk",
+    "mealType": "breakfast",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "paleo", "nut-free", "low-carb"],
+    "baseServings": 2,
+    "nutrition": { "calories": 230, "protein": 6, "carbs": 15, "fat": 17 },
+    "instructions": [
+      "Whisk chia seeds into coconut milk with a touch of maple syrup.",
+      "Refrigerate at least 4 hours, top with berries before serving."
+    ],
+    "ingredients": [
+      { "name": "chia seeds", "quantity": 4, "unit": "tbsp", "category": "pantry" },
+      { "name": "coconut milk", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "maple syrup", "quantity": 1, "unit": "tbsp", "category": "pantry" },
+      { "name": "mixed berries", "quantity": 0.5, "unit": "cup", "category": "produce" }
+    ]
+  },
+  {
+    "id": "b11",
+    "name": "Turkey Sausage & Sweet Potato Hash",
+    "mealType": "breakfast",
+    "diets": ["gluten-free", "dairy-free", "paleo", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 340, "protein": 21, "carbs": 28, "fat": 15 },
+    "instructions": [
+      "Dice sweet potato and pan-fry until tender.",
+      "Add sliced turkey sausage and diced onion, cook until browned."
+    ],
+    "ingredients": [
+      { "name": "turkey sausage", "quantity": 8, "unit": "oz", "category": "meat" },
+      { "name": "sweet potato", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "yellow onion", "quantity": 0.5, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "b12",
+    "name": "Peanut Butter Banana Smoothie",
+    "mealType": "breakfast",
+    "diets": ["vegetarian", "gluten-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 310, "protein": 13, "carbs": 34, "fat": 14 },
+    "instructions": ["Blend all ingredients until smooth."],
+    "ingredients": [
+      { "name": "banana", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "peanut butter", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "milk", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "honey", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l01",
+    "name": "Grilled Chicken Caesar Salad",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 380, "protein": 34, "carbs": 8, "fat": 22 },
+    "instructions": [
+      "Grill chicken breast and slice.",
+      "Toss romaine with caesar dressing and parmesan, top with chicken."
+    ],
+    "ingredients": [
+      { "name": "chicken breast", "quantity": 12, "unit": "oz", "category": "meat" },
+      { "name": "romaine lettuce", "quantity": 1, "unit": "head", "category": "produce" },
+      { "name": "parmesan cheese", "quantity": 0.25, "unit": "cup", "category": "dairy" },
+      { "name": "caesar dressing", "quantity": 4, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l02",
+    "name": "Quinoa Chickpea Salad with Lemon Vinaigrette",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 360, "protein": 13, "carbs": 48, "fat": 14 },
+    "instructions": [
+      "Cook quinoa and let cool.",
+      "Toss with chickpeas, cucumber, tomato, and lemon vinaigrette."
+    ],
+    "ingredients": [
+      { "name": "quinoa", "quantity": 1, "unit": "cup", "category": "pantry" },
+      { "name": "chickpeas", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "cucumber", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "cherry tomatoes", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "lemon", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 3, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l03",
+    "name": "Turkey & Avocado Lettuce Wraps",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 320, "protein": 26, "carbs": 9, "fat": 20 },
+    "instructions": [
+      "Lay out large lettuce leaves.",
+      "Fill with turkey slices, avocado, and shredded carrot, wrap and serve."
+    ],
+    "ingredients": [
+      { "name": "sliced turkey breast", "quantity": 10, "unit": "oz", "category": "meat" },
+      { "name": "butter lettuce", "quantity": 1, "unit": "head", "category": "produce" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "carrot", "quantity": 1, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "l04",
+    "name": "Mediterranean Chickpea & Feta Bowl",
+    "mealType": "lunch",
+    "diets": ["vegetarian", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 400, "protein": 15, "carbs": 40, "fat": 20 },
+    "instructions": [
+      "Combine chickpeas, cucumber, tomato, red onion, and olives.",
+      "Top with crumbled feta and a drizzle of olive oil."
+    ],
+    "ingredients": [
+      { "name": "chickpeas", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "feta cheese", "quantity": 0.5, "unit": "cup", "category": "dairy" },
+      { "name": "cucumber", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "cherry tomatoes", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "kalamata olives", "quantity": 0.25, "unit": "cup", "category": "pantry" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l05",
+    "name": "Thai Peanut Chicken Salad",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "dairy-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 410, "protein": 30, "carbs": 24, "fat": 22 },
+    "instructions": [
+      "Shred cooked chicken and toss with cabbage, carrot, and cilantro.",
+      "Dress with peanut-lime sauce."
+    ],
+    "ingredients": [
+      { "name": "cooked chicken breast", "quantity": 10, "unit": "oz", "category": "meat" },
+      { "name": "shredded cabbage", "quantity": 2, "unit": "cup", "category": "produce" },
+      { "name": "carrot", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "peanut butter", "quantity": 3, "unit": "tbsp", "category": "pantry" },
+      { "name": "lime", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "tamari", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l06",
+    "name": "Black Bean & Sweet Potato Buddha Bowl",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 420, "protein": 14, "carbs": 62, "fat": 12 },
+    "instructions": [
+      "Roast sweet potato cubes until tender.",
+      "Serve over rice with black beans, avocado, and a squeeze of lime."
+    ],
+    "ingredients": [
+      { "name": "sweet potato", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "black beans", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "cooked rice", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "lime", "quantity": 1, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "l07",
+    "name": "Tuna Salad Lettuce Cups",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 300, "protein": 28, "carbs": 5, "fat": 19 },
+    "instructions": [
+      "Mix canned tuna with mayo, celery, and red onion.",
+      "Scoop into lettuce cups to serve."
+    ],
+    "ingredients": [
+      { "name": "canned tuna", "quantity": 10, "unit": "oz", "category": "pantry" },
+      { "name": "mayonnaise", "quantity": 3, "unit": "tbsp", "category": "pantry" },
+      { "name": "celery", "quantity": 2, "unit": "stalks", "category": "produce" },
+      { "name": "red onion", "quantity": 0.25, "unit": "each", "category": "produce" },
+      { "name": "butter lettuce", "quantity": 1, "unit": "head", "category": "produce" }
+    ]
+  },
+  {
+    "id": "l08",
+    "name": "Caprese Sandwich on Ciabatta",
+    "mealType": "lunch",
+    "diets": ["vegetarian", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 450, "protein": 17, "carbs": 46, "fat": 22 },
+    "instructions": [
+      "Slice ciabatta and layer with mozzarella, tomato, and basil.",
+      "Drizzle with balsamic glaze and olive oil."
+    ],
+    "ingredients": [
+      { "name": "ciabatta bread", "quantity": 2, "unit": "each", "category": "bakery" },
+      { "name": "fresh mozzarella", "quantity": 8, "unit": "oz", "category": "dairy" },
+      { "name": "tomato", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "fresh basil", "quantity": 0.25, "unit": "cup", "category": "produce" },
+      { "name": "balsamic glaze", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l09",
+    "name": "Zucchini Noodle Pesto Bowl with Grilled Shrimp",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 340, "protein": 27, "carbs": 11, "fat": 21 },
+    "instructions": [
+      "Spiralize zucchini into noodles.",
+      "Toss with sunflower-seed pesto and top with grilled shrimp."
+    ],
+    "ingredients": [
+      { "name": "zucchini", "quantity": 3, "unit": "each", "category": "produce" },
+      { "name": "shrimp", "quantity": 10, "unit": "oz", "category": "seafood" },
+      { "name": "sunflower seed pesto", "quantity": 0.33, "unit": "cup", "category": "pantry" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l10",
+    "name": "Vegan Lentil Soup",
+    "mealType": "lunch",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 320, "protein": 16, "carbs": 50, "fat": 6 },
+    "instructions": [
+      "Saute onion, carrot, and celery.",
+      "Add lentils, vegetable broth, and tomatoes, simmer 25 minutes."
+    ],
+    "ingredients": [
+      { "name": "green lentils", "quantity": 1, "unit": "cup", "category": "pantry" },
+      { "name": "vegetable broth", "quantity": 4, "unit": "cup", "category": "pantry" },
+      { "name": "carrot", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "celery", "quantity": 2, "unit": "stalks", "category": "produce" },
+      { "name": "yellow onion", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "diced tomatoes", "quantity": 1, "unit": "can", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l11",
+    "name": "BLT Wrap with Turkey Bacon",
+    "mealType": "lunch",
+    "diets": ["gluten-free", "dairy-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 380, "protein": 18, "carbs": 30, "fat": 21 },
+    "instructions": [
+      "Cook turkey bacon until crisp.",
+      "Fill a gluten-free wrap with bacon, lettuce, tomato, and mayo, roll up."
+    ],
+    "ingredients": [
+      { "name": "turkey bacon", "quantity": 8, "unit": "slices", "category": "meat" },
+      { "name": "gluten-free wraps", "quantity": 2, "unit": "each", "category": "bakery" },
+      { "name": "romaine lettuce", "quantity": 4, "unit": "leaves", "category": "produce" },
+      { "name": "tomato", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "mayonnaise", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "l12",
+    "name": "Egg Salad Lettuce Boats",
+    "mealType": "lunch",
+    "diets": ["vegetarian", "gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 290, "protein": 17, "carbs": 4, "fat": 22 },
+    "instructions": [
+      "Chop hard-boiled eggs and mix with mayo, mustard, and chives.",
+      "Spoon into lettuce leaves to serve."
+    ],
+    "ingredients": [
+      { "name": "eggs", "quantity": 8, "unit": "each", "category": "dairy" },
+      { "name": "mayonnaise", "quantity": 4, "unit": "tbsp", "category": "pantry" },
+      { "name": "dijon mustard", "quantity": 1, "unit": "tsp", "category": "pantry" },
+      { "name": "chives", "quantity": 1, "unit": "tbsp", "category": "produce" },
+      { "name": "butter lettuce", "quantity": 1, "unit": "head", "category": "produce" }
+    ]
+  },
+  {
+    "id": "d01",
+    "name": "Baked Salmon with Asparagus",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 380, "protein": 34, "carbs": 6, "fat": 24 },
+    "instructions": [
+      "Season salmon fillets and roast at 400F for 12-15 minutes with asparagus.",
+      "Finish with a squeeze of lemon."
+    ],
+    "ingredients": [
+      { "name": "salmon fillets", "quantity": 4, "unit": "each", "category": "seafood" },
+      { "name": "asparagus", "quantity": 1, "unit": "bunch", "category": "produce" },
+      { "name": "lemon", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d02",
+    "name": "Vegan Chickpea Coconut Curry with Rice",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 480, "protein": 14, "carbs": 62, "fat": 20 },
+    "instructions": [
+      "Saute onion, garlic, and curry powder.",
+      "Add chickpeas and coconut milk, simmer 15 minutes, serve over rice."
+    ],
+    "ingredients": [
+      { "name": "chickpeas", "quantity": 3, "unit": "cup", "category": "pantry" },
+      { "name": "coconut milk", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "yellow onion", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "garlic", "quantity": 3, "unit": "cloves", "category": "produce" },
+      { "name": "curry powder", "quantity": 2, "unit": "tbsp", "category": "spices" },
+      { "name": "cooked rice", "quantity": 4, "unit": "cup", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d03",
+    "name": "Grilled Steak with Garlic Ghee & Roasted Broccoli",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 460, "protein": 38, "carbs": 8, "fat": 30 },
+    "instructions": [
+      "Grill steaks to desired doneness and rest.",
+      "Top with garlic ghee, serve with roasted broccoli."
+    ],
+    "ingredients": [
+      { "name": "sirloin steak", "quantity": 1.5, "unit": "lb", "category": "meat" },
+      { "name": "broccoli", "quantity": 1, "unit": "lb", "category": "produce" },
+      { "name": "ghee", "quantity": 3, "unit": "tbsp", "category": "dairy" },
+      { "name": "garlic", "quantity": 3, "unit": "cloves", "category": "produce" }
+    ]
+  },
+  {
+    "id": "d04",
+    "name": "Stuffed Bell Peppers with Ground Turkey & Rice",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 400, "protein": 28, "carbs": 38, "fat": 14 },
+    "instructions": [
+      "Brown ground turkey with onion and cooked rice.",
+      "Stuff into halved bell peppers and bake at 375F for 25 minutes."
+    ],
+    "ingredients": [
+      { "name": "ground turkey", "quantity": 1.5, "unit": "lb", "category": "meat" },
+      { "name": "bell pepper", "quantity": 4, "unit": "each", "category": "produce" },
+      { "name": "cooked rice", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "yellow onion", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "diced tomatoes", "quantity": 1, "unit": "can", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d05",
+    "name": "Eggplant Parmesan",
+    "mealType": "dinner",
+    "diets": ["vegetarian", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 420, "protein": 18, "carbs": 36, "fat": 22 },
+    "instructions": [
+      "Bread and bake eggplant slices until crisp.",
+      "Layer with marinara and mozzarella, bake until bubbly."
+    ],
+    "ingredients": [
+      { "name": "eggplant", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "breadcrumbs", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "marinara sauce", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "mozzarella cheese", "quantity": 2, "unit": "cup", "category": "dairy" },
+      { "name": "parmesan cheese", "quantity": 0.5, "unit": "cup", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "d06",
+    "name": "Shrimp Stir-Fry with Vegetables",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 320, "protein": 29, "carbs": 16, "fat": 15 },
+    "instructions": [
+      "Stir-fry shrimp until pink, remove from pan.",
+      "Stir-fry broccoli, snap peas, and carrot, combine with shrimp and tamari."
+    ],
+    "ingredients": [
+      { "name": "shrimp", "quantity": 1.5, "unit": "lb", "category": "seafood" },
+      { "name": "broccoli", "quantity": 2, "unit": "cup", "category": "produce" },
+      { "name": "snap peas", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "carrot", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "tamari", "quantity": 3, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d07",
+    "name": "Vegetarian Chili with Black Beans & Kidney Beans",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 360, "protein": 18, "carbs": 58, "fat": 6 },
+    "instructions": [
+      "Saute onion and bell pepper.",
+      "Add beans, diced tomatoes, and chili spices, simmer 30 minutes."
+    ],
+    "ingredients": [
+      { "name": "black beans", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "kidney beans", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "diced tomatoes", "quantity": 2, "unit": "can", "category": "pantry" },
+      { "name": "bell pepper", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "yellow onion", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "chili powder", "quantity": 2, "unit": "tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "d08",
+    "name": "Herb-Crusted Baked Chicken Thighs with Green Beans",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 410, "protein": 33, "carbs": 9, "fat": 26 },
+    "instructions": [
+      "Rub chicken thighs with herbs and olive oil, bake at 400F for 35 minutes.",
+      "Roast green beans alongside."
+    ],
+    "ingredients": [
+      { "name": "chicken thighs", "quantity": 2, "unit": "lb", "category": "meat" },
+      { "name": "green beans", "quantity": 1, "unit": "lb", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "dried thyme", "quantity": 1, "unit": "tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "d09",
+    "name": "Spaghetti Squash with Turkey Meatballs & Marinara",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 370, "protein": 27, "carbs": 22, "fat": 19 },
+    "instructions": [
+      "Roast spaghetti squash and scrape into strands.",
+      "Bake turkey meatballs and serve over squash with marinara."
+    ],
+    "ingredients": [
+      { "name": "spaghetti squash", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "ground turkey", "quantity": 1, "unit": "lb", "category": "meat" },
+      { "name": "marinara sauce", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "egg", "quantity": 1, "unit": "each", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "d10",
+    "name": "Vegan Stuffed Sweet Potatoes with Black Beans",
+    "mealType": "dinner",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 350, "protein": 11, "carbs": 60, "fat": 8 },
+    "instructions": [
+      "Bake sweet potatoes until tender.",
+      "Split and top with black beans, corn, salsa, and avocado."
+    ],
+    "ingredients": [
+      { "name": "sweet potato", "quantity": 4, "unit": "each", "category": "produce" },
+      { "name": "black beans", "quantity": 2, "unit": "cup", "category": "pantry" },
+      { "name": "corn kernels", "quantity": 1, "unit": "cup", "category": "frozen" },
+      { "name": "salsa", "quantity": 0.5, "unit": "cup", "category": "pantry" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "d11",
+    "name": "Pork Tenderloin with Roasted Brussels Sprouts & Apples",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 400, "protein": 32, "carbs": 26, "fat": 17 },
+    "instructions": [
+      "Sear pork tenderloin, then roast at 400F for 20 minutes.",
+      "Roast brussels sprouts and apple wedges alongside."
+    ],
+    "ingredients": [
+      { "name": "pork tenderloin", "quantity": 1.5, "unit": "lb", "category": "meat" },
+      { "name": "brussels sprouts", "quantity": 1, "unit": "lb", "category": "produce" },
+      { "name": "apple", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "d12",
+    "name": "Baked Cod with Lemon Caper Sauce & Sauteed Spinach",
+    "mealType": "dinner",
+    "diets": ["gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 4,
+    "nutrition": { "calories": 300, "protein": 32, "carbs": 6, "fat": 15 },
+    "instructions": [
+      "Bake cod fillets at 400F for 12-15 minutes.",
+      "Top with lemon caper sauce and serve with sauteed spinach."
+    ],
+    "ingredients": [
+      { "name": "cod fillets", "quantity": 1.5, "unit": "lb", "category": "seafood" },
+      { "name": "baby spinach", "quantity": 4, "unit": "cup", "category": "produce" },
+      { "name": "capers", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "lemon", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "olive oil", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s01",
+    "name": "Hummus with Carrot & Cucumber Sticks",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 180, "protein": 6, "carbs": 20, "fat": 9 },
+    "instructions": ["Slice carrot and cucumber into sticks, serve with hummus."],
+    "ingredients": [
+      { "name": "hummus", "quantity": 0.5, "unit": "cup", "category": "pantry" },
+      { "name": "carrot", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "cucumber", "quantity": 1, "unit": "each", "category": "produce" }
+    ]
+  },
+  {
+    "id": "s02",
+    "name": "Seed & Dried Fruit Trail Mix",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 220, "protein": 6, "carbs": 24, "fat": 12 },
+    "instructions": ["Combine all ingredients in a bowl or bag."],
+    "ingredients": [
+      { "name": "pumpkin seeds", "quantity": 0.25, "unit": "cup", "category": "pantry" },
+      { "name": "sunflower seeds", "quantity": 0.25, "unit": "cup", "category": "pantry" },
+      { "name": "dried cranberries", "quantity": 0.25, "unit": "cup", "category": "pantry" },
+      { "name": "dark chocolate chips", "quantity": 2, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s03",
+    "name": "Apple Slices with Almond Butter",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "paleo"],
+    "baseServings": 2,
+    "nutrition": { "calories": 210, "protein": 5, "carbs": 26, "fat": 11 },
+    "instructions": ["Slice apples and serve with almond butter for dipping."],
+    "ingredients": [
+      { "name": "apple", "quantity": 2, "unit": "each", "category": "produce" },
+      { "name": "almond butter", "quantity": 3, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s04",
+    "name": "Greek Yogurt with Honey & Walnuts",
+    "mealType": "snack",
+    "diets": ["vegetarian", "gluten-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 230, "protein": 14, "carbs": 20, "fat": 11 },
+    "instructions": ["Top greek yogurt with honey and chopped walnuts."],
+    "ingredients": [
+      { "name": "greek yogurt", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "honey", "quantity": 2, "unit": "tbsp", "category": "pantry" },
+      { "name": "walnuts", "quantity": 0.25, "unit": "cup", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s05",
+    "name": "Hard-Boiled Eggs with Everything Bagel Seasoning",
+    "mealType": "snack",
+    "diets": ["vegetarian", "gluten-free", "dairy-free", "paleo", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 140, "protein": 12, "carbs": 1, "fat": 10 },
+    "instructions": ["Peel hard-boiled eggs and sprinkle with everything bagel seasoning."],
+    "ingredients": [
+      { "name": "eggs", "quantity": 4, "unit": "each", "category": "dairy" },
+      { "name": "everything bagel seasoning", "quantity": 1, "unit": "tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "s06",
+    "name": "Rice Cakes with Avocado & Everything Seasoning",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 190, "protein": 4, "carbs": 22, "fat": 10 },
+    "instructions": ["Mash avocado onto rice cakes and sprinkle with seasoning."],
+    "ingredients": [
+      { "name": "rice cakes", "quantity": 4, "unit": "each", "category": "pantry" },
+      { "name": "avocado", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "everything bagel seasoning", "quantity": 1, "unit": "tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "s07",
+    "name": "Celery Sticks with Sunflower Seed Butter",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "paleo", "nut-free", "low-carb", "keto"],
+    "baseServings": 2,
+    "nutrition": { "calories": 160, "protein": 6, "carbs": 9, "fat": 12 },
+    "instructions": ["Fill celery sticks with sunflower seed butter."],
+    "ingredients": [
+      { "name": "celery", "quantity": 4, "unit": "stalks", "category": "produce" },
+      { "name": "sunflower seed butter", "quantity": 3, "unit": "tbsp", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s08",
+    "name": "Cottage Cheese with Pineapple",
+    "mealType": "snack",
+    "diets": ["vegetarian", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 170, "protein": 15, "carbs": 16, "fat": 4 },
+    "instructions": ["Top cottage cheese with fresh pineapple chunks."],
+    "ingredients": [
+      { "name": "cottage cheese", "quantity": 1.5, "unit": "cup", "category": "dairy" },
+      { "name": "pineapple chunks", "quantity": 1, "unit": "cup", "category": "produce" }
+    ]
+  },
+  {
+    "id": "s09",
+    "name": "Roasted Chickpeas (Spiced)",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 200, "protein": 8, "carbs": 26, "fat": 7 },
+    "instructions": ["Toss chickpeas with olive oil and spices, roast at 400F for 25 minutes until crisp."],
+    "ingredients": [
+      { "name": "chickpeas", "quantity": 1.5, "unit": "cup", "category": "pantry" },
+      { "name": "olive oil", "quantity": 1, "unit": "tbsp", "category": "pantry" },
+      { "name": "smoked paprika", "quantity": 1, "unit": "tsp", "category": "spices" },
+      { "name": "cumin", "quantity": 1, "unit": "tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "s10",
+    "name": "Dark Chocolate & Almonds",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "low-carb"],
+    "baseServings": 2,
+    "nutrition": { "calories": 210, "protein": 5, "carbs": 15, "fat": 16 },
+    "instructions": ["Portion dark chocolate squares and almonds into small bowls."],
+    "ingredients": [
+      { "name": "dark chocolate", "quantity": 2, "unit": "oz", "category": "pantry" },
+      { "name": "almonds", "quantity": 0.33, "unit": "cup", "category": "pantry" }
+    ]
+  },
+  {
+    "id": "s11",
+    "name": "Turkey & Cheese Roll-Ups",
+    "mealType": "snack",
+    "diets": ["gluten-free", "low-carb", "keto", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 220, "protein": 20, "carbs": 2, "fat": 14 },
+    "instructions": ["Layer turkey slices with cheese, roll up, and slice into pinwheels."],
+    "ingredients": [
+      { "name": "sliced turkey breast", "quantity": 6, "unit": "oz", "category": "meat" },
+      { "name": "sliced cheddar", "quantity": 4, "unit": "slices", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "s12",
+    "name": "Protein Smoothie with Spinach & Banana",
+    "mealType": "snack",
+    "diets": ["vegan", "vegetarian", "dairy-free", "gluten-free", "nut-free"],
+    "baseServings": 2,
+    "nutrition": { "calories": 240, "protein": 15, "carbs": 32, "fat": 6 },
+    "instructions": ["Blend spinach, banana, plant-based protein powder, and oat milk until smooth."],
+    "ingredients": [
+      { "name": "baby spinach", "quantity": 1, "unit": "cup", "category": "produce" },
+      { "name": "banana", "quantity": 1, "unit": "each", "category": "produce" },
+      { "name": "plant-based protein powder", "quantity": 2, "unit": "scoop", "category": "pantry" },
+      { "name": "oat milk", "quantity": 1.5, "unit": "cup", "category": "dairy" }
+    ]
+  }
+]

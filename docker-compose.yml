@@ -1,0 +1,25 @@
+services:
+  server:
+    build: ./server
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./server/.env
+    environment:
+      - CLIENT_ORIGIN=http://localhost:5173
+      - DB_PATH=/app/data/app.db
+    volumes:
+      - meal-planner-db:/app/data
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:4000/api
+      - VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID:-}
+    depends_on:
+      - server
+
+volumes:
+  meal-planner-db:
