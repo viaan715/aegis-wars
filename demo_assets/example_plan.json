@@ -1,0 +1,125 @@
+{
+  "site_confidence": 82,
+  "human_review_required": true,
+  "front_description": "The primary entrance faces south toward the main front parking lot and entrance drive.",
+  "assumptions": [
+    "This is a mill-and-overlay job with localized base repair.",
+    "Contractor must verify pavement limits, drainage, fire access, and utility elevations in the field.",
+    "A protected accessible route must remain open to the entrance during every phase.",
+    "Guest and crew signage should be placed the morning of each phase transition."
+  ],
+  "phases": [
+    {
+      "day": 1,
+      "title": "Rear lot closure",
+      "zone_label": "Rear lot closed for paving",
+      "polygon": [
+        {
+          "x": 15.0,
+          "y": 8.0
+        },
+        {
+          "x": 85.0,
+          "y": 8.0
+        },
+        {
+          "x": 85.0,
+          "y": 15.0
+        },
+        {
+          "x": 15.0,
+          "y": 15.0
+        }
+      ],
+      "label_anchor": {
+        "x": 50.0,
+        "y": 11.0
+      },
+      "guest_instruction": "use front lot parking",
+      "guest_arrow_to": {
+        "x": 50.0,
+        "y": 65.0
+      }
+    },
+    {
+      "day": 2,
+      "title": "Front lot bays closure",
+      "zone_label": "Front lot bays closed (both sides)",
+      "polygon": [
+        {
+          "x": 8.0,
+          "y": 45.0
+        },
+        {
+          "x": 92.0,
+          "y": 45.0
+        },
+        {
+          "x": 92.0,
+          "y": 90.0
+        },
+        {
+          "x": 58.0,
+          "y": 90.0
+        },
+        {
+          "x": 58.0,
+          "y": 72.0
+        },
+        {
+          "x": 42.0,
+          "y": 72.0
+        },
+        {
+          "x": 42.0,
+          "y": 90.0
+        },
+        {
+          "x": 8.0,
+          "y": 90.0
+        }
+      ],
+      "label_anchor": {
+        "x": 20.0,
+        "y": 65.0
+      },
+      "guest_instruction": "use the completed rear lot",
+      "guest_arrow_to": {
+        "x": 50.0,
+        "y": 11.0
+      }
+    },
+    {
+      "day": 3,
+      "title": "Entrance drive closure",
+      "zone_label": "Main entrance drive & apron closed",
+      "polygon": [
+        {
+          "x": 40.0,
+          "y": 66.0
+        },
+        {
+          "x": 60.0,
+          "y": 66.0
+        },
+        {
+          "x": 60.0,
+          "y": 100.0
+        },
+        {
+          "x": 40.0,
+          "y": 100.0
+        }
+      ],
+      "label_anchor": {
+        "x": 50.0,
+        "y": 84.0
+      },
+      "guest_instruction": "park in rear lot and walk to entrance",
+      "guest_arrow_to": {
+        "x": 50.0,
+        "y": 11.0
+      }
+    }
+  ]
+}

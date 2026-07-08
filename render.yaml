@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: paving-plan-ai
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MAPBOX_ACCESS_TOKEN
+        sync: false
+      - key: MAPBOX_STYLE
+        value: mapbox/satellite-v9
+      - key: OPENAI_VISION_MODEL
+        value: gpt-5.5
+      - key: IMAGERY_LICENSE_CONFIRMED
+        value: "false"
+      - key: DATA_DIR
+        value: /data
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: "6"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "300"
+    disk:
+      name: paving-plan-ai-data
+      mountPath: /data
+      sizeGB: 1

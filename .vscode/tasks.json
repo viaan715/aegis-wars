@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Paving Plan AI",
+      "type": "shell",
+      "command": "bash .devcontainer/start-server.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "View server log",
+      "type": "shell",
+      "command": "cat .paving-plan-ai.log",
+      "problemMatcher": []
+    },
+    {
+      "label": "Confirm live-mode setup",
+      "type": "shell",
+      "command": "./codespaces-configure.sh",
+      "problemMatcher": []
+    }
+  ]
+}

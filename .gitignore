@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/
+.paving-plan-ai.log
+.paving-plan-ai.pid
