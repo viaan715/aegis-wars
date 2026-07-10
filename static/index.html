@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paving Plan AI</title>
+<meta name="description" content="Turn a business address into a preliminary, editable, print-ready parking-lot paving phasing plan.">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJz4KPHJlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScxOCcgZmlsbD0nIzBkMTAxMycvPgo8cmVjdCB4PSc5JyB5PSc5JyB3aWR0aD0nODInIGhlaWdodD0nODInIHJ4PScxMScgZmlsbD0nIzFhMWYyNicvPgo8cG9seWdvbiBwb2ludHM9JzE2LDU4IDE2LDg0IDQyLDg0JyBmaWxsPScjZmZjYzAwJy8+Cjxwb2x5Z29uIHBvaW50cz0nNTgsMTYgODQsMTYgODQsNDInIGZpbGw9JyNmZjdhMWEnLz4KPC9zdmc+">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Paving Plan <em>AI</em></span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-view="new" type="button">New Plan</button>
+      <button class="tab-btn" data-view="history" type="button">History</button>
+    </nav>
+    <div class="status-pill" id="statusPill" title="Checking…">Checking…</div>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- NEW PLAN -->
+  <section id="view-new" class="view active">
+    <div class="hero">
+      <p class="eyebrow">Preliminary paving phasing, in minutes</p>
+      <h1>Plan the paving job before you plan the headaches.</h1>
+      <p class="lede">Enter a business address, pick a job type, and get an AI-drafted, guest-friendly phasing map you can review, edit, and hand to your crew — before a single cone goes down.</p>
+    </div>
+
+    <div class="panel-grid">
+      <form id="planForm" class="card form-card" novalidate>
+        <h2>Start a new plan</h2>
+
+        <label class="field">
+          <span>Business name <span class="optional">(optional)</span></span>
+          <input type="text" id="businessName" maxlength="120" placeholder="e.g. Riverside Shopping Center" autocomplete="organization">
+        </label>
+
+        <label class="field">
+          <span>Business address</span>
+          <input type="text" id="address" maxlength="220" minlength="8" required placeholder="Full street address, city, state, ZIP" autocomplete="street-address">
+        </label>
+
+        <div class="field">
+          <span>Job type</span>
+          <div class="job-type-grid" id="jobTypeGrid"></div>
+        </div>
+
+        <label class="field">
+          <span>Plan length: <strong id="daysValue">3</strong> day(s)</span>
+          <input type="range" id="daysRange" min="1" max="5" step="1" value="3">
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="generateBtn">Generate plan</button>
+          <button type="button" class="btn btn-outline" id="demoBtn">View example</button>
+        </div>
+        <p class="form-note" id="liveNote" hidden></p>
+        <p class="form-error" id="formError" hidden></p>
+      </form>
+
+      <div class="card how-card">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li><span class="step-num">1</span><div><strong>Enter the address</strong><p>We geocode it and pull an aerial image of the property.</p></div></li>
+          <li><span class="step-num">2</span><div><strong>AI drafts the phasing</strong><p>A vision model proposes which zones close each day, keeping the most parking open.</p></div></li>
+          <li><span class="step-num">3</span><div><strong>You review &amp; edit</strong><p>Drag zone boundaries, fix labels, then export a print-ready map and a guest notice.</p></div></li>
+        </ol>
+        <div class="callout callout-warn">
+          <strong>This is a preliminary operations map, not a construction drawing.</strong>
+          <p>A paving contractor must verify field conditions, ADA access, drainage, fire lanes, utilities, and municipal requirements before work begins.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOADING -->
+  <section id="view-loading" class="view">
+    <div class="loading-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="loadingText">Scouting the lot from orbit…</p>
+    </div>
+  </section>
+
+  <!-- REVIEW / EDIT -->
+  <section id="view-review" class="view">
+    <div class="review-header">
+      <div>
+        <h2>Review &amp; edit the plan</h2>
+        <p class="muted" id="reviewSubtitle"></p>
+      </div>
+      <div class="review-badges">
+        <span class="badge" id="confidenceBadge"></span>
+        <span class="badge badge-warn">Human review required</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info" id="frontDescription"></div>
+
+    <details class="assumptions">
+      <summary>AI assumptions (click to expand)</summary>
+      <ul id="assumptionsList"></ul>
+    </details>
+
+    <div class="editor-grid">
+      <div class="map-editor-wrap card">
+        <div class="map-editor" id="mapEditor">
+          <img id="rawImage" alt="Aerial view of the property">
+          <svg id="editorSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        </div>
+        <p class="muted small">Drag the numbered badges or the small square handles to adjust a zone. Drag the diamond to change where guests are routed.</p>
+      </div>
+
+      <div class="phase-editor" id="phaseEditor"></div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-outline" id="regenerateBtn" type="button">Regenerate with AI</button>
+      <button class="btn btn-outline" id="resetEditsBtn" type="button">Reset edits</button>
+      <button class="btn btn-primary" id="finalizeBtn" type="button">Finalize &amp; export</button>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="view-final" class="view">
+    <div class="review-header">
+      <h2>Final plan</h2>
+      <button class="btn btn-text" id="backToEditBtn" type="button">&larr; Back to edit</button>
+    </div>
+
+    <div class="final-grid">
+      <div class="card final-image-card">
+        <img id="finalImage" alt="Final paving phasing plan">
+        <div class="form-actions">
+          <a class="btn btn-primary" id="downloadBtn" download="paving-plan.png" href="#">Download PNG</a>
+          <button class="btn btn-outline" id="printBtn" type="button">Print / Save PDF</button>
+          <button class="btn btn-outline" id="saveHistoryBtn" type="button">Save to history</button>
+        </div>
+      </div>
+
+      <div class="card guest-notice-card">
+        <h3>Guest notice</h3>
+        <p class="muted small">A ready-to-send draft for customers or tenants. Edit freely before sending.</p>
+        <textarea id="guestNoticeText" rows="11" spellcheck="false"></textarea>
+        <div class="form-actions">
+          <button class="btn btn-outline" id="copyNoticeBtn" type="button">Copy text</button>
+          <a class="btn btn-outline" id="emailNoticeBtn" href="#">Email guests</a>
+          <a class="btn btn-outline" id="smsNoticeBtn" href="#">Text guests</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="view-history" class="view">
+    <div class="review-header">
+      <div>
+        <h2>Saved plans</h2>
+        <p class="muted">Stored on this server only, until you delete them.</p>
+      </div>
+    </div>
+    <div class="history-grid" id="historyGrid"></div>
+    <p class="muted" id="historyEmpty" hidden>No saved plans yet. Generate a plan and click "Save to history".</p>
+  </section>
+
+</main>
+
+<div id="printArea"><img id="printImage" alt=""></div>
+
+<div class="toast" id="toast" hidden></div>
+
+<footer class="site-footer">
+  <p>Preliminary operations map generator — always confirm field conditions, ADA access, drainage, fire lanes, utilities, and municipal requirements with a licensed contractor before work begins.</p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
