@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../api/client.js';
 import MealSlot from '../components/MealSlot.jsx';
 import NutritionSummary, { DAY_LABELS } from '../components/NutritionSummary.jsx';
@@ -6,27 +7,42 @@ import RecipeDetailModal from '../components/RecipeDetailModal.jsx';
 import { mealTypeColor } from '../theme/colors.js';
 
 const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snack'];
+const TEMPLATES = [
+  { value: '', label: 'No theme' },
+  { value: 'high-protein', label: 'High protein' },
+  { value: 'lower-calorie', label: 'Lower calorie' },
+  { value: 'budget-friendly', label: 'Budget-friendly' },
+];
 
 export default function MealPlanPage() {
   const [mealPlan, setMealPlan] = useState(null);
   const [items, setItems] = useState([]);
   const [nutrition, setNutrition] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [ratings, setRatings] = useState(new Map());
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [swappingKey, setSwappingKey] = useState(null);
   const [error, setError] = useState('');
   const [detailRecipe, setDetailRecipe] = useState(null);
+  const [template, setTemplate] = useState('');
+  const [dragSource, setDragSource] = useState(null);
+  const [dragOverKey, setDragOverKey] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const [planData, favData] = await Promise.all([api.getCurrentMealPlan(), api.getFavorites()]);
+      const [planData, favData, ratingData] = await Promise.all([
+        api.getCurrentMealPlan(),
+        api.getFavorites(),
+        api.getRatings(),
+      ]);
       setMealPlan(planData.mealPlan);
       setItems(planData.items);
       setNutrition(planData.nutrition);
       setFavoriteIds(new Set(favData.favorites.map((r) => r.id)));
+      setRatings(new Map(ratingData.ratings.map((r) => [r.recipe_id, r.rating])));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -42,7 +58,7 @@ export default function MealPlanPage() {
     setGenerating(true);
     setError('');
     try {
-      const data = await api.generateMealPlan();
+      const data = await api.generateMealPlan(template || undefined);
       setMealPlan(data.mealPlan);
       setItems(data.items);
       setNutrition(data.nutrition);
@@ -68,6 +84,20 @@ export default function MealPlanPage() {
     }
   }
 
+  async function handleDropSwap(mealType, dayIndexA, dayIndexB) {
+    setDragOverKey(null);
+    setDragSource(null);
+    if (dayIndexA === dayIndexB) return;
+    setError('');
+    try {
+      const data = await api.swapMealPositions(mealType, dayIndexA, dayIndexB);
+      setItems(data.items);
+      setNutrition(data.nutrition);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   async function handleToggleFavorite(recipeId) {
     try {
       if (favoriteIds.has(recipeId)) {
@@ -86,6 +116,24 @@ export default function MealPlanPage() {
     }
   }
 
+  async function handleRate(recipeId, rating) {
+    try {
+      if (rating === null) {
+        await api.clearRating(recipeId);
+        setRatings((prev) => {
+          const next = new Map(prev);
+          next.delete(recipeId);
+          return next;
+        });
+      } else {
+        await api.setRating(recipeId, rating);
+        setRatings((prev) => new Map(prev).set(recipeId, rating));
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   if (loading) return <div className="text-center text-gray-500">Loading...</div>;
 
   return (
@@ -95,17 +143,33 @@ export default function MealPlanPage() {
           <h1 className="text-2xl font-bold text-brand-800">Weekly meal plan</h1>
           {mealPlan && (
             <p className="text-sm text-gray-500">
-              Week of {mealPlan.weekStartDate} · household of {mealPlan.householdSize}
+              Week of {mealPlan.weekStartDate} · household of {mealPlan.householdSize} ·{' '}
+              <Link to="/history" className="text-brand-700 hover:underline">
+                view past weeks
+              </Link>
             </p>
           )}
         </div>
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-        >
-          {generating ? 'Generating...' : mealPlan ? 'Regenerate full week' : 'Generate my meal plan'}
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            value={template}
+            onChange={(e) => setTemplate(e.target.value)}
+            className="rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none"
+          >
+            {TEMPLATES.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
+          >
+            {generating ? 'Generating...' : mealPlan ? 'Regenerate full week' : 'Generate my meal plan'}
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -119,6 +183,7 @@ export default function MealPlanPage() {
 
       {mealPlan && (
         <>
+          <p className="text-xs text-gray-400">Tip: drag a meal onto another day (same meal type) to swap them.</p>
           <div className="overflow-x-auto">
             <div className="grid min-w-[900px] grid-cols-[80px_repeat(7,1fr)] gap-2">
               <div />
@@ -152,6 +217,21 @@ export default function MealPlanPage() {
                           onSwap={() => handleSwap(dayIndex, mealType)}
                           onToggleFavorite={handleToggleFavorite}
                           onOpenDetail={setDetailRecipe}
+                          draggable={Boolean(item.recipe)}
+                          isDropTarget={dragOverKey === key}
+                          onDragStart={() => setDragSource({ mealType, dayIndex })}
+                          onDragOver={(e) => {
+                            if (dragSource && dragSource.mealType === mealType) {
+                              e.preventDefault();
+                              setDragOverKey(key);
+                            }
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (dragSource && dragSource.mealType === mealType) {
+                              handleDropSwap(mealType, dragSource.dayIndex, dayIndex);
+                            }
+                          }}
                         />
                       </div>
                     );
@@ -171,6 +251,8 @@ export default function MealPlanPage() {
           recipe={detailRecipe}
           isFavorite={favoriteIds.has(detailRecipe.id)}
           onToggleFavorite={handleToggleFavorite}
+          rating={ratings.get(detailRecipe.id)}
+          onRate={handleRate}
           onClose={() => setDetailRecipe(null)}
         />
       )}

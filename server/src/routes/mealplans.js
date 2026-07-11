@@ -1,9 +1,11 @@
 import express from 'express';
 import db from '../db/index.js';
 import { requireAuth } from '../middleware/auth.js';
-import { generatePlan, generateSingleMeal, MEAL_TYPES } from '../services/mealPlanGenerator.js';
+import { generatePlan, generateSingleMeal, MEAL_TYPES, TEMPLATES } from '../services/mealPlanGenerator.js';
 import { summarizeNutrition } from '../services/groceryListBuilder.js';
-import { getCurrentPlan, serializeItems } from '../services/planAccess.js';
+import { getCurrentPlan, getPlanById, getPlanHistory, serializeItems } from '../services/planAccess.js';
+import { getCustomRecipesForUser } from '../services/customRecipes.js';
+import { getRatingsMapForUser } from '../services/ratings.js';
 
 const router = express.Router();
 
@@ -23,12 +25,27 @@ function upcomingMonday() {
   return monday.toISOString().slice(0, 10);
 }
 
+function toGeneratorItems(items) {
+  return items.map((i) => ({ dayIndex: i.day_index, recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier }));
+}
+
+function planSummary(plan) {
+  return { id: plan.id, weekStartDate: plan.week_start_date, householdSize: plan.household_size };
+}
+
 router.post('/generate', requireAuth, (req, res) => {
+  const { template } = req.body || {};
+  if (template && !TEMPLATES.includes(template)) {
+    return res.status(400).json({ error: `template must be one of: ${TEMPLATES.join(', ')}` });
+  }
+
   const diets = JSON.parse(req.user.diet_restrictions);
   const householdSize = req.user.household_size;
   const favoriteRecipeIds = getFavoriteIds(req.user.id);
+  const customRecipes = getCustomRecipesForUser(req.user.id);
+  const ratings = getRatingsMapForUser(req.user.id);
 
-  const items = generatePlan({ diets, favoriteRecipeIds, householdSize });
+  const items = generatePlan({ diets, favoriteRecipeIds, householdSize, customRecipes, ratings, template });
 
   const insertPlan = db.prepare(
     'INSERT INTO meal_plans (user_id, week_start_date, household_size) VALUES (?, ?, ?)'
@@ -46,11 +63,9 @@ router.post('/generate', requireAuth, (req, res) => {
 
   const { plan, items: dbItems } = getCurrentPlan(req.user.id);
   res.status(201).json({
-    mealPlan: { id: plan.id, weekStartDate: plan.week_start_date, householdSize: plan.household_size },
-    items: serializeItems(dbItems),
-    nutrition: summarizeNutrition(
-      dbItems.map((i) => ({ dayIndex: i.day_index, recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier }))
-    ),
+    mealPlan: planSummary(plan),
+    items: serializeItems(dbItems, customRecipes),
+    nutrition: summarizeNutrition(toGeneratorItems(dbItems), customRecipes),
   });
 });
 
@@ -58,13 +73,38 @@ router.get('/current', requireAuth, (req, res) => {
   const current = getCurrentPlan(req.user.id);
   if (!current) return res.json({ mealPlan: null, items: [], nutrition: null });
 
+  const customRecipes = getCustomRecipesForUser(req.user.id);
   const { plan, items } = current;
   res.json({
-    mealPlan: { id: plan.id, weekStartDate: plan.week_start_date, householdSize: plan.household_size },
-    items: serializeItems(items),
-    nutrition: summarizeNutrition(
-      items.map((i) => ({ dayIndex: i.day_index, recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier }))
-    ),
+    mealPlan: planSummary(plan),
+    items: serializeItems(items, customRecipes),
+    nutrition: summarizeNutrition(toGeneratorItems(items), customRecipes),
+  });
+});
+
+router.get('/history', requireAuth, (req, res) => {
+  const history = getPlanHistory(req.user.id).map((plan) => ({
+    id: plan.id,
+    weekStartDate: plan.week_start_date,
+    householdSize: plan.household_size,
+    createdAt: plan.created_at,
+  }));
+  res.json({ history });
+});
+
+router.get('/:id', requireAuth, (req, res) => {
+  const planId = Number(req.params.id);
+  if (!Number.isInteger(planId)) return res.status(400).json({ error: 'Invalid plan id' });
+
+  const found = getPlanById(req.user.id, planId);
+  if (!found) return res.status(404).json({ error: 'Meal plan not found' });
+
+  const customRecipes = getCustomRecipesForUser(req.user.id);
+  const { plan, items } = found;
+  res.json({
+    mealPlan: planSummary(plan),
+    items: serializeItems(items, customRecipes),
+    nutrition: summarizeNutrition(toGeneratorItems(items), customRecipes),
   });
 });
 
@@ -83,12 +123,16 @@ router.patch('/current/items/:dayIndex/:mealType', requireAuth, (req, res) => {
 
   const diets = JSON.parse(req.user.diet_restrictions);
   const favoriteRecipeIds = getFavoriteIds(req.user.id);
+  const customRecipes = getCustomRecipesForUser(req.user.id);
+  const ratings = getRatingsMapForUser(req.user.id);
   const replacement = generateSingleMeal({
     diets,
     favoriteRecipeIds,
     householdSize: req.user.household_size,
     mealType,
     excludeRecipeId: existing.recipe_id,
+    customRecipes,
+    ratings,
   });
 
   db.prepare('UPDATE meal_plan_items SET recipe_id = ?, servings_multiplier = ? WHERE id = ?').run(
@@ -99,10 +143,51 @@ router.patch('/current/items/:dayIndex/:mealType', requireAuth, (req, res) => {
 
   const updated = getCurrentPlan(req.user.id);
   res.json({
-    items: serializeItems(updated.items),
-    nutrition: summarizeNutrition(
-      updated.items.map((i) => ({ dayIndex: i.day_index, recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier }))
-    ),
+    items: serializeItems(updated.items, customRecipes),
+    nutrition: summarizeNutrition(toGeneratorItems(updated.items), customRecipes),
+  });
+});
+
+router.patch('/current/items/swap-positions', requireAuth, (req, res) => {
+  const { mealType, dayIndexA, dayIndexB } = req.body || {};
+  if (
+    !MEAL_TYPES.includes(mealType) ||
+    !Number.isInteger(dayIndexA) ||
+    !Number.isInteger(dayIndexB) ||
+    dayIndexA < 0 ||
+    dayIndexA > 6 ||
+    dayIndexB < 0 ||
+    dayIndexB > 6 ||
+    dayIndexA === dayIndexB
+  ) {
+    return res.status(400).json({ error: 'mealType and two distinct dayIndex values (0-6) are required' });
+  }
+
+  const current = getCurrentPlan(req.user.id);
+  if (!current) return res.status(404).json({ error: 'No meal plan exists yet' });
+
+  const itemA = current.items.find((i) => i.day_index === dayIndexA && i.meal_type === mealType);
+  const itemB = current.items.find((i) => i.day_index === dayIndexB && i.meal_type === mealType);
+  if (!itemA || !itemB) return res.status(404).json({ error: 'Meal slot not found' });
+
+  db.transaction(() => {
+    db.prepare('UPDATE meal_plan_items SET recipe_id = ?, servings_multiplier = ? WHERE id = ?').run(
+      itemB.recipe_id,
+      itemB.servings_multiplier,
+      itemA.id
+    );
+    db.prepare('UPDATE meal_plan_items SET recipe_id = ?, servings_multiplier = ? WHERE id = ?').run(
+      itemA.recipe_id,
+      itemA.servings_multiplier,
+      itemB.id
+    );
+  })();
+
+  const customRecipes = getCustomRecipesForUser(req.user.id);
+  const updated = getCurrentPlan(req.user.id);
+  res.json({
+    items: serializeItems(updated.items, customRecipes),
+    nutrition: summarizeNutrition(toGeneratorItems(updated.items), customRecipes),
   });
 });
 

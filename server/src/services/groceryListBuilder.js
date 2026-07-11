@@ -1,4 +1,4 @@
-import { getRecipeById } from '../data/recipeStore.js';
+import { getRecipeByIdWithExtra } from '../data/recipeStore.js';
 
 export function key(name, unit) {
   return `${name.trim().toLowerCase()}|${unit.trim().toLowerCase()}`;
@@ -8,12 +8,12 @@ export function key(name, unit) {
  * Aggregates ingredients across all meal plan items, scales by each meal's
  * servings multiplier, and subtracts matching pantry stock (same name+unit).
  */
-export function buildGroceryList(mealPlanItems, pantryItems = []) {
+export function buildGroceryList(mealPlanItems, pantryItems = [], customRecipes = []) {
   const totals = new Map();
 
   for (const item of mealPlanItems) {
     if (!item.recipeId) continue;
-    const recipe = getRecipeById(item.recipeId);
+    const recipe = getRecipeByIdWithExtra(item.recipeId, customRecipes);
     if (!recipe) continue;
 
     for (const ingredient of recipe.ingredients) {
@@ -61,7 +61,7 @@ export function buildGroceryList(mealPlanItems, pantryItems = []) {
  * regardless of household size, so no servings-multiplier scaling applies
  * here (that multiplier only scales the grocery list quantities).
  */
-export function summarizeNutrition(mealPlanItems) {
+export function summarizeNutrition(mealPlanItems, customRecipes = []) {
   const perDay = Array.from({ length: 7 }, (_, dayIndex) => ({
     dayIndex,
     calories: 0,
@@ -73,7 +73,7 @@ export function summarizeNutrition(mealPlanItems) {
 
   for (const item of mealPlanItems) {
     if (!item.recipeId) continue;
-    const recipe = getRecipeById(item.recipeId);
+    const recipe = getRecipeByIdWithExtra(item.recipeId, customRecipes);
     if (!recipe) continue;
 
     const day = perDay[item.dayIndex];

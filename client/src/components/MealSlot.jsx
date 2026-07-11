@@ -1,6 +1,18 @@
 import { mealTypeColor } from '../theme/colors.js';
 
-export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, onOpenDetail, swapping }) {
+export default function MealSlot({
+  item,
+  isFavorite,
+  onSwap,
+  onToggleFavorite,
+  onOpenDetail,
+  swapping,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  isDropTarget,
+}) {
   const { recipe } = item;
   const color = mealTypeColor(item.mealType);
 
@@ -14,7 +26,13 @@ export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, o
 
   return (
     <div
-      className="flex h-full flex-col justify-between rounded-lg border-l-4 bg-white p-2 text-xs shadow-sm"
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      className={`flex h-full flex-col justify-between rounded-lg border-l-4 bg-white p-2 text-xs shadow-sm ${
+        draggable ? 'cursor-grab active:cursor-grabbing' : ''
+      } ${isDropTarget ? 'ring-2 ring-brand-500' : ''}`}
       style={{ borderLeftColor: color.dot }}
     >
       <div>
@@ -35,14 +53,16 @@ export default function MealSlot({ item, isFavorite, onSwap, onToggleFavorite, o
         </div>
         <div className="mt-1 text-gray-500">{recipe.nutrition.calories} kcal</div>
       </div>
-      <button
-        onClick={onSwap}
-        disabled={swapping}
-        className="mt-2 rounded px-2 py-1 font-medium hover:brightness-95 disabled:opacity-50"
-        style={{ backgroundColor: color.bg, color: color.text }}
-      >
-        {swapping ? 'Swapping...' : 'Swap'}
-      </button>
+      {onSwap && (
+        <button
+          onClick={onSwap}
+          disabled={swapping}
+          className="mt-2 rounded px-2 py-1 font-medium hover:brightness-95 disabled:opacity-50"
+          style={{ backgroundColor: color.bg, color: color.text }}
+        >
+          {swapping ? 'Swapping...' : 'Swap'}
+        </button>
+      )}
     </div>
   );
 }

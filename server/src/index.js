@@ -10,6 +10,7 @@ import groceryRoutes from './routes/grocery.js';
 import pantryRoutes from './routes/pantry.js';
 import favoriteRoutes from './routes/favorites.js';
 import instacartRoutes from './routes/instacart.js';
+import ratingRoutes from './routes/ratings.js';
 
 if (!process.env.JWT_SECRET) {
   console.error('JWT_SECRET is not set. Copy server/.env.example to server/.env and set it.');
@@ -31,6 +32,7 @@ app.use('/api/grocery', groceryRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/instacart', instacartRoutes);
+app.use('/api/ratings', ratingRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error(err);

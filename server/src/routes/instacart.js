@@ -4,6 +4,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { buildGroceryList } from '../services/groceryListBuilder.js';
 import { getCurrentPlan } from '../services/planAccess.js';
 import { createInstacartShoppingListLink } from '../services/instacartService.js';
+import { getCustomRecipesForUser } from '../services/customRecipes.js';
 
 const router = express.Router();
 
@@ -15,7 +16,8 @@ router.post('/send', requireAuth, async (req, res) => {
   const pantry = db.prepare('SELECT * FROM pantry_items WHERE user_id = ?').all(req.user.id);
   const groceryList = buildGroceryList(
     items.map((i) => ({ recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier })),
-    pantry
+    pantry,
+    getCustomRecipesForUser(req.user.id)
   );
 
   if (groceryList.length === 0) {

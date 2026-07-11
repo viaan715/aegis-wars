@@ -3,6 +3,8 @@ import db from '../db/index.js';
 import { requireAuth } from '../middleware/auth.js';
 import { buildGroceryList, key } from '../services/groceryListBuilder.js';
 import { getCurrentPlan } from '../services/planAccess.js';
+import { getCustomRecipesForUser } from '../services/customRecipes.js';
+import { estimateGroceryListCost } from '../services/costEstimate.js';
 
 const router = express.Router();
 
@@ -12,10 +14,12 @@ const router = express.Router();
 function syncGroceryList(planId, userId) {
   const items = db.prepare('SELECT * FROM meal_plan_items WHERE meal_plan_id = ?').all(planId);
   const pantry = db.prepare('SELECT * FROM pantry_items WHERE user_id = ?').all(userId);
+  const customRecipes = getCustomRecipesForUser(userId);
 
   const computed = buildGroceryList(
     items.map((i) => ({ recipeId: i.recipe_id, servingsMultiplier: i.servings_multiplier })),
-    pantry
+    pantry,
+    customRecipes
   );
 
   const existingRows = db.prepare('SELECT * FROM grocery_list_items WHERE meal_plan_id = ?').all(planId);
@@ -67,7 +71,12 @@ router.get('/current', requireAuth, (req, res) => {
   if (!current) return res.status(404).json({ error: 'No meal plan yet — generate one first' });
 
   const rows = syncGroceryList(current.plan.id, req.user.id);
-  res.json({ mealPlanId: current.plan.id, items: rows.map(serialize) });
+  const items = rows.map(serialize);
+  res.json({
+    mealPlanId: current.plan.id,
+    items,
+    estimatedCost: estimateGroceryListCost(items),
+  });
 });
 
 router.patch('/items/:id', requireAuth, (req, res) => {

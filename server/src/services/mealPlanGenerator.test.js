@@ -80,4 +80,65 @@ describe('generateSingleMeal', () => {
       expect(result.recipeId).toBeNull();
     }
   });
+
+  it('picks a thumbs-up recipe more often than a thumbs-down recipe over many trials', () => {
+    const pool = findRecipes({ mealType: 'lunch', diets: [] });
+    expect(pool.length).toBeGreaterThan(2);
+    const [up, down] = pool;
+    const ratings = new Map([
+      [up.id, 1],
+      [down.id, -1],
+    ]);
+
+    const counts = { up: 0, down: 0 };
+    for (let i = 0; i < 200; i += 1) {
+      const result = generateSingleMeal({ diets: [], mealType: 'lunch', householdSize: 2, ratings });
+      if (result.recipeId === up.id) counts.up += 1;
+      if (result.recipeId === down.id) counts.down += 1;
+    }
+    expect(counts.up).toBeGreaterThan(counts.down);
+  });
+
+  it('includes a custom recipe in the candidate pool alongside built-ins', () => {
+    // A sentinel diet tag no built-in recipe could ever have makes the
+    // custom recipe the only possible match, deterministically — no need to
+    // guess which real diet combination happens to be uncovered by the
+    // (changeable) built-in dataset.
+    const sentinelDiet = '__test_sentinel_diet__';
+    const customRecipe = {
+      id: 'custom:test-1',
+      name: 'Test Custom Dinner',
+      mealType: 'dinner',
+      diets: [sentinelDiet],
+      baseServings: 2,
+      nutrition: { calories: 300, protein: 20, carbs: 5, fat: 20 },
+      instructions: ['Do the thing.'],
+      ingredients: [{ name: 'thing', quantity: 1, unit: 'each', category: 'other' }],
+    };
+
+    const result = generateSingleMeal({
+      diets: [sentinelDiet],
+      mealType: 'dinner',
+      householdSize: 4,
+      customRecipes: [customRecipe],
+    });
+
+    expect(result.recipeId).toBe('custom:test-1');
+    expect(result.servingsMultiplier).toBeCloseTo(4 / 2, 5);
+  });
+
+  it('"high-protein" template favors recipes where protein makes up a larger share of calories', () => {
+    const pool = findRecipes({ mealType: 'lunch', diets: [] });
+    const proteinRatio = (r) => (r.nutrition.calories > 0 ? (r.nutrition.protein * 4) / r.nutrition.calories : 0);
+    const highest = [...pool].sort((a, b) => proteinRatio(b) - proteinRatio(a))[0];
+    const lowest = [...pool].sort((a, b) => proteinRatio(a) - proteinRatio(b))[0];
+
+    const counts = { highest: 0, lowest: 0 };
+    for (let i = 0; i < 200; i += 1) {
+      const result = generateSingleMeal({ diets: [], mealType: 'lunch', householdSize: 2, template: 'high-protein' });
+      if (result.recipeId === highest.id) counts.highest += 1;
+      if (result.recipeId === lowest.id) counts.lowest += 1;
+    }
+    expect(counts.highest).toBeGreaterThan(counts.lowest);
+  });
 });

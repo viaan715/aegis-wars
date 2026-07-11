@@ -5,7 +5,7 @@ function formatQuantity(q) {
   return Number.isInteger(q) ? String(q) : q.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
 }
 
-export default function RecipeDetailModal({ recipe, isFavorite, onToggleFavorite, onClose }) {
+export default function RecipeDetailModal({ recipe, isFavorite, onToggleFavorite, onClose, rating, onRate, onDelete }) {
   useEffect(() => {
     function onKeyDown(e) {
       if (e.key === 'Escape') onClose();
@@ -49,8 +49,31 @@ export default function RecipeDetailModal({ recipe, isFavorite, onToggleFavorite
               <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl">
                 {recipe.name}
               </h2>
+              {recipe.isCustom && (
+                <span className="mt-1 inline-block rounded-full bg-ink/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-ink/50">
+                  Your recipe
+                </span>
+              )}
             </div>
             <div className="flex flex-none items-center gap-1">
+              {onRate && (
+                <>
+                  <button
+                    onClick={() => onRate(recipe.id, rating === 1 ? null : 1)}
+                    title={rating === 1 ? 'Remove thumbs up' : 'Thumbs up'}
+                    className={`text-xl leading-none ${rating === 1 ? 'text-brand-600' : 'text-paper-line hover:text-brand-500'}`}
+                  >
+                    👍
+                  </button>
+                  <button
+                    onClick={() => onRate(recipe.id, rating === -1 ? null : -1)}
+                    title={rating === -1 ? 'Remove thumbs down' : 'Thumbs down'}
+                    className={`text-xl leading-none ${rating === -1 ? 'text-flame' : 'text-paper-line hover:text-flame'}`}
+                  >
+                    👎
+                  </button>
+                </>
+              )}
               <button
                 onClick={() => onToggleFavorite(recipe.id)}
                 title={isFavorite ? 'Remove favorite' : 'Add favorite'}
@@ -149,6 +172,15 @@ export default function RecipeDetailModal({ recipe, isFavorite, onToggleFavorite
                 </span>
                 <span className="text-ink/50">per serving</span>
               </div>
+
+              {recipe.isCustom && onDelete && (
+                <button
+                  onClick={() => onDelete(recipe.id)}
+                  className="mt-4 text-xs font-medium text-flame hover:underline"
+                >
+                  Delete this recipe
+                </button>
+              )}
             </div>
           </div>
         </div>

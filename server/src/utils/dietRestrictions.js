@@ -22,5 +22,6 @@ export function publicUser(user) {
     householdSize: user.household_size,
     dietRestrictions: JSON.parse(user.diet_restrictions),
     authProvider: user.google_id ? 'google' : 'password',
+    emailVerified: Boolean(user.email_verified),
   };
 }

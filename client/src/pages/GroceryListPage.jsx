@@ -10,11 +10,15 @@ export default function GroceryListPage() {
   const [error, setError] = useState('');
   const [sending, setSending] = useState(false);
   const [instacartUrl, setInstacartUrl] = useState('');
+  const [estimatedCost, setEstimatedCost] = useState(null);
 
   useEffect(() => {
     api
       .getGroceryList()
-      .then((data) => setItems(data.items))
+      .then((data) => {
+        setItems(data.items);
+        setEstimatedCost(data.estimatedCost);
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
@@ -90,6 +94,19 @@ export default function GroceryListPage() {
           Nothing here yet — generate a meal plan first, or everything you need is already in your
           pantry.
         </p>
+      )}
+
+      {estimatedCost && items.length > 0 && (
+        <div className="rounded-lg bg-white p-4 shadow">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-ink">Estimated cost</span>
+            <span className="font-display text-xl font-semibold text-brand-800">${estimatedCost.total.toFixed(2)}</span>
+          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            A rough ballpark by category, not real store prices — there's no pricing feed wired up, this just
+            assigns a typical per-item price for each aisle.
+          </p>
+        </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">

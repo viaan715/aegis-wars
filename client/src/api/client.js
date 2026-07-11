@@ -29,17 +29,39 @@ export const api = {
   signup: (payload) => request('/auth/signup', { method: 'POST', body: payload }),
   login: (payload) => request('/auth/login', { method: 'POST', body: payload }),
   loginWithGoogle: (credential) => request('/auth/google', { method: 'POST', body: { credential } }),
+  resendVerification: () => request('/auth/resend-verification', { method: 'POST' }),
+  verifyEmail: (token) => request('/auth/verify-email', { method: 'POST', body: { token } }),
+  forgotPassword: (email) => request('/auth/forgot-password', { method: 'POST', body: { email } }),
+  resetPassword: (token, password) =>
+    request('/auth/reset-password', { method: 'POST', body: { token, password } }),
 
   getMe: () => request('/profile/me'),
   updateMe: (payload) => request('/profile/me', { method: 'PATCH', body: payload }),
   getDiets: () => request('/profile/diets'),
 
-  getRecipes: () => request('/recipes'),
+  getRecipes: (params = {}) => {
+    const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v)).toString();
+    return request(`/recipes${qs ? `?${qs}` : ''}`);
+  },
+  getRecipe: (id) => request(`/recipes/${id}`),
+  createCustomRecipe: (payload) => request('/recipes', { method: 'POST', body: payload }),
+  deleteCustomRecipe: (id) => request(`/recipes/${id}`, { method: 'DELETE' }),
 
-  generateMealPlan: () => request('/mealplans/generate', { method: 'POST' }),
+  getRatings: () => request('/ratings'),
+  setRating: (recipeId, rating) => request(`/ratings/${recipeId}`, { method: 'PUT', body: { rating } }),
+  clearRating: (recipeId) => request(`/ratings/${recipeId}`, { method: 'DELETE' }),
+
+  generateMealPlan: (template) => request('/mealplans/generate', { method: 'POST', body: { template } }),
   getCurrentMealPlan: () => request('/mealplans/current'),
+  getMealPlanHistory: () => request('/mealplans/history'),
+  getMealPlanById: (id) => request(`/mealplans/${id}`),
   swapMeal: (dayIndex, mealType) =>
     request(`/mealplans/current/items/${dayIndex}/${mealType}`, { method: 'PATCH' }),
+  swapMealPositions: (mealType, dayIndexA, dayIndexB) =>
+    request('/mealplans/current/items/swap-positions', {
+      method: 'PATCH',
+      body: { mealType, dayIndexA, dayIndexB },
+    }),
 
   getGroceryList: () => request('/grocery/current'),
   toggleGroceryItem: (id, checked) =>

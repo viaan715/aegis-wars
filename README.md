@@ -24,6 +24,23 @@ the resulting grocery list directly to Instacart for delivery.
   list, step-by-step instructions, and nutrition.
 - **Instacart sync** — one-click button that calls the Instacart Developer
   Platform to turn your grocery list into a shoppable Instacart cart link.
+- **Browse & search recipes** — filter the full catalog by name, meal type,
+  and diet, independent of what's currently planned.
+- **Custom recipes** — add your own recipes (ingredients, steps, nutrition,
+  diet tags); they're private to your account and participate in plan
+  generation exactly like the built-in dataset.
+- **Ratings** — thumbs up/down a recipe to steer future plans more strongly
+  than favoriting alone.
+- **Meal plan history** — every generated week is kept; browse and revisit
+  past plans read-only.
+- **Grocery cost estimate** — a rough per-category dollar ballpark for the
+  week's list (not real store pricing — there's no pricing feed wired up).
+- **Themed generation** — bias a generated week toward high-protein,
+  lower-calorie, or budget-friendly recipes.
+- **Drag-and-drop swapping** — drag a meal onto another day (same meal type)
+  to swap their positions.
+- **Email verification & password reset** — via [Resend](https://resend.com);
+  optional, see below.
 
 ## Architecture
 
@@ -71,6 +88,17 @@ every other feature works fully offline with no external API required.
 Set `GOOGLE_CLIENT_ID` in `server/.env` and `client/.env` (`VITE_GOOGLE_CLIENT_ID`)
 to enable "Sign in with Google". Email/password auth works without any setup.
 
+## Email verification & password reset
+
+Set `RESEND_API_KEY` in `server/.env` (get one free at [resend.com](https://resend.com))
+to send real verification and password-reset emails. `RESEND_FROM_EMAIL` defaults to
+Resend's shared `onboarding@resend.dev` address, which works without verifying your
+own domain but is best replaced with a verified sender before showing this to real
+users. Without a key configured, signup and login still work fully — email
+verification is a soft, non-blocking nudge (a dismissible banner), never a login
+gate — and "forgot password" responds successfully without actually sending
+anything, so it can't be used to enumerate registered emails either way.
+
 ## Running tests
 
 ```bash
@@ -79,10 +107,10 @@ npm test
 ```
 
 Covers the meal-plan generator (diet-restriction filtering, household-size
-scaling, unfulfillable-slot handling) and the grocery-list/nutrition math
-(ingredient aggregation, pantry deduction, per-person nutrition — including
-that nutrition must *not* scale with household size the way grocery
-quantities do).
+scaling, unfulfillable-slot handling, ratings/template weighting, custom-recipe
+inclusion), the grocery-list/nutrition math (ingredient aggregation, pantry
+deduction, per-person nutrition — including that nutrition must *not* scale
+with household size the way grocery quantities do), and the cost estimator.
 
 ## Deploying to Render
 
@@ -99,8 +127,8 @@ that deploys the API as a Docker web service and the frontend as a static site.
    - On `meal-planner-client` → Environment: set `VITE_API_BASE_URL` to the server's
      URL + `/api` (e.g. `https://meal-planner-server.onrender.com/api`). This is a
      build-time variable, so changing it triggers a rebuild of the static site.
-4. Optionally set `GOOGLE_CLIENT_ID` (both services) and `INSTACART_API_KEY`
-   (server only), same as local setup.
+4. Optionally set `GOOGLE_CLIENT_ID` (both services), `INSTACART_API_KEY`, and
+   `RESEND_API_KEY` (server only), same as local setup.
 
 **Free-tier caveats**, worth knowing before you rely on this:
 - Free web services spin down after 15 minutes of inactivity and take a few

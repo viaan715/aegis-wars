@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 const links = [
   { to: '/plan', label: 'Meal Plan', dot: '#F5A524' },
+  { to: '/recipes', label: 'Recipes', dot: '#EAB308' },
   { to: '/grocery', label: 'Grocery List', dot: '#84CC16' },
   { to: '/pantry', label: 'Pantry', dot: '#38BDF8' },
   { to: '/favorites', label: 'Favorites', dot: '#F472B6' },
