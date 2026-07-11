@@ -10,11 +10,17 @@ async function request(path, { method = 'GET', body } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (authToken) headers.Authorization = `Bearer ${authToken}`;
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  const url = `${API_BASE_URL}${path}`;
+  let res;
+  try {
+    res = await fetch(url, {
+      method,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch (err) {
+    throw new Error(`Network error calling ${method} ${url}: ${err.message}`);
+  }
 
   if (res.status === 204) return null;
 
