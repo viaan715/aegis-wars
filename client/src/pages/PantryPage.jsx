@@ -48,24 +48,27 @@ export default function PantryPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-brand-800">Pantry</h1>
-      <p className="text-sm text-gray-500">
+      <div>
+        <p className="eyebrow mb-1">What you've got on hand</p>
+        <h1 className="font-display text-2xl font-semibold text-ink">Pantry</h1>
+      </div>
+      <p className="text-sm text-ink/50">
         Items you already have on hand are subtracted from your generated grocery list.
       </p>
 
-      <form onSubmit={handleAdd} className="flex flex-wrap items-end gap-2 rounded-lg bg-white p-4 shadow">
+      <form onSubmit={handleAdd} className="card-pop flex flex-wrap items-end gap-2 p-4">
         <div>
-          <label className="block text-xs text-gray-500">Ingredient</label>
+          <label className="block text-xs font-medium text-ink/50">Ingredient</label>
           <input
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. eggs"
-            className="w-40 rounded border border-gray-300 px-2 py-1"
+            className="w-40 rounded-lg border-2 border-ink/15 px-2 py-1.5 focus:border-brand-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500">Quantity</label>
+          <label className="block text-xs font-medium text-ink/50">Quantity</label>
           <input
             required
             type="number"
@@ -73,36 +76,36 @@ export default function PantryPage() {
             step="any"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
-            className="w-24 rounded border border-gray-300 px-2 py-1"
+            className="w-24 rounded-lg border-2 border-ink/15 px-2 py-1.5 focus:border-brand-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500">Unit</label>
+          <label className="block text-xs font-medium text-ink/50">Unit</label>
           <input
             required
             value={unit}
             onChange={(e) => setUnit(e.target.value)}
             placeholder="each, cup, oz..."
-            className="w-28 rounded border border-gray-300 px-2 py-1"
+            className="w-28 rounded-lg border-2 border-ink/15 px-2 py-1.5 focus:border-brand-500 focus:outline-none"
           />
         </div>
         <button
           type="submit"
-          className="rounded px-4 py-2 font-medium hover:brightness-95"
+          className="rounded-lg px-4 py-2 font-semibold shadow-sm transition hover:-translate-y-px hover:shadow-md"
           style={{ backgroundColor: pantryColor.dot, color: pantryColor.text }}
         >
           Add
         </button>
       </form>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
       {loading ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-ink/50">Loading...</p>
       ) : items.length === 0 ? (
-        <p className="text-gray-500">Your pantry is empty.</p>
+        <p className="text-ink/50">Your pantry is empty.</p>
       ) : (
-        <table className="w-full overflow-hidden rounded-lg bg-white shadow">
+        <table className="card-pop w-full">
           <thead className="text-left text-sm" style={{ backgroundColor: pantryColor.bg, color: pantryColor.text }}>
             <tr>
               <th className="px-4 py-2">Ingredient</th>
@@ -113,12 +116,12 @@ export default function PantryPage() {
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.id} className="border-t border-gray-100 text-sm">
+              <tr key={item.id} className="border-t border-ink/10 text-sm">
                 <td className="px-4 py-2">{item.ingredientName}</td>
                 <td className="px-4 py-2">{item.quantity}</td>
                 <td className="px-4 py-2">{item.unit}</td>
                 <td className="px-4 py-2 text-right">
-                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:underline">
+                  <button onClick={() => handleDelete(item.id)} className="font-medium text-flame hover:underline">
                     Remove
                   </button>
                 </td>

@@ -37,11 +37,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm overflow-hidden rounded-lg bg-white shadow">
+    <div className="card-pop mx-auto max-w-sm">
       <div className="rainbow-strip h-1.5 w-full" />
       <div className="p-8">
-      <p className="mb-1 text-center text-2xl">🥗</p>
-      <h1 className="mb-6 text-center text-2xl font-bold text-brand-800">Create your account</h1>
+      <p className="mb-1 text-center text-3xl">🥗</p>
+      <p className="eyebrow mb-1 text-center">Get started</p>
+      <h1 className="mb-6 text-center font-display text-2xl font-semibold text-ink">Create your account</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium">Name</label>
@@ -50,7 +51,7 @@ export default function SignupPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border-2 border-ink/15 px-3 py-2 focus:border-brand-500 focus:outline-none"
           />
         </div>
         <div>
@@ -60,7 +61,7 @@ export default function SignupPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border-2 border-ink/15 px-3 py-2 focus:border-brand-500 focus:outline-none"
           />
         </div>
         <div>
@@ -71,16 +72,12 @@ export default function SignupPage() {
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border-2 border-ink/15 px-3 py-2 focus:border-brand-500 focus:outline-none"
           />
-          <p className="mt-1 text-xs text-gray-500">At least 8 characters.</p>
+          <p className="mt-1 text-xs text-ink/50">At least 8 characters.</p>
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-        >
+        {error && <p className="text-sm font-medium text-flame">{error}</p>}
+        <button type="submit" disabled={submitting} className="btn-primary w-full">
           {submitting ? 'Creating account...' : 'Sign up'}
         </button>
       </form>
@@ -89,9 +86,9 @@ export default function SignupPage() {
         <GoogleSignInButton onCredential={handleGoogle} />
       </div>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-ink/60">
         Already have an account?{' '}
-        <Link to="/login" className="text-brand-700 underline">
+        <Link to="/login" className="font-medium text-brand-700 underline">
           Log in
         </Link>
       </p>

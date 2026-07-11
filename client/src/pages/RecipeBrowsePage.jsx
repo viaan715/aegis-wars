@@ -92,26 +92,26 @@ export default function RecipeBrowsePage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-brand-800">Browse recipes</h1>
-        <Link
-          to="/recipes/new"
-          className="rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700"
-        >
+        <div>
+          <p className="eyebrow mb-1">The full catalog</p>
+          <h1 className="font-display text-2xl font-semibold text-ink">Browse recipes</h1>
+        </div>
+        <Link to="/recipes/new" className="btn-primary">
           + Add your own recipe
         </Link>
       </div>
 
-      <div className="space-y-3 rounded-lg bg-white p-4 shadow">
+      <div className="card-pop space-y-3 p-4">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search recipes by name..."
-          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none"
+          className="w-full rounded-lg border-2 border-ink/15 px-3 py-2 focus:border-brand-500 focus:outline-none"
         />
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMealType('')}
-            className={`rounded-full px-3 py-1 text-sm ${mealType === '' ? 'bg-ink text-white' : 'bg-gray-100 text-gray-600'}`}
+            className={`rounded-full px-3 py-1 text-sm font-semibold transition ${mealType === '' ? 'bg-ink text-white' : 'bg-ink/5 text-ink/60 hover:bg-ink/10'}`}
           >
             All meals
           </button>
@@ -152,12 +152,12 @@ export default function RecipeBrowsePage() {
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
       {loading ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-ink/50">Loading...</p>
       ) : recipes.length === 0 ? (
-        <p className="text-gray-500">No recipes match those filters.</p>
+        <p className="text-ink/50">No recipes match those filters.</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {recipes.map((recipe) => {
@@ -167,7 +167,8 @@ export default function RecipeBrowsePage() {
               <button
                 key={recipe.id}
                 onClick={() => setDetailRecipe(recipe)}
-                className="rounded-lg bg-white p-4 text-left shadow hover:shadow-md"
+                className="card-pop border-t-4 p-4 text-left transition hover:-translate-y-0.5 hover:shadow-lg"
+                style={{ borderTopColor: mealColor.dot }}
               >
                 <div className="flex items-start justify-between gap-2">
                   <span
@@ -183,8 +184,8 @@ export default function RecipeBrowsePage() {
                   </div>
                 </div>
                 <h2 className="mt-2 font-semibold text-ink">{recipe.name}</h2>
-                {recipe.isCustom && <p className="text-[10px] uppercase tracking-wide text-ink/40">Your recipe</p>}
-                <p className="mt-1 text-sm text-gray-600">{recipe.nutrition.calories} kcal / serving</p>
+                {recipe.isCustom && <p className="eyebrow mt-0.5">Your recipe</p>}
+                <p className="mt-1 text-sm text-ink/60">{recipe.nutrition.calories} kcal / serving</p>
               </button>
             );
           })}

@@ -50,19 +50,20 @@ export default function MealPlanHistoryDetailPage() {
     }
   }
 
-  if (loading) return <div className="text-center text-gray-500">Loading...</div>;
-  if (error) return <p className="text-sm text-red-600">{error}</p>;
-  if (!mealPlan) return <p className="text-gray-500">Meal plan not found.</p>;
+  if (loading) return <div className="text-center text-ink/50">Loading...</div>;
+  if (error) return <p className="text-sm font-medium text-flame">{error}</p>;
+  if (!mealPlan) return <p className="text-ink/50">Meal plan not found.</p>;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <Link to="/history" className="text-sm text-brand-700 hover:underline">
+          <Link to="/history" className="text-sm font-medium text-brand-700 hover:underline">
             &larr; Back to history
           </Link>
-          <h1 className="mt-1 text-2xl font-bold text-brand-800">Week of {mealPlan.weekStartDate}</h1>
-          <p className="text-sm text-gray-500">Household of {mealPlan.householdSize} (read-only)</p>
+          <p className="eyebrow mb-1 mt-2">Past week · read-only</p>
+          <h1 className="font-display text-2xl font-semibold text-ink">Week of {mealPlan.weekStartDate}</h1>
+          <p className="text-sm text-ink/50">Household of {mealPlan.householdSize}</p>
         </div>
       </div>
 

@@ -140,11 +140,12 @@ export default function MealPlanPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-brand-800">Weekly meal plan</h1>
+          <p className="eyebrow mb-1">Plan ahead</p>
+          <h1 className="font-display text-2xl font-semibold text-ink">Weekly meal plan</h1>
           {mealPlan && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-ink/50">
               Week of {mealPlan.weekStartDate} · household of {mealPlan.householdSize} ·{' '}
-              <Link to="/history" className="text-brand-700 hover:underline">
+              <Link to="/history" className="font-medium text-brand-700 hover:underline">
                 view past weeks
               </Link>
             </p>
@@ -154,7 +155,7 @@ export default function MealPlanPage() {
           <select
             value={template}
             onChange={(e) => setTemplate(e.target.value)}
-            className="rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none"
+            className="rounded-lg border-2 border-ink/15 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none"
           >
             {TEMPLATES.map((t) => (
               <option key={t.value} value={t.value}>
@@ -162,20 +163,16 @@ export default function MealPlanPage() {
               </option>
             ))}
           </select>
-          <button
-            onClick={handleGenerate}
-            disabled={generating}
-            className="rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-          >
+          <button onClick={handleGenerate} disabled={generating} className="btn-primary">
             {generating ? 'Generating...' : mealPlan ? 'Regenerate full week' : 'Generate my meal plan'}
           </button>
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
       {!mealPlan && !generating && (
-        <p className="text-gray-500">
+        <p className="text-ink/50">
           No meal plan yet. Set your dietary restrictions and household size on your Profile page,
           then click &ldquo;Generate my meal plan&rdquo;.
         </p>
@@ -183,7 +180,7 @@ export default function MealPlanPage() {
 
       {mealPlan && (
         <>
-          <p className="text-xs text-gray-400">Tip: drag a meal onto another day (same meal type) to swap them.</p>
+          <p className="eyebrow">Tip: drag a meal onto another day (same meal type) to swap them</p>
           <div className="overflow-x-auto">
             <div className="grid min-w-[900px] grid-cols-[80px_repeat(7,1fr)] gap-2">
               <div />

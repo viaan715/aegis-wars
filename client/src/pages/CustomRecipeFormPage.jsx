@@ -69,9 +69,12 @@ export default function CustomRecipeFormPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold text-brand-800">Add your own recipe</h1>
+      <div>
+        <p className="eyebrow mb-1">Your recipe box</p>
+        <h1 className="font-display text-2xl font-semibold text-ink">Add your own recipe</h1>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 rounded-lg bg-white p-6 shadow">
+      <form onSubmit={handleSubmit} className="card-pop space-y-6 p-6">
         <div>
           <label className="block text-sm font-medium">Recipe name</label>
           <input
@@ -129,7 +132,7 @@ export default function CustomRecipeFormPage() {
             <button
               type="button"
               onClick={() => setIngredients((prev) => [...prev, emptyIngredient()])}
-              className="text-sm text-brand-700 hover:underline"
+              className="text-sm font-medium text-brand-700 hover:underline"
             >
               + Add ingredient
             </button>
@@ -190,7 +193,7 @@ export default function CustomRecipeFormPage() {
             <button
               type="button"
               onClick={() => setInstructions((prev) => [...prev, ''])}
-              className="text-sm text-brand-700 hover:underline"
+              className="text-sm font-medium text-brand-700 hover:underline"
             >
               + Add step
             </button>
@@ -238,13 +241,9 @@ export default function CustomRecipeFormPage() {
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-        >
+        <button type="submit" disabled={submitting} className="btn-primary w-full">
           {submitting ? 'Saving...' : 'Save recipe'}
         </button>
       </form>

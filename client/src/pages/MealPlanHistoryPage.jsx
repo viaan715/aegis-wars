@@ -17,16 +17,19 @@ export default function MealPlanHistoryPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-brand-800">Meal plan history</h1>
+      <div>
+        <p className="eyebrow mb-1">Every week, kept</p>
+        <h1 className="font-display text-2xl font-semibold text-ink">Meal plan history</h1>
+      </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
       {loading ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-ink/50">Loading...</p>
       ) : history.length === 0 ? (
-        <p className="text-gray-500">No past meal plans yet.</p>
+        <p className="text-ink/50">No past meal plans yet.</p>
       ) : (
-        <div className="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white shadow">
+        <div className="card-pop divide-y divide-ink/10">
           {history.map((plan, i) => (
             <Link
               key={plan.id}
@@ -35,7 +38,7 @@ export default function MealPlanHistoryPage() {
             >
               <div>
                 <p className="font-medium text-ink">Week of {plan.weekStartDate}</p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-ink/50">
                   Household of {plan.householdSize} · generated {new Date(plan.createdAt).toLocaleDateString()}
                 </p>
               </div>

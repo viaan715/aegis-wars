@@ -18,7 +18,7 @@ export default function MealSlot({
 
   if (!recipe) {
     return (
-      <div className="flex h-full flex-col justify-between rounded-lg border border-dashed border-red-300 bg-red-50 p-2 text-xs text-red-700">
+      <div className="flex h-full flex-col justify-between rounded-lg border-2 border-dashed border-flame/40 bg-flame/5 p-2 text-xs text-flame">
         <span>No recipe matches your current diet restrictions for this slot.</span>
       </div>
     );
@@ -30,7 +30,7 @@ export default function MealSlot({
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDrop={onDrop}
-      className={`flex h-full flex-col justify-between rounded-lg border-l-4 bg-white p-2 text-xs shadow-sm ${
+      className={`flex h-full flex-col justify-between rounded-lg border-l-[6px] bg-white p-2 text-xs shadow-sm transition hover:shadow-md ${
         draggable ? 'cursor-grab active:cursor-grabbing' : ''
       } ${isDropTarget ? 'ring-2 ring-brand-500' : ''}`}
       style={{ borderLeftColor: color.dot }}
@@ -51,13 +51,13 @@ export default function MealSlot({
             ★
           </button>
         </div>
-        <div className="mt-1 text-gray-500">{recipe.nutrition.calories} kcal</div>
+        <div className="mt-1 text-ink/50">{recipe.nutrition.calories} kcal</div>
       </div>
       {onSwap && (
         <button
           onClick={onSwap}
           disabled={swapping}
-          className="mt-2 rounded px-2 py-1 font-medium hover:brightness-95 disabled:opacity-50"
+          className="mt-2 rounded-md px-2 py-1 font-semibold transition hover:brightness-95 disabled:opacity-50"
           style={{ backgroundColor: color.bg, color: color.text }}
         >
           {swapping ? 'Swapping...' : 'Swap'}

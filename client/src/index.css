@@ -6,6 +6,21 @@ body {
   @apply bg-paper-light text-ink;
 }
 
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-ink/55;
+  }
+  .btn-primary {
+    @apply rounded-lg bg-brand-600 px-4 py-2.5 font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-brand-700 hover:shadow-md active:translate-y-0 disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply rounded-lg border-2 border-ink/15 bg-white px-4 py-2 font-semibold text-ink transition hover:border-brand-500 hover:text-brand-700 disabled:pointer-events-none disabled:opacity-50;
+  }
+  .card-pop {
+    @apply overflow-hidden rounded-xl bg-white shadow-[0_2px_10px_rgba(36,48,31,0.08)];
+  }
+}
+
 .rainbow-strip {
   background: linear-gradient(
     90deg,

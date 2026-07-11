@@ -60,7 +60,7 @@ export default function ShoppingModePage() {
       <div className="flex-1 overflow-y-auto px-4 pb-28 pt-4 sm:px-8">
         <div className="mx-auto max-w-2xl space-y-8">
           {loading && <p className="text-ink/60">Loading...</p>}
-          {error && <p className="text-sm text-red-700">{error}</p>}
+          {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
           {!loading && items.length === 0 && (
             <p className="text-ink/60">

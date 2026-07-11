@@ -28,17 +28,20 @@ export default function FavoritesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-brand-800">Favorite recipes</h1>
-      <p className="text-sm text-gray-500">
+      <div>
+        <p className="eyebrow mb-1">Recipes you love</p>
+        <h1 className="font-display text-2xl font-semibold text-ink">Favorite recipes</h1>
+      </div>
+      <p className="text-sm text-ink/50">
         Favorited recipes are prioritized when generating or swapping meals.
       </p>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-medium text-flame">{error}</p>}
 
       {loading ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-ink/50">Loading...</p>
       ) : favorites.length === 0 ? (
-        <p className="text-gray-500">
+        <p className="text-ink/50">
           No favorites yet — star recipes from your meal plan to see them here.
         </p>
       ) : (
@@ -46,7 +49,7 @@ export default function FavoritesPage() {
           {favorites.map((recipe) => {
             const mealColor = mealTypeColor(recipe.mealType);
             return (
-              <div key={recipe.id} className="rounded-lg bg-white p-4 shadow">
+              <div key={recipe.id} className="card-pop border-t-4 p-4" style={{ borderTopColor: mealColor.dot }}>
                 <div className="flex items-start justify-between gap-2">
                   <button
                     onClick={() => setDetailRecipe(recipe)}
@@ -68,7 +71,7 @@ export default function FavoritesPage() {
                 >
                   {recipe.mealType}
                 </span>
-                <p className="mt-2 text-sm text-gray-600">{recipe.nutrition.calories} kcal / serving</p>
+                <p className="mt-2 text-sm text-ink/60">{recipe.nutrition.calories} kcal / serving</p>
                 <div className="mt-2 flex flex-wrap gap-1">
                   {recipe.diets.map((diet) => {
                     const c = dietColor(diet);

@@ -20,17 +20,23 @@ export default function Navbar() {
     <nav className="bg-brand-700 text-white">
       <div className="rainbow-strip h-1.5 w-full" />
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-        <span className="font-display text-lg font-semibold">🥗 Plately</span>
-        <div className="flex flex-wrap items-center gap-4 text-sm">
+        <span className="font-display text-lg font-semibold tracking-tight">🥗 Plately</span>
+        <div className="flex flex-wrap items-center gap-1.5 text-sm">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                `flex items-center gap-1.5 ${isActive ? 'font-semibold underline' : 'text-brand-100 hover:text-white'}`
+                `flex items-center gap-1.5 rounded-full px-3 py-1.5 transition ${
+                  isActive ? 'font-semibold text-ink shadow-sm' : 'text-brand-100 hover:bg-brand-600 hover:text-white'
+                }`
               }
+              style={({ isActive }) => (isActive ? { backgroundColor: link.dot } : undefined)}
             >
-              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: link.dot }} />
+              <span
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: link.dot }}
+              />
               {link.label}
             </NavLink>
           ))}
@@ -39,7 +45,7 @@ export default function Navbar() {
               logout();
               navigate('/login');
             }}
-            className="rounded bg-brand-800 px-3 py-1 hover:bg-brand-900"
+            className="ml-1 rounded-full bg-brand-800 px-3 py-1.5 font-medium hover:bg-brand-900"
           >
             Log out
           </button>
