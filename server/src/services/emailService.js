@@ -41,7 +41,7 @@ export async function sendEmail({ to, subject, html }) {
 export function sendVerificationEmail(to, verifyUrl) {
   return sendEmail({
     to,
-    subject: 'Verify your email — Smart Meal Planner',
+    subject: 'Verify your email — Plately',
     html: `<p>Welcome! Confirm your email address to finish setting up your account.</p>
 <p><a href="${verifyUrl}">Verify your email</a></p>
 <p>If you didn't create this account, you can ignore this email.</p>`,
@@ -51,7 +51,7 @@ export function sendVerificationEmail(to, verifyUrl) {
 export function sendPasswordResetEmail(to, resetUrl) {
   return sendEmail({
     to,
-    subject: 'Reset your password — Smart Meal Planner',
+    subject: 'Reset your password — Plately',
     html: `<p>Someone requested a password reset for this account.</p>
 <p><a href="${resetUrl}">Choose a new password</a></p>
 <p>This link expires in 1 hour. If you didn't request this, you can ignore this email.</p>`,

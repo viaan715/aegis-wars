@@ -20,7 +20,7 @@ export default function Navbar() {
     <nav className="bg-brand-700 text-white">
       <div className="rainbow-strip h-1.5 w-full" />
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-        <span className="font-display text-lg font-semibold">🥗 Meal Planner</span>
+        <span className="font-display text-lg font-semibold">🥗 Plately</span>
         <div className="flex flex-wrap items-center gap-4 text-sm">
           {links.map((link) => (
             <NavLink

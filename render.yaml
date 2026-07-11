@@ -3,7 +3,7 @@
 # (cross-service URLs, and attaching a persistent disk if you want the SQLite
 # database to survive restarts — that requires upgrading off the free plan).
 services:
-  - name: meal-planner-server
+  - name: plately-server
     type: web
     runtime: docker
     dockerfilePath: ./server/Dockerfile
@@ -35,11 +35,11 @@ services:
         value: onboarding@resend.dev
     # Uncomment once you've upgraded this service off the free plan:
     # disk:
-    #   name: meal-planner-data
+    #   name: plately-data
     #   mountPath: /var/data
     #   sizeGB: 1
 
-  - name: meal-planner-client
+  - name: plately-client
     type: web
     runtime: static
     buildCommand: cd client && npm install && npm run build

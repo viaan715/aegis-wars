@@ -3,7 +3,7 @@ import { api, setAuthToken } from '../api/client.js';
 
 const AuthContext = createContext(null);
 
-const STORAGE_KEY = 'meal-planner-token';
+const STORAGE_KEY = 'plately-token';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);

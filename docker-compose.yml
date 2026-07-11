@@ -9,7 +9,7 @@ services:
       - CLIENT_ORIGIN=http://localhost:5173
       - DB_PATH=/app/data/app.db
     volumes:
-      - meal-planner-db:/app/data
+      - plately-db:/app/data
 
   client:
     build: ./client
@@ -22,4 +22,4 @@ services:
       - server
 
 volumes:
-  meal-planner-db:
+  plately-db:

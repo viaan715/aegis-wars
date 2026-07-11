@@ -1,8 +1,9 @@
-# Smart Meal Planner & Grocery Tracker
+# Plately
 
-A full-stack web app that generates weekly meal plans based on dietary restrictions,
-calculates the exact ingredients needed for the week, tracks pantry stock, and syncs
-the resulting grocery list directly to Instacart for delivery.
+A full-stack meal planner & grocery tracker that generates weekly meal plans based
+on dietary restrictions, calculates the exact ingredients needed for the week,
+tracks pantry stock, and syncs the resulting grocery list directly to Instacart
+for delivery.
 
 ## Features
 
@@ -130,10 +131,10 @@ that deploys the API as a Docker web service and the frontend as a static site.
    to a random string (`openssl rand -hex 32`). You can leave `CLIENT_ORIGIN` and
    `VITE_API_BASE_URL` blank for now — they need URLs that don't exist until step 3.
 3. Once both services deploy, copy their public URLs from the dashboard, then:
-   - On `meal-planner-server` → Environment: set `CLIENT_ORIGIN` to the client's URL
-     (e.g. `https://meal-planner-client.onrender.com`).
-   - On `meal-planner-client` → Environment: set `VITE_API_BASE_URL` to the server's
-     URL + `/api` (e.g. `https://meal-planner-server.onrender.com/api`). This is a
+   - On `plately-server` → Environment: set `CLIENT_ORIGIN` to the client's URL
+     (e.g. `https://plately-client.onrender.com`).
+   - On `plately-client` → Environment: set `VITE_API_BASE_URL` to the server's
+     URL + `/api` (e.g. `https://plately-server.onrender.com/api`). This is a
      build-time variable, so changing it triggers a rebuild of the static site.
 4. Optionally set `GOOGLE_CLIENT_ID` (both services), `INSTACART_API_KEY`, and
    `RESEND_API_KEY` (server only), same as local setup.
@@ -143,5 +144,5 @@ that deploys the API as a Docker web service and the frontend as a static site.
   seconds to cold-start on the next request.
 - Free services have no persistent disk, so the SQLite database resets on
   every restart or redeploy — fine for trying the app out, not for real use.
-  For real persistence, upgrade `meal-planner-server`'s plan in the Render
+  For real persistence, upgrade `plately-server`'s plan in the Render
   dashboard and uncomment the `disk:` block in `render.yaml`.
