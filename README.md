@@ -59,6 +59,14 @@ docker compose up --build
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:4000
 
+Works the same way in GitHub Codespaces or any other forwarded/remote dev
+environment — open the forwarded port-5173 URL in the browser. The frontend
+talks to the API through a same-origin `/api` dev-server proxy (see
+`client/vite.config.js`), so there's no hardcoded `localhost` API URL to break
+when the browser isn't on the same machine as the containers. Just don't set
+`VITE_API_BASE_URL` in `client/.env` unless you specifically want to point at
+a different, already-deployed API.
+
 ## Running without Docker
 
 ```bash
