@@ -196,7 +196,7 @@ export default function IntakeWizard({ project }: { project: Project }) {
           </span>
           <button
             onClick={proceedToQuestionnaire}
-            className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark"
+            className="rounded-lg bg-gold px-6 py-3 font-semibold text-on-accent hover:bg-gold-dark"
           >
             Continue to questionnaire →
           </button>
@@ -358,7 +358,7 @@ export default function IntakeWizard({ project }: { project: Project }) {
         <button
           onClick={submitAndProcess}
           disabled={submitting}
-          className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark disabled:opacity-60"
+          className="rounded-lg bg-gold px-6 py-3 font-semibold text-on-accent hover:bg-gold-dark disabled:opacity-60"
         >
           {submitting ? "Saving…" : "Build my Restart Report →"}
         </button>

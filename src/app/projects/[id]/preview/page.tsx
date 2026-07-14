@@ -102,7 +102,7 @@ export default async function PreviewPage({
             <p className="font-medium text-ink">questions for your next contractor, and the full PDF</p>
             <Link
               href="#pricing"
-              className="mt-3 inline-block rounded-lg bg-gold px-5 py-2 text-sm font-semibold text-ink hover:bg-gold-dark"
+              className="mt-3 inline-block rounded-lg bg-gold px-5 py-2 text-sm font-semibold text-on-accent hover:bg-gold-dark"
             >
               Unlock the full report
             </Link>

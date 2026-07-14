@@ -113,7 +113,7 @@ export default function LandingPage() {
           </span>
           <Link
             href="/start"
-            className="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink hover:bg-gold-dark"
+            className="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-on-accent hover:bg-gold-dark"
           >
             Start my report
           </Link>
@@ -136,7 +136,7 @@ export default function LandingPage() {
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/start"
-              className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark"
+              className="rounded-lg bg-gold px-6 py-3 font-semibold text-on-accent hover:bg-gold-dark"
             >
               Start my Restart Report
             </Link>
@@ -176,7 +176,7 @@ export default function LandingPage() {
               return (
                 <div key={s.step}>
                   <span
-                    className={`flex h-8 w-8 items-center justify-center rounded-full ${accent.bg} font-display text-sm font-bold text-ink`}
+                    className={`flex h-8 w-8 items-center justify-center rounded-full ${accent.bg} font-display text-sm font-bold text-on-accent`}
                   >
                     {s.step}
                   </span>
@@ -237,7 +237,7 @@ export default function LandingPage() {
                 }`}
               >
                 {tier.id === "full" && (
-                  <span className="mb-2 self-start rounded-full bg-gold px-2 py-0.5 text-xs font-semibold text-ink">
+                  <span className="mb-2 self-start rounded-full bg-gold px-2 py-0.5 text-xs font-semibold text-on-accent">
                     Most popular
                   </span>
                 )}
@@ -258,7 +258,7 @@ export default function LandingPage() {
           <div className="mt-8 text-center">
             <Link
               href="/start"
-              className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark"
+              className="rounded-lg bg-gold px-6 py-3 font-semibold text-on-accent hover:bg-gold-dark"
             >
               Start my Restart Report
             </Link>

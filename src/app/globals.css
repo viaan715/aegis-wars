@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #17172b;
+  --background: #14141f;
+  --foreground: #f2f1f7;
 }
 
 @theme inline {
@@ -13,26 +13,27 @@
   --font-display: var(--font-display);
   --font-label: var(--font-label);
 
-  /* Warm-white base + deep navy ink */
-  --color-paper: #ffffff;
-  --color-paper-soft: #faf8f4;
-  --color-ink: #17172b;
-  --color-ink-soft: #5b5b76;
-  --color-line: #e4e1f0;
+  /* Deep navy-black base + off-white ink, FormForge dark theme */
+  --color-paper: #14141f;
+  --color-paper-soft: #1b1b2c;
+  --color-ink: #f2f1f7;
+  --color-ink-soft: #a3a2c2;
+  --color-line: #2b2b42;
+  --color-on-accent: #14141f;
 
-  /* Accent quartet, FormForge-inspired */
-  --color-gold: #e0a83d;
-  --color-gold-dark: #c48f2e;
-  --color-gold-soft: #fcf1dc;
+  /* Accent quartet, matched to FormForge */
+  --color-gold: #e3a83e;
+  --color-gold-dark: #c98f2e;
+  --color-gold-soft: #3a2f18;
 
-  --color-teal: #0f9e8c;
-  --color-teal-soft: #e1f5f1;
+  --color-teal: #2dd4bf;
+  --color-teal-soft: #16302c;
 
-  --color-coral: #e0503f;
-  --color-coral-soft: #fce7e3;
+  --color-coral: #f2665a;
+  --color-coral-soft: #3a1f1c;
 
-  --color-lavender: #7c7fe0;
-  --color-lavender-soft: #eeeefb;
+  --color-lavender: #9b9ff0;
+  --color-lavender-soft: #26243f;
 }
 
 body {
@@ -44,7 +45,7 @@ body {
   width: 100%;
   border-radius: 0.5rem;
   border: 1px solid var(--color-line);
-  background: white;
+  background: var(--color-paper-soft);
   padding: 0.5rem 0.75rem;
   font-size: 0.9375rem;
   color: var(--color-ink);

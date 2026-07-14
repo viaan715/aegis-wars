@@ -37,7 +37,7 @@ export default function PricingCards({ projectId }: { projectId: string }) {
             }`}
           >
             {tier.id === "full" && (
-              <span className="mb-2 self-start rounded-full bg-gold px-2 py-0.5 text-xs font-semibold text-ink">
+              <span className="mb-2 self-start rounded-full bg-gold px-2 py-0.5 text-xs font-semibold text-on-accent">
                 Most popular
               </span>
             )}
@@ -57,7 +57,7 @@ export default function PricingCards({ projectId }: { projectId: string }) {
               disabled={loadingTier !== null}
               className={`mt-6 rounded-lg px-4 py-2.5 text-sm font-medium disabled:opacity-60 ${
                 tier.id === "full"
-                  ? "bg-gold text-ink font-semibold hover:bg-gold-dark"
+                  ? "bg-gold text-on-accent font-semibold hover:bg-gold-dark"
                   : "border border-line text-ink hover:bg-paper-soft"
               }`}
             >
