@@ -143,14 +143,14 @@ export default function IntakeWizard({ project }: { project: Project }) {
             return (
               <div
                 key={cat.id}
-                className="rounded-xl border border-stone-200 bg-white p-5"
+                className="rounded-xl border border-line bg-paper p-5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-medium text-stone-900">{cat.label}</h3>
-                    <p className="text-sm text-stone-500">{cat.hint}</p>
+                    <h3 className="font-medium text-ink">{cat.label}</h3>
+                    <p className="text-sm text-ink-soft">{cat.hint}</p>
                   </div>
-                  <label className="cursor-pointer rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
+                  <label className="cursor-pointer rounded-lg bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink-soft">
                     {busyCategory === cat.id ? "Uploading…" : "Add files"}
                     <input
                       type="file"
@@ -163,18 +163,18 @@ export default function IntakeWizard({ project }: { project: Project }) {
                   </label>
                 </div>
                 {docs.length > 0 && (
-                  <ul className="mt-4 divide-y divide-stone-100 border-t border-stone-100">
+                  <ul className="mt-4 divide-y divide-line border-t border-line">
                     {docs.map((doc) => (
                       <li
                         key={doc.id}
                         className="flex items-center justify-between py-2 text-sm"
                       >
-                        <span className="truncate text-stone-700">{doc.filename}</span>
-                        <span className="flex items-center gap-3 text-stone-400">
+                        <span className="truncate text-ink">{doc.filename}</span>
+                        <span className="flex items-center gap-3 text-ink-soft">
                           {fmtBytes(doc.sizeBytes)}
                           <button
                             onClick={() => deleteDoc(doc.id)}
-                            className="text-red-500 hover:underline"
+                            className="text-coral hover:underline"
                           >
                             Remove
                           </button>
@@ -188,15 +188,15 @@ export default function IntakeWizard({ project }: { project: Project }) {
           })}
         </div>
 
-        {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-4 text-sm text-coral">{error}</p>}
 
         <div className="mt-8 flex items-center justify-between">
-          <span className="text-sm text-stone-500">
+          <span className="text-sm text-ink-soft">
             {totalDocs} file{totalDocs === 1 ? "" : "s"} uploaded
           </span>
           <button
             onClick={proceedToQuestionnaire}
-            className="rounded-lg bg-amber-700 px-6 py-3 font-medium text-white hover:bg-amber-800"
+            className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark"
           >
             Continue to questionnaire →
           </button>
@@ -276,12 +276,12 @@ export default function IntakeWizard({ project }: { project: Project }) {
         <Field label="What was promised in the contract? Check everything that applies.">
           <div className="grid gap-2 sm:grid-cols-2">
             {scopeChecklist.map((item) => (
-              <label key={item} className="flex items-center gap-2 text-sm text-stone-700">
+              <label key={item} className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={form.promisedScope.includes(item)}
                   onChange={() => toggleArrayValue("promisedScope", item)}
-                  className="h-4 w-4 rounded border-stone-300"
+                  className="h-4 w-4 rounded border-line accent-gold"
                 />
                 {item}
               </label>
@@ -315,12 +315,12 @@ export default function IntakeWizard({ project }: { project: Project }) {
         <Field label="What have you already tried? Check everything that applies.">
           <div className="grid gap-2 sm:grid-cols-2">
             {ALREADY_TRIED_OPTIONS.map((item) => (
-              <label key={item} className="flex items-center gap-2 text-sm text-stone-700">
+              <label key={item} className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={form.alreadyTried.includes(item)}
                   onChange={() => toggleArrayValue("alreadyTried", item)}
-                  className="h-4 w-4 rounded border-stone-300"
+                  className="h-4 w-4 rounded border-line accent-gold"
                 />
                 {item}
               </label>
@@ -346,19 +346,19 @@ export default function IntakeWizard({ project }: { project: Project }) {
         </Field>
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-coral">{error}</p>}
 
       <div className="mt-8 flex items-center justify-between">
         <button
           onClick={() => setStep("upload")}
-          className="text-sm font-medium text-stone-500 hover:underline"
+          className="text-sm font-medium text-ink-soft hover:text-ink hover:underline"
         >
           ← Back to uploads
         </button>
         <button
           onClick={submitAndProcess}
           disabled={submitting}
-          className="rounded-lg bg-amber-700 px-6 py-3 font-medium text-white hover:bg-amber-800 disabled:opacity-60"
+          className="rounded-lg bg-gold px-6 py-3 font-semibold text-ink hover:bg-gold-dark disabled:opacity-60"
         >
           {submitting ? "Saving…" : "Build my Restart Report →"}
         </button>
@@ -378,11 +378,9 @@ function StepHeader({
 }) {
   return (
     <div>
-      <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-        Step {step} of 2
-      </span>
-      <h1 className="mt-1 font-serif text-2xl font-semibold text-stone-900">{title}</h1>
-      <p className="mt-1 text-stone-500">{subtitle}</p>
+      <span className="kicker text-coral">Step {step} of 2</span>
+      <h1 className="mt-1 font-display text-2xl font-bold text-ink">{title}</h1>
+      <p className="mt-1 text-ink-soft">{subtitle}</p>
     </div>
   );
 }
@@ -390,7 +388,7 @@ function StepHeader({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-stone-800">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-ink">{label}</label>
       {children}
     </div>
   );

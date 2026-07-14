@@ -28,7 +28,7 @@ export default function CheckoutStatusHandler({ projectId }: { projectId: string
   if (!checking) return null;
 
   return (
-    <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+    <div className="mb-6 rounded-lg border border-gold bg-gold-soft px-4 py-3 text-sm text-ink">
       Confirming your payment…
     </div>
   );

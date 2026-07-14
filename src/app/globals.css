@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #17172b;
 }
 
 @theme inline {
@@ -10,13 +10,29 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+  --font-display: var(--font-display);
+  --font-label: var(--font-label);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Warm-white base + deep navy ink */
+  --color-paper: #ffffff;
+  --color-paper-soft: #faf8f4;
+  --color-ink: #17172b;
+  --color-ink-soft: #5b5b76;
+  --color-line: #e4e1f0;
+
+  /* Accent quartet, FormForge-inspired */
+  --color-gold: #e0a83d;
+  --color-gold-dark: #c48f2e;
+  --color-gold-soft: #fcf1dc;
+
+  --color-teal: #0f9e8c;
+  --color-teal-soft: #e1f5f1;
+
+  --color-coral: #e0503f;
+  --color-coral-soft: #fce7e3;
+
+  --color-lavender: #7c7fe0;
+  --color-lavender-soft: #eeeefb;
 }
 
 body {
@@ -27,18 +43,30 @@ body {
 .input {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid #d6d3d1;
+  border: 1px solid var(--color-line);
   background: white;
   padding: 0.5rem 0.75rem;
   font-size: 0.9375rem;
-  color: #1c1917;
+  color: var(--color-ink);
 }
 
 .input:focus {
-  outline: 2px solid #b45309;
+  outline: 2px solid var(--color-gold);
   outline-offset: 1px;
 }
 
-.font-serif {
-  font-family: Georgia, "Times New Roman", serif;
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.font-label {
+  font-family: var(--font-label), "IBM Plex Mono", monospace;
+}
+
+.kicker {
+  font-family: var(--font-label), "IBM Plex Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
 }

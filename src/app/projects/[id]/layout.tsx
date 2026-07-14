@@ -6,13 +6,13 @@ export default function ProjectLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
+    <div className="min-h-screen bg-paper-soft">
+      <header className="border-b border-line bg-paper">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-serif text-lg font-semibold text-stone-900">
-            Renovation Restart
+          <Link href="/" className="font-display text-lg font-semibold text-ink">
+            Renovation<span className="text-gold">Restart</span>
           </Link>
-          <span className="text-sm text-stone-400">Your progress is saved automatically</span>
+          <span className="text-sm text-ink-soft">Your progress is saved automatically</span>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>

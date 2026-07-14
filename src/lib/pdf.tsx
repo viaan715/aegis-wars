@@ -2,49 +2,50 @@ import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-p
 import { Project, RestartReport } from "./types";
 
 const styles = StyleSheet.create({
-  page: { padding: 40, fontSize: 10, fontFamily: "Helvetica", color: "#1c1917" },
-  title: { fontSize: 20, fontFamily: "Helvetica-Bold", marginBottom: 4 },
-  subtitle: { fontSize: 10, color: "#78716c", marginBottom: 20 },
+  page: { padding: 40, fontSize: 10, fontFamily: "Helvetica", color: "#17172b" },
+  title: { fontSize: 20, fontFamily: "Helvetica-Bold", marginBottom: 4, color: "#17172b" },
+  subtitle: { fontSize: 10, color: "#5b5b76", marginBottom: 20 },
   section: { marginBottom: 18 },
   sectionTitle: {
     fontSize: 13,
     fontFamily: "Helvetica-Bold",
     marginBottom: 8,
-    borderBottom: "1 solid #d6d3d1",
+    borderBottom: "1 solid #e4e1f0",
     paddingBottom: 4,
+    color: "#17172b",
   },
   row: { flexDirection: "row", marginBottom: 4 },
-  label: { width: 140, color: "#57534e" },
+  label: { width: 140, color: "#5b5b76" },
   value: { flex: 1 },
   timelineItem: { flexDirection: "row", marginBottom: 6 },
   timelineDate: { width: 80, fontFamily: "Helvetica-Bold" },
   timelineLabel: { flex: 1 },
-  timelineSource: { color: "#a8a29e", fontSize: 8 },
-  flag: { marginBottom: 8, padding: 8, backgroundColor: "#fef3ec", borderRadius: 4 },
-  flagHigh: { backgroundColor: "#fee2e2" },
+  timelineSource: { color: "#9a9ab3", fontSize: 8 },
+  flag: { marginBottom: 8, padding: 8, backgroundColor: "#fcf1dc", borderRadius: 4, border: "1 solid #e0a83d" },
+  flagHigh: { backgroundColor: "#fce7e3", border: "1 solid #e0503f" },
   flagTitle: { fontFamily: "Helvetica-Bold", marginBottom: 2 },
   bullet: { flexDirection: "row", marginBottom: 4 },
-  bulletDot: { width: 12 },
+  bulletDot: { width: 12, color: "#e0503f" },
   bulletText: { flex: 1 },
   stageRow: { flexDirection: "row", marginBottom: 4, alignItems: "center" },
   stageDot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
   disclaimer: {
     marginTop: 24,
     padding: 10,
-    backgroundColor: "#f5f5f4",
+    backgroundColor: "#faf8f4",
     borderRadius: 4,
     fontSize: 8,
-    color: "#57534e",
+    color: "#5b5b76",
     lineHeight: 1.4,
   },
-  footer: { position: "absolute", bottom: 20, left: 40, right: 40, fontSize: 8, color: "#a8a29e" },
+  footer: { position: "absolute", bottom: 20, left: 40, right: 40, fontSize: 8, color: "#9a9ab3" },
 });
 
 const STAGE_COLORS: Record<string, string> = {
-  likely_done: "#16a34a",
-  in_progress: "#d97706",
-  not_started: "#a8a29e",
-  unclear: "#d6d3d1",
+  likely_done: "#0f9e8c",
+  in_progress: "#e0a83d",
+  not_started: "#e4e1f0",
+  unclear: "#c9c6d9",
 };
 
 const STAGE_LABELS: Record<string, string> = {
@@ -128,7 +129,7 @@ function RestartReportDocument({ project, report }: { project: Project; report: 
             <View key={i} style={styles.stageRow}>
               <View style={[styles.stageDot, { backgroundColor: STAGE_COLORS[s.status] }]} />
               <Text style={{ flex: 1 }}>{s.stage}</Text>
-              <Text style={{ width: 140, color: "#57534e" }}>{STAGE_LABELS[s.status]}</Text>
+              <Text style={{ width: 140, color: "#5b5b76" }}>{STAGE_LABELS[s.status]}</Text>
             </View>
           ))}
         </View>

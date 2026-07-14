@@ -3,16 +3,16 @@ import { getProject } from "@/lib/store";
 import { PRICING_TIERS } from "@/lib/pricing";
 
 function severityStyle(severity: string) {
-  if (severity === "high") return "border-red-200 bg-red-50";
-  if (severity === "medium") return "border-amber-200 bg-amber-50";
-  return "border-stone-200 bg-stone-50";
+  if (severity === "high") return "border-coral bg-coral-soft";
+  if (severity === "medium") return "border-gold bg-gold-soft";
+  return "border-line bg-paper-soft";
 }
 
 const STAGE_STYLE: Record<string, { label: string; dot: string }> = {
-  likely_done: { label: "Likely done", dot: "bg-green-500" },
-  in_progress: { label: "In progress / stopped here", dot: "bg-amber-500" },
-  not_started: { label: "Not started", dot: "bg-stone-300" },
-  unclear: { label: "Unclear", dot: "bg-stone-200" },
+  likely_done: { label: "Likely done", dot: "bg-teal" },
+  in_progress: { label: "In progress / stopped here", dot: "bg-gold" },
+  not_started: { label: "Not started", dot: "bg-line" },
+  unclear: { label: "Unclear", dot: "bg-ink-soft/40" },
 };
 
 function money(n: number | null): string {
@@ -38,25 +38,23 @@ export default async function ReportPage({
     <div>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span className="text-xs font-semibold uppercase tracking-wide text-green-700">
-            Unlocked
-          </span>
-          <h1 className="mt-1 font-serif text-3xl font-semibold text-stone-900">Your Restart Report</h1>
-          <p className="mt-1 text-stone-500">
+          <span className="kicker text-teal">Unlocked</span>
+          <h1 className="mt-1 font-display text-3xl font-bold text-ink">Your Restart Report</h1>
+          <p className="mt-1 text-ink-soft">
             {project.projectType === "kitchen" ? "Kitchen" : "Bathroom"} renovation — generated{" "}
             {new Date(report.generatedAt).toLocaleDateString()}
           </p>
         </div>
         <a
           href={`/api/projects/${id}/download`}
-          className="shrink-0 rounded-lg bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-700"
+          className="shrink-0 rounded-lg bg-ink px-5 py-2.5 text-sm font-medium text-paper hover:bg-ink-soft"
         >
           Download PDF
         </a>
       </div>
 
       {tierDef?.isManualReview && (
-        <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        <div className="mt-6 rounded-lg border border-lavender bg-lavender-soft p-4 text-sm text-ink">
           You purchased the manual review add-on. A specialist will follow up by email within 2
           business days with anything the automated pass might have missed.
         </div>
@@ -64,30 +62,30 @@ export default async function ReportPage({
 
       {report.flags.length > 0 && (
         <section className="mt-8">
-          <h2 className="font-serif text-lg font-semibold text-stone-900">Flagged issues</h2>
+          <h2 className="font-display text-lg font-semibold text-ink">Flagged issues</h2>
           <div className="mt-3 space-y-3">
             {report.flags.map((f, i) => (
               <div key={i} className={`rounded-lg border p-4 ${severityStyle(f.severity)}`}>
-                <p className="font-medium text-stone-900">{f.title}</p>
-                <p className="mt-1 text-sm text-stone-700">{f.detail}</p>
+                <p className="font-medium text-ink">{f.title}</p>
+                <p className="mt-1 text-sm text-ink">{f.detail}</p>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      <section className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">Timeline</h2>
+      <section className="mt-8 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">Timeline</h2>
         {report.timeline.length === 0 ? (
-          <p className="mt-2 text-sm text-stone-500">No dated events were found in your documents.</p>
+          <p className="mt-2 text-sm text-ink-soft">No dated events were found in your documents.</p>
         ) : (
           <ol className="mt-4 space-y-3">
             {report.timeline.map((e, i) => (
               <li key={i} className="flex gap-4 text-sm">
-                <span className="w-24 shrink-0 font-medium text-stone-900">{e.date}</span>
+                <span className="w-24 shrink-0 font-medium text-ink">{e.date}</span>
                 <div>
-                  <p className="text-stone-800">{e.label}</p>
-                  <p className="text-xs text-stone-400">{e.source}</p>
+                  <p className="text-ink">{e.label}</p>
+                  <p className="text-xs text-ink-soft">{e.source}</p>
                 </div>
               </li>
             ))}
@@ -95,8 +93,8 @@ export default async function ReportPage({
         )}
       </section>
 
-      <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">
+      <section className="mt-6 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">
           Work completed vs. contracted scope
         </h2>
         <div className="mt-4 space-y-2">
@@ -106,38 +104,38 @@ export default async function ReportPage({
               <div key={i} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
                   <span className={`h-2.5 w-2.5 rounded-full ${style.dot}`} />
-                  <span className="text-stone-800">{s.stage}</span>
+                  <span className="text-ink">{s.stage}</span>
                 </div>
-                <span className="text-stone-500">{style.label}</span>
+                <span className="text-ink-soft">{style.label}</span>
               </div>
             );
           })}
         </div>
       </section>
 
-      <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">
+      <section className="mt-6 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">
           Money paid vs. value received
         </h2>
         <dl className="mt-4 grid gap-3 sm:grid-cols-3">
           <div>
-            <dt className="text-xs text-stone-500">Total contract</dt>
-            <dd className="text-lg font-semibold text-stone-900">
+            <dt className="text-xs text-ink-soft">Total contract</dt>
+            <dd className="text-lg font-semibold text-ink">
               {money(report.financials.totalContractAmount)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-stone-500">Paid to date</dt>
-            <dd className="text-lg font-semibold text-stone-900">
+            <dt className="text-xs text-ink-soft">Paid to date</dt>
+            <dd className="text-lg font-semibold text-ink">
               {money(report.financials.amountPaidToDate)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-stone-500">Estimated value received</dt>
-            <dd className="text-lg font-semibold text-stone-900">
+            <dt className="text-xs text-ink-soft">Estimated value received</dt>
+            <dd className="text-lg font-semibold text-ink">
               {money(report.financials.estimatedValueReceived)}
               {report.financials.estimatedValueReceivedPct != null && (
-                <span className="ml-1 text-sm font-normal text-stone-500">
+                <span className="ml-1 text-sm font-normal text-ink-soft">
                   (~{Math.round(report.financials.estimatedValueReceivedPct * 100)}% of scope)
                 </span>
               )}
@@ -146,15 +144,15 @@ export default async function ReportPage({
         </dl>
       </section>
 
-      <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">Missing documents</h2>
+      <section className="mt-6 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">Missing documents</h2>
         {report.missingDocuments.length === 0 ? (
-          <p className="mt-2 text-sm text-stone-500">Nothing obvious is missing — nice work staying organized.</p>
+          <p className="mt-2 text-sm text-ink-soft">Nothing obvious is missing — nice work staying organized.</p>
         ) : (
-          <ul className="mt-3 space-y-2 text-sm text-stone-700">
+          <ul className="mt-3 space-y-2 text-sm text-ink">
             {report.missingDocuments.map((d, i) => (
               <li key={i} className="flex gap-2">
-                <span className="text-amber-700">•</span>
+                <span className="text-coral">•</span>
                 <span>{d}</span>
               </li>
             ))}
@@ -162,26 +160,26 @@ export default async function ReportPage({
         )}
       </section>
 
-      <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">
+      <section className="mt-6 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">
           Questions for your next contractor
         </h2>
-        <ol className="mt-3 space-y-2 text-sm text-stone-700">
+        <ol className="mt-3 space-y-2 text-sm text-ink">
           {report.questionsForNextContractor.map((q, i) => (
             <li key={i} className="flex gap-2">
-              <span className="font-medium text-stone-400">{i + 1}.</span>
+              <span className="font-medium text-lavender">{i + 1}.</span>
               <span>{q}</span>
             </li>
           ))}
         </ol>
       </section>
 
-      <section className="mt-6 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-serif text-lg font-semibold text-stone-900">Plain-language summary</h2>
-        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-stone-700">{report.summary}</p>
+      <section className="mt-6 rounded-xl border border-line bg-paper p-6">
+        <h2 className="font-display text-lg font-semibold text-ink">Plain-language summary</h2>
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-ink">{report.summary}</p>
       </section>
 
-      <p className="mt-6 rounded-lg bg-stone-100 p-4 text-xs leading-relaxed text-stone-500">
+      <p className="mt-6 rounded-lg bg-paper-soft p-4 text-xs leading-relaxed text-ink-soft">
         {report.disclaimer}
       </p>
     </div>

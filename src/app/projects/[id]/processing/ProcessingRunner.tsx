@@ -51,15 +51,15 @@ export default function ProcessingRunner({ projectId }: { projectId: string }) {
   return (
     <div className="flex flex-col items-center py-24 text-center">
       {step !== "error" && (
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-stone-200 border-t-amber-700" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-line border-t-gold" />
       )}
-      <p className="mt-6 max-w-sm text-stone-700">{STEP_LABELS[step]}</p>
+      <p className="mt-6 max-w-sm text-ink">{STEP_LABELS[step]}</p>
       {error && (
         <div className="mt-4 max-w-sm">
-          <p className="text-sm text-red-600">{error}</p>
+          <p className="text-sm text-coral">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-3 rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100"
+            className="mt-3 rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper-soft"
           >
             Try again
           </button>

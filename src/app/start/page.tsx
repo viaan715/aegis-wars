@@ -9,19 +9,20 @@ export const metadata: Metadata = {
 
 export default function StartPage() {
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
+    <div className="min-h-screen bg-paper">
+      <header className="border-b border-line bg-paper">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-serif text-lg font-semibold text-stone-900">
-            Renovation Restart
+          <Link href="/" className="font-display text-lg font-semibold text-ink">
+            Renovation<span className="text-gold">Restart</span>
           </Link>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-6 py-14">
-        <h1 className="font-serif text-3xl font-semibold text-stone-900">
+        <span className="kicker text-coral">Step 1</span>
+        <h1 className="mt-2 font-display text-3xl font-bold text-ink">
           What kind of project stalled?
         </h1>
-        <p className="mt-2 max-w-xl text-stone-600">
+        <p className="mt-2 max-w-xl text-ink-soft">
           We currently build Restart Reports for kitchen and bathroom renovations — the two most
           common mid-size projects with a predictable enough sequence of stages that we can tell
           you, with confidence, what should already be done.
