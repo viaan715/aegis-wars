@@ -3,26 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProjectType } from "@/lib/types";
-
-const OPTIONS: { type: ProjectType; label: string; blurb: string; accent: "teal" | "lavender" }[] = [
-  {
-    type: "kitchen",
-    label: "Kitchen renovation",
-    blurb: "Cabinets, countertops, appliances, plumbing & electrical rough-in.",
-    accent: "teal",
-  },
-  {
-    type: "bathroom",
-    label: "Bathroom renovation",
-    blurb: "Tile, waterproofing, vanity, tub or shower, fixtures.",
-    accent: "lavender",
-  },
-];
-
-const ACCENT_BORDER: Record<"teal" | "lavender", string> = {
-  teal: "hover:border-teal",
-  lavender: "hover:border-lavender",
-};
+import { PROJECT_TYPE_GROUPS, PROJECT_TYPE_META } from "@/lib/project-stages";
 
 export default function StartPicker() {
   const router = useRouter();
@@ -48,27 +29,25 @@ export default function StartPicker() {
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      {OPTIONS.map((opt) => (
-        <button
-          key={opt.type}
-          onClick={() => choose(opt.type)}
-          disabled={loading !== null}
-          className={`group flex flex-col items-start rounded-xl border border-line bg-paper p-6 text-left shadow-sm transition hover:shadow-md disabled:opacity-60 ${ACCENT_BORDER[opt.accent]}`}
-        >
-          <span className="text-lg font-semibold text-ink">{opt.label}</span>
-          <span className="mt-1 text-sm text-ink-soft">{opt.blurb}</span>
-          <span className="mt-4 text-sm font-medium text-gold-dark group-hover:underline">
-            {loading === opt.type ? "Starting…" : "Start with this project type →"}
-          </span>
-        </button>
+    <div className="space-y-10">
+      {PROJECT_TYPE_GROUPS.map((group) => (
+        <div key={group.name}>
+          <h2 className="kicker text-teal">{group.name}</h2>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {group.types.map((type) => (
+              <button
+                key={type}
+                onClick={() => choose(type)}
+                disabled={loading !== null}
+                className="rounded-lg border border-line bg-paper px-4 py-3 text-left text-sm font-medium text-ink transition hover:border-gold hover:bg-paper-soft disabled:opacity-60"
+              >
+                {loading === type ? "Starting…" : PROJECT_TYPE_META[type].label}
+              </button>
+            ))}
+          </div>
+        </div>
       ))}
-      {error && <p className="sm:col-span-2 text-sm text-coral">{error}</p>}
-      <p className="sm:col-span-2 text-xs text-ink-soft">
-        More project types (roofing, additions) are coming. For now Renovation Restart covers
-        kitchen and bathroom jobs, where the stages and scope are predictable enough to flag
-        what&apos;s missing with confidence.
-      </p>
+      {error && <p className="text-sm text-coral">{error}</p>}
     </div>
   );
 }

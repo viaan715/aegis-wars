@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { getProject } from "@/lib/store";
 import { PRICING_TIERS } from "@/lib/pricing";
+import { PROJECT_TYPE_META } from "@/lib/project-stages";
 
 function severityStyle(severity: string) {
   if (severity === "high") return "border-coral bg-coral-soft";
@@ -41,7 +42,7 @@ export default async function ReportPage({
           <span className="kicker text-teal">Unlocked</span>
           <h1 className="mt-1 font-display text-3xl font-bold text-ink">Your Restart Report</h1>
           <p className="mt-1 text-ink-soft">
-            {project.projectType === "kitchen" ? "Kitchen" : "Bathroom"} renovation — generated{" "}
+            {PROJECT_TYPE_META[project.projectType ?? "kitchen"].reportLabel} — generated{" "}
             {new Date(report.generatedAt).toLocaleDateString()}
           </p>
         </div>

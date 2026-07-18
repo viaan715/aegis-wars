@@ -6,7 +6,9 @@ documents (contract, receipts, texts, photos) and a short questionnaire, and gen
 received, missing documents, questions for the next contractor, and a plain-language summary
 (always paired with a "this is not legal advice" disclaimer).
 
-v1 covers kitchen and bathroom renovations only.
+Covers 19 project types across kitchen/bathroom renovations, living-space overhauls, structural
+additions, exterior upgrades, systems upgrades, and cosmetic refreshes — see
+`src/lib/project-stages.ts` for the full list and each type's stage sequence.
 
 ## Stack
 

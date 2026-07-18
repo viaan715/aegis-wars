@@ -75,8 +75,8 @@ const FAQS = [
     a: "That's normal — most people in this situation have a scattered, incomplete folder. Upload whatever you have, even if it's just the contract or a handful of texts. The report will tell you what's missing.",
   },
   {
-    q: "Do you handle roofing, additions, or other project types?",
-    a: "Not yet. Renovation Restart currently covers kitchen and bathroom renovations, where the sequence of stages is standard enough to say with confidence what should already be done. Other project types are coming.",
+    q: "What project types do you cover?",
+    a: "Kitchen and bathroom renovations, plus room additions, basement and attic conversions, garage conversions, second-story additions, sunrooms and porches, roofing, siding, decks, door and window upgrades, HVAC and electrical/plumbing updates, smart home wiring, flooring, painting, and trim work. Each has its own stage sequence so the report can say with confidence what should already be done.",
   },
   {
     q: "How long does this take?",
@@ -123,7 +123,7 @@ export default function LandingPage() {
       <main>
         {/* Hero */}
         <section className="mx-auto max-w-4xl px-6 pb-16 pt-20 text-center">
-          <span className="kicker text-coral">Kitchen &amp; bathroom renovations</span>
+          <span className="kicker text-coral">19 project types, one report format</span>
           <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
             Your contractor quit?{" "}
             <span className="bg-gold-soft px-1.5">Upload what you have</span>, get an organized
@@ -210,9 +210,9 @@ export default function LandingPage() {
               })}
             </div>
             <p className="mx-auto mt-8 max-w-2xl text-center text-sm text-ink-soft">
-              v1 covers kitchen and bathroom renovations — the most common mid-size projects, with a
-              standard enough sequence of stages to say with confidence what should already be done.
-              Roofing, additions, and other project types are coming.
+              From kitchens and bathrooms to additions, roofing, decks, and whole-house systems
+              upgrades — each project type has its own predictable sequence of stages, so the report
+              can say with confidence what should already be done.
             </p>
           </div>
         </section>

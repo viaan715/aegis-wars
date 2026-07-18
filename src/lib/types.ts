@@ -1,4 +1,23 @@
-export type ProjectType = "kitchen" | "bathroom";
+export type ProjectType =
+  | "kitchen"
+  | "bathroom"
+  | "open_concept"
+  | "basement_finishing"
+  | "attic_conversion"
+  | "garage_conversion"
+  | "room_addition"
+  | "sunroom_porch"
+  | "second_story_addition"
+  | "siding_replacement"
+  | "roof_remodel"
+  | "deck_patio"
+  | "door_window_upgrade"
+  | "hvac_update"
+  | "electrical_plumbing_update"
+  | "smart_home"
+  | "flooring_replacement"
+  | "interior_painting"
+  | "molding_trim";
 
 export type DocumentCategory =
   | "contract"

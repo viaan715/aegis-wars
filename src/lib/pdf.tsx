@@ -1,4 +1,5 @@
 import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
+import { PROJECT_TYPE_META } from "./project-stages";
 import { Project, RestartReport } from "./types";
 
 const styles = StyleSheet.create({
@@ -66,7 +67,7 @@ function RestartReportDocument({ project, report }: { project: Project; report: 
       <Page size="LETTER" style={styles.page}>
         <Text style={styles.title}>Restart Report</Text>
         <Text style={styles.subtitle}>
-          {project.projectType === "kitchen" ? "Kitchen" : "Bathroom"} renovation — generated{" "}
+          {PROJECT_TYPE_META[project.projectType ?? "kitchen"].reportLabel} — generated{" "}
           {new Date(report.generatedAt).toLocaleDateString()}
         </Text>
 

@@ -1,4 +1,4 @@
-import { STAGE_SEQUENCES, STANDARD_MISSING_DOC_CHECKLIST } from "./project-stages";
+import { PROJECT_TYPE_META, STAGE_SEQUENCES, missingDocChecklistFor } from "./project-stages";
 import {
   Financials,
   Flag,
@@ -127,6 +127,7 @@ function buildFinancials(project: Project, scopeStatus: ScopeStageStatus[]): Fin
 }
 
 function buildMissingDocuments(project: Project): string[] {
+  const projectType = project.projectType ?? "kitchen";
   const categories = new Set(project.documents.map((d) => d.category));
   const allText = project.extraction.perDocument
     .flatMap((e) => [
@@ -138,7 +139,7 @@ function buildMissingDocuments(project: Project): string[] {
     .toLowerCase();
 
   const missing: string[] = [];
-  for (const item of STANDARD_MISSING_DOC_CHECKLIST) {
+  for (const item of missingDocChecklistFor(projectType)) {
     let found = false;
     switch (item) {
       case "Signed contract":
@@ -167,13 +168,19 @@ function buildMissingDocuments(project: Project): string[] {
 
 function buildQuestions(project: Project, missingDocuments: string[], financials: Financials): string[] {
   const projectType = project.projectType ?? "kitchen";
+  const meta = PROJECT_TYPE_META[projectType];
   const questions = [
-    `Can you confirm exactly what stage the ${projectType} was left at, in writing?`,
-    "Was the rough-in (plumbing/electrical) inspected and signed off before any walls were closed up?",
+    "Can you confirm exactly what stage the project was left at, in writing?",
     "Are there any change orders or verbal agreements that aren't reflected in the original contract?",
     "Who has keys, code access, or possession of any materials already purchased for the job?",
     "Are there manufacturer warranties on any installed materials or appliances, and are they transferable?",
   ];
+
+  if (meta.hasRoughIn) {
+    questions.push(
+      "Was the rough-in (plumbing/electrical) inspected and signed off before any walls were closed up?"
+    );
+  }
 
   if (missingDocuments.includes("Building permit")) {
     questions.push("Was a permit ever pulled for this project? If not, is one required in this jurisdiction?");
@@ -215,7 +222,7 @@ function buildFlags(project: Project, financials: Financials, missingDocuments: 
     flags.push({
       severity: "medium",
       title: "No permit found",
-      detail: "Kitchen and bathroom projects involving plumbing or electrical work typically require a permit. Unpermitted work can complicate resale and inspections later.",
+      detail: "This type of project typically requires a permit. Unpermitted work can complicate resale and inspections later.",
     });
   }
 
