@@ -145,7 +145,11 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="mt-4 text-sm text-ink-soft">
-            Takes about 10 minutes. Free preview before you pay anything.
+            Takes about 10 minutes. Free preview before you pay anything. Or{" "}
+            <Link href="/sample" className="font-medium text-teal hover:underline">
+              see a sample report
+            </Link>{" "}
+            first.
           </p>
         </section>
 
@@ -213,6 +217,11 @@ export default function LandingPage() {
               From kitchens and bathrooms to additions, roofing, decks, and whole-house systems
               upgrades — each project type has its own predictable sequence of stages, so the report
               can say with confidence what should already be done.
+            </p>
+            <p className="mt-4 text-center">
+              <Link href="/sample" className="text-sm font-medium text-teal hover:underline">
+                See a full sample report →
+              </Link>
             </p>
           </div>
         </section>

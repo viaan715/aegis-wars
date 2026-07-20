@@ -12,7 +12,7 @@ export default function ProjectLayout({
           <Link href="/" className="font-display text-lg font-semibold text-ink">
             Renovation<span className="text-gold">Restart</span>
           </Link>
-          <span className="text-sm text-ink-soft">Your progress is saved automatically</span>
+          <span className="hidden text-sm text-ink-soft sm:inline">Your progress is saved automatically</span>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>

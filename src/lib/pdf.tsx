@@ -118,6 +118,13 @@ function RestartReportDocument({ project, report }: { project: Project; report: 
                 ` (~${Math.round(report.financials.estimatedValueReceivedPct * 100)}% of scope)`}
             </Text>
           </View>
+          {report.costBenchmark && (
+            <Text style={{ marginTop: 8, fontSize: 8, color: "#5b5b76", lineHeight: 1.4 }}>
+              Typical U.S. range for {PROJECT_TYPE_META[project.projectType ?? "kitchen"].label.toLowerCase()}:{" "}
+              {money(report.costBenchmark.low)}–{money(report.costBenchmark.high)}. A rough national average —
+              actual costs vary by region, size, and finish level.
+            </Text>
+          )}
         </View>
 
         <Text style={styles.footer} render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} fixed />

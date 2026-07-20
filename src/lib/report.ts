@@ -1,5 +1,7 @@
 import { PROJECT_TYPE_META, STAGE_SEQUENCES, missingDocChecklistFor } from "./project-stages";
+import { costBenchmarkFor } from "./cost-benchmarks";
 import {
+  CostBenchmark,
   Financials,
   Flag,
   Project,
@@ -8,7 +10,7 @@ import {
   TimelineEvent,
 } from "./types";
 
-const DISCLAIMER =
+export const DISCLAIMER =
   "This report is generated automatically from the documents and answers you provided. " +
   "It is a plain-language summary, not legal advice. For decisions about money owed, contract " +
   "disputes, liens, or possible legal action, consult a licensed attorney in your state.";
@@ -199,8 +201,32 @@ function buildQuestions(project: Project, missingDocuments: string[], financials
   return questions;
 }
 
-function buildFlags(project: Project, financials: Financials, missingDocuments: string[]): Flag[] {
+function buildFlags(
+  project: Project,
+  financials: Financials,
+  missingDocuments: string[],
+  costBenchmark: CostBenchmark
+): Flag[] {
   const flags: Flag[] = [];
+  const projectType = project.projectType ?? "kitchen";
+  const meta = PROJECT_TYPE_META[projectType];
+  const totalContractAmount = financials.totalContractAmount;
+
+  if (totalContractAmount != null && totalContractAmount > 0) {
+    if (totalContractAmount < costBenchmark.low) {
+      flags.push({
+        severity: "medium",
+        title: "Contract price is unusually low for this type of project",
+        detail: `A ${meta.label.toLowerCase()} typically runs $${costBenchmark.low.toLocaleString()}–$${costBenchmark.high.toLocaleString()} nationally. This contract was for $${totalContractAmount.toLocaleString()} — bids that far under the typical range are a common sign of a contractor planning to cut corners, under-scope the work, or walk away before finishing.`,
+      });
+    } else if (totalContractAmount > costBenchmark.high) {
+      flags.push({
+        severity: "low",
+        title: "Contract price is on the high end for this type of project",
+        detail: `A ${meta.label.toLowerCase()} typically runs $${costBenchmark.low.toLocaleString()}–$${costBenchmark.high.toLocaleString()} nationally. This contract was for $${totalContractAmount.toLocaleString()} — worth confirming the scope, materials, or square footage justify the higher price.`,
+      });
+    }
+  }
 
   if (financials.likelyOverpaid && financials.overpaymentAmount) {
     flags.push({
@@ -253,19 +279,22 @@ function buildFlags(project: Project, financials: Financials, missingDocuments: 
 }
 
 export function buildReport(project: Project, summary: string): RestartReport {
+  const projectType = project.projectType ?? "kitchen";
   const scopeStatus = buildScopeStatus(project);
   const financials = buildFinancials(project, scopeStatus);
   const missingDocuments = buildMissingDocuments(project);
+  const costBenchmark = costBenchmarkFor(projectType);
 
   return {
     generatedAt: new Date().toISOString(),
-    projectType: project.projectType ?? "kitchen",
+    projectType,
     timeline: buildTimeline(project),
     scopeStatus,
     financials,
+    costBenchmark,
     missingDocuments,
     questionsForNextContractor: buildQuestions(project, missingDocuments, financials),
-    flags: buildFlags(project, financials, missingDocuments),
+    flags: buildFlags(project, financials, missingDocuments, costBenchmark),
     summary,
     disclaimer: DISCLAIMER,
   };

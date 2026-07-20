@@ -100,12 +100,18 @@ export interface Flag {
   detail: string;
 }
 
+export interface CostBenchmark {
+  low: number;
+  high: number;
+}
+
 export interface RestartReport {
   generatedAt: string;
   projectType: ProjectType;
   timeline: TimelineEvent[];
   scopeStatus: ScopeStageStatus[];
   financials: Financials;
+  costBenchmark: CostBenchmark | null;
   missingDocuments: string[];
   questionsForNextContractor: string[];
   flags: Flag[];
