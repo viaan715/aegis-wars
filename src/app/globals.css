@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --background: #14141f;
+  --foreground: #f2f1f7;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-label: var(--font-label);
+
+  /* Deep navy-black base + off-white ink, FormForge dark theme */
+  --color-paper: #14141f;
+  --color-paper-soft: #1b1b2c;
+  --color-ink: #f2f1f7;
+  --color-ink-soft: #a3a2c2;
+  --color-line: #2b2b42;
+  --color-on-accent: #14141f;
+
+  /* Accent quartet, matched to FormForge */
+  --color-gold: #e3a83e;
+  --color-gold-dark: #c98f2e;
+  --color-gold-soft: #3a2f18;
+
+  --color-teal: #2dd4bf;
+  --color-teal-soft: #16302c;
+
+  --color-coral: #f2665a;
+  --color-coral-soft: #3a1f1c;
+
+  --color-lavender: #9b9ff0;
+  --color-lavender-soft: #26243f;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-paper-soft);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--color-ink);
+}
+
+.input:focus {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+}
+
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.font-label {
+  font-family: var(--font-label), "IBM Plex Mono", monospace;
+}
+
+.kicker {
+  font-family: var(--font-label), "IBM Plex Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}

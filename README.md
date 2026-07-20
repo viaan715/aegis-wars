@@ -1,68 +1,55 @@
-# Smart Meal Planner & Grocery Tracker
+# Renovation Restart
 
-A full-stack web app that generates weekly meal plans based on dietary restrictions,
-calculates the exact ingredients needed for the week, tracks pantry stock, and syncs
-the resulting grocery list directly to Instacart for delivery.
+A homeowner's contractor quit or disappeared mid-project. This app takes their scattered
+documents (contract, receipts, texts, photos) and a short questionnaire, and generates a
+**Restart Report**: timeline, work completed vs. contracted scope, money paid vs. value
+received, missing documents, questions for the next contractor, and a plain-language summary
+(always paired with a "this is not legal advice" disclaimer).
 
-## Features
+Covers 19 project types across kitchen/bathroom renovations, living-space overhauls, structural
+additions, exterior upgrades, systems upgrades, and cosmetic refreshes — see
+`src/lib/project-stages.ts` for the full list and each type's stage sequence.
 
-- **Accounts** — email/password signup & login, plus "Sign in with Google".
-- **Dietary restrictions** — vegetarian, vegan, gluten-free, dairy-free, keto, low-carb,
-  paleo, and nut-free, combinable per user.
-- **Weekly meal plans** — breakfast, lunch, dinner, and a snack for all 7 days,
-  generated from a curated recipe dataset, scaled to your household size.
-- **Swap meals** — regenerate a single meal slot without redoing the whole week.
-- **Favorites** — star recipes so they're prioritized in future plans.
-- **Nutrition dashboard** — daily and weekly calorie/protein/carb/fat totals.
-- **Pantry tracking** — mark what you already have on hand; it's subtracted from
-  the generated grocery list.
-- **Grocery list** — ingredients aggregated across the week, grouped by aisle
-  category, with a checklist for shopping.
-- **Instacart sync** — one-click button that calls the Instacart Developer
-  Platform to turn your grocery list into a shoppable Instacart cart link.
+## Stack
 
-## Architecture
+- Next.js (App Router) + TypeScript + Tailwind
+- Claude API (`@anthropic-ai/sdk`) for document extraction and report narrative
+- Stripe Checkout for the one-time-payment paywall
+- `@react-pdf/renderer` for the downloadable report PDF
+- Local filesystem storage under `.data/` (uploads + project records as JSON) — swap for
+  S3/Vercel Blob + a real database before deploying to a serverless/ephemeral-disk target
 
-```
-├── server/   Node.js + Express + SQLite (better-sqlite3) REST API
-└── client/   React + Vite + Tailwind CSS frontend
-```
-
-## Running locally with Docker Compose
+## Getting started
 
 ```bash
-cp server/.env.example server/.env   # fill in JWT_SECRET, optionally GOOGLE_CLIENT_ID / INSTACART_API_KEY
-docker compose up --build
-```
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:4000
-
-## Running without Docker
-
-```bash
-# Backend
-cd server
-cp .env.example .env
 npm install
-npm run dev
-
-# Frontend (separate terminal)
-cd client
-npm install
+cp .env.example .env.local   # fill in the keys below
 npm run dev
 ```
 
-## Instacart integration
+Open [http://localhost:3000](http://localhost:3000).
 
-Sending a grocery list to Instacart uses the public [Instacart Developer
-Platform](https://docs.instacart.com/developer_platform_api) "Create shopping
-list page" endpoint. Set `INSTACART_API_KEY` (and optionally
-`INSTACART_ENV=development|production`) in `server/.env`. Without a key, the
-"Send to Instacart" button returns a clear error instead of a broken link —
-every other feature works fully offline with no external API required.
+### Environment variables
 
-## Google Sign-In
+| Variable | Required for | Notes |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | AI document extraction + report narrative | Without it, the app runs with mocked extraction/summary text so the rest of the flow is still testable. |
+| `STRIPE_SECRET_KEY` | Checkout | Without it, checkout returns a friendly "payments not configured" error. |
+| `STRIPE_WEBHOOK_SECRET` | Marking payments as paid via webhook | Use `stripe listen --forward-to localhost:3000/api/stripe/webhook` locally. There's also a fallback: the preview page verifies payment directly against the Stripe session on redirect, so checkout works end-to-end in local dev even without webhook forwarding. |
+| `NEXT_PUBLIC_APP_URL` | Checkout redirect URLs, sitemap/robots | Defaults to inferring from request headers in dev; set explicitly in production. |
 
-Set `GOOGLE_CLIENT_ID` in `server/.env` and `client/.env` (`VITE_GOOGLE_CLIENT_ID`)
-to enable "Sign in with Google". Email/password auth works without any setup.
+### Build order (matches the product brief)
+
+1. Upload + intake questionnaire (`/start`, `/projects/[id]/upload`) — files land in `.data/uploads`, project state in `.data/projects/*.json`.
+2. AI extraction (`/api/projects/[id]/extract`) + templated report (`/api/projects/[id]/report`, `src/lib/report.ts`).
+3. Stripe paywall (`/api/projects/[id]/checkout`, `/api/stripe/webhook`) gating `/projects/[id]/report` and the PDF download.
+4. Report formatting — `src/app/projects/[id]/report/page.tsx` (web) and `src/lib/pdf.tsx` (PDF).
+5. Landing page copy + SEO (`src/app/page.tsx`, `robots.ts`, `sitemap.ts`).
+6. Outreach to construction attorneys — not a code task.
+
+## Notes for production
+
+- Local disk storage (`.data/`) is for development. Deploying to Vercel or any environment
+  with ephemeral/read-only filesystem needs persistent object storage (Vercel Blob, S3) and a
+  real database in place of the JSON file store in `src/lib/store.ts`.
+- Project IDs act as unguessable capability tokens in URLs; there's no user auth in v1.
