@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hallucination Insurance Validator</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #5b5b5b;
+    --border: #e2e2e2;
+    --bg-soft: #fafafa;
+    --verified: #d9f7d9;
+    --verified-ink: #1e6b1e;
+    --review: #ffe8a3;
+    --review-ink: #7a5b00;
+    --unverified: #ffff00;
+    --unverified-ink: #6b5b00;
+    --accent: #2451c9;
+    --accent-ink: #ffffff;
+    --danger: #b3261e;
+    --danger-bg: #fbe9e7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 1.5rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+  .subtitle { color: var(--muted); margin: 0; font-size: 0.95rem; }
+
+  .panel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    background: #fff;
+  }
+  .panel h2 { font-size: 0.95rem; margin: 0 0 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+  input[type=text], input[type=password] {
+    font: inherit; padding: 0.5rem 0.65rem; border: 1px solid var(--border); border-radius: 6px;
+    min-width: 260px; flex: 1;
+  }
+  button {
+    font: inherit; padding: 0.5rem 0.9rem; border-radius: 6px; border: 1px solid var(--border);
+    background: #f4f4f4; cursor: pointer;
+  }
+  button:hover { background: #ececec; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button.primary:hover { background: #1d3fa0; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.link { background: none; border: none; color: var(--accent); padding: 0.1rem 0; text-decoration: underline; font-size: 0.85rem; }
+
+  .hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 760px) { .columns { grid-template-columns: 1fr; } }
+
+  .doc-col label.title { font-weight: 600; display: block; margin-bottom: 0.4rem; }
+  .toggle { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; }
+  .toggle button { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+  .toggle button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  textarea {
+    width: 100%; min-height: 220px; font: 0.85rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; resize: vertical;
+  }
+  input[type=file] { font-size: 0.85rem; }
+
+  .actions { display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; }
+  .spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid #ccc; border-top-color: var(--accent);
+    animation: spin 0.7s linear infinite; display: none;
+  }
+  .spinner.active { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-banner {
+    display: none; background: var(--danger-bg); color: var(--danger); border: 1px solid #f0b8b3;
+    padding: 0.6rem 0.9rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .error-banner.active { display: block; }
+
+  .stats { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .stat {
+    border-radius: 8px; padding: 0.5rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--border);
+  }
+  .stat b { display: block; font-size: 1.1rem; }
+  .stat.verified { background: var(--verified); color: var(--verified-ink); }
+  .stat.review { background: var(--review); color: var(--review-ink); }
+  .stat.unverified { background: var(--unverified); color: var(--unverified-ink); }
+  .charge-line { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { vertical-align: top; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+  td.claim { width: 50%; }
+  td.source { width: 50%; background: var(--bg-soft); }
+  .meta { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+  .facts { font-size: 0.8rem; color: var(--danger); margin-top: 0.35rem; font-weight: 600; }
+  .citation { font-size: 0.8rem; font-weight: 600; color: #444; margin-bottom: 0.35rem; }
+  thead td { font-weight: 600; border-bottom: 2px solid var(--ink); }
+
+  .legend span { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 4px; margin-right: 0.6rem; font-size: 0.8rem; }
+  #results-panel { display: none; }
+  #usage-line { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Hallucination Insurance Validator</h1>
+    <p class="subtitle">Cross-references every claim in an AI-generated summary against the exact page and line of the source document it should be traceable to.</p>
+  </header>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="panel">
+    <h2>API Access</h2>
+    <div class="row">
+      <input type="password" id="api-key" placeholder="X-API-Key (paste yours, or get a demo key)">
+      <button id="show-key-btn" type="button">Show</button>
+      <button id="demo-key-btn" type="button">Get demo key</button>
+      <button id="usage-btn" type="button">Check usage</button>
+    </div>
+    <div class="hint">Demo keys are pay-as-you-go and free to generate for trying the tool &mdash; not for production use.</div>
+    <div id="usage-line"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Documents</h2>
+    <div class="columns">
+      <div class="doc-col">
+        <label class="title">Original source document</label>
+        <div class="toggle" data-target="source">
+          <button type="button" class="mode-btn active" data-mode="text">Paste text</button>
+          <button type="button" class="mode-btn" data-mode="file">Upload file</button>
+          <button type="button" class="link" id="load-sample-source">Load sample</button>
+        </div>
+        <textarea id="source-text" placeholder="Paste the original document text here..."></textarea>
+        <input type="file" id="source-file" accept=".pdf,.txt" style="display:none">
+      </div>
+      <div class="doc-col">
+        <label class="title">AI-generated summary</label>
+        <div class="toggle" data-target="summary">
+          <button type="button" class="mode-btn active" data-mode="text">Paste text</button>
+          <button type="button" class="mode-btn" data-mode="file">Upload file</button>
+          <button type="button" class="link" id="load-sample-summary">Load sample</button>
+        </div>
+        <textarea id="summary-text" placeholder="Paste the AI-generated summary here..."></textarea>
+        <input type="file" id="summary-file" accept=".pdf,.txt" style="display:none">
+      </div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="verify-btn" type="button">Run verification</button>
+      <div class="spinner" id="spinner"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <h2>Results</h2>
+    <div class="stats" id="stats-row"></div>
+    <div class="charge-line" id="charge-line"></div>
+    <div class="legend">
+      <span style="background:var(--verified);color:var(--verified-ink)">Verified</span>
+      <span style="background:var(--review);color:var(--review-ink)">Needs review</span>
+      <span style="background:var(--unverified);color:var(--unverified-ink)">Unverified</span>
+    </div>
+    <table>
+      <thead><tr><td>AI Summary Claim</td><td>Source Match</td></tr></thead>
+      <tbody id="results-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SAMPLE_SOURCE = "CONTRACT FOR PROFESSIONAL SERVICES\nThis Agreement is entered into on March 4, 2021, between Alpha Logistics Inc. and Beta Consulting LLC.\nThe total contract value is $120,000, payable in four installments.\nBeta Consulting LLC shall deliver the final report no later than October 15, 2021.\nEither party may terminate this agreement with 30 days written notice.\n\fGOVERNING LAW\nThis Agreement shall be governed by the laws of the State of Delaware.\nAny disputes arising under this Agreement shall be resolved through binding arbitration in Wilmington, Delaware.\nThe prevailing party shall be entitled to recover reasonable attorney's fees.\n";
+
+const SAMPLE_SUMMARY = "The agreement was signed on March 4, 2021 between Alpha Logistics Inc. and Beta Consulting LLC.\n\nThe total contract value is $120,000, paid in four installments.\n\nBeta Consulting LLC must deliver the final report by December 1, 2021.\n\nDisputes will be resolved through binding arbitration in Wilmington, Delaware.\n\nThe agreement includes a non-compete clause preventing Beta Consulting from working with competitors for five years.\n";
+
+const $ = (sel) => document.querySelector(sel);
+
+const apiKeyInput = $("#api-key");
+const errorBanner = $("#error-banner");
+const spinner = $("#spinner");
+
+function showError(message) {
+  errorBanner.textContent = message;
+  errorBanner.classList.add("active");
+}
+function clearError() {
+  errorBanner.classList.remove("active");
+  errorBanner.textContent = "";
+}
+
+$("#show-key-btn").addEventListener("click", () => {
+  const showing = apiKeyInput.type === "text";
+  apiKeyInput.type = showing ? "password" : "text";
+  $("#show-key-btn").textContent = showing ? "Show" : "Hide";
+});
+
+$("#demo-key-btn").addEventListener("click", async () => {
+  clearError();
+  try {
+    const res = await fetch("/v1/demo/api-key", { method: "POST" });
+    if (!res.ok) throw new Error("Could not create a demo key (" + res.status + ")");
+    const body = await res.json();
+    apiKeyInput.value = body.api_key;
+  } catch (err) {
+    showError(err.message);
+  }
+});
+
+$("#usage-btn").addEventListener("click", async () => {
+  clearError();
+  const key = apiKeyInput.value.trim();
+  if (!key) { showError("Enter an API key first."); return; }
+  try {
+    const res = await fetch("/v1/usage", { headers: { "X-API-Key": key } });
+    if (!res.ok) throw new Error("Could not fetch usage (" + res.status + ")");
+    const body = await res.json();
+    const usageLine = $("#usage-line");
+    usageLine.style.display = "block";
+    const dollars = (body.amount_cents_this_period / 100).toFixed(2);
+    usageLine.textContent = `Plan: ${body.plan} · ${body.period}: ${body.scans_this_period} scan(s), ${body.pages_this_period} page(s), $${dollars} billed.`;
+  } catch (err) {
+    showError(err.message);
+  }
+});
+
+$("#load-sample-source").addEventListener("click", () => { $("#source-text").value = SAMPLE_SOURCE; });
+$("#load-sample-summary").addEventListener("click", () => { $("#summary-text").value = SAMPLE_SUMMARY; });
+
+document.querySelectorAll(".toggle").forEach((toggle) => {
+  const target = toggle.dataset.target;
+  const textarea = document.getElementById(target + "-text");
+  const fileInput = document.getElementById(target + "-file");
+  toggle.querySelectorAll(".mode-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      toggle.querySelectorAll(".mode-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const isFile = btn.dataset.mode === "file";
+      textarea.style.display = isFile ? "none" : "block";
+      fileInput.style.display = isFile ? "block" : "none";
+    });
+  });
+});
+
+function citationFor(claim) {
+  if (claim.matched_page === null || claim.matched_page === undefined) return "No match found in source";
+  if (claim.matched_line_start === claim.matched_line_end) return `p.${claim.matched_page}, line ${claim.matched_line_start}`;
+  return `p.${claim.matched_page}, lines ${claim.matched_line_start}-${claim.matched_line_end}`;
+}
+
+const STATUS_LABEL = { verified: "Verified", review: "Needs review", unverified: "UNVERIFIED" };
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+function renderResults(body) {
+  const statsRow = $("#stats-row");
+  statsRow.innerHTML = `
+    <div class="stat"><b>${body.summary.total_claims}</b>Total claims</div>
+    <div class="stat verified"><b>${body.summary.verified}</b>Verified</div>
+    <div class="stat review"><b>${body.summary.review}</b>Needs review</div>
+    <div class="stat unverified"><b>${body.summary.unverified}</b>Unverified</div>
+  `;
+
+  const dollars = (body.charge.amount_cents / 100).toFixed(2);
+  $("#charge-line").textContent = `Pages scanned: ${body.source_pages_scanned} · Plan: ${body.charge.plan} · Charge for this request: $${dollars}`;
+
+  const rows = body.claims.map((claim) => {
+    const factsHtml = claim.unsupported_facts.length
+      ? `<div class="facts">Unsupported detail(s): ${claim.unsupported_facts.map((f) => escapeHtml(f.value)).join(", ")}</div>`
+      : "";
+    return `
+      <tr>
+        <td class="claim" style="background:var(--${claim.status})">
+          <div>${escapeHtml(claim.text)}</div>
+          <div class="meta">${STATUS_LABEL[claim.status] || claim.status} &middot; similarity ${claim.similarity.toFixed(2)}</div>
+          ${factsHtml}
+        </td>
+        <td class="source">
+          <div class="citation">${citationFor(claim)}</div>
+          <div>${escapeHtml(claim.matched_text)}</div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+  $("#results-body").innerHTML = rows;
+  $("#results-panel").style.display = "block";
+}
+
+$("#verify-btn").addEventListener("click", async () => {
+  clearError();
+  const key = apiKeyInput.value.trim();
+  if (!key) { showError("Enter an API key first (or click “Get demo key”)."); return; }
+
+  const formData = new FormData();
+  const sourceFileInput = $("#source-file");
+  const summaryFileInput = $("#summary-file");
+
+  if (sourceFileInput.style.display !== "none" && sourceFileInput.files[0]) {
+    formData.append("source_file", sourceFileInput.files[0]);
+  } else if ($("#source-text").value.trim()) {
+    formData.append("source_text", $("#source-text").value);
+  } else {
+    showError("Provide the source document (paste text or upload a file).");
+    return;
+  }
+
+  if (summaryFileInput.style.display !== "none" && summaryFileInput.files[0]) {
+    formData.append("summary_file", summaryFileInput.files[0]);
+  } else if ($("#summary-text").value.trim()) {
+    formData.append("summary_text", $("#summary-text").value);
+  } else {
+    showError("Provide the AI-generated summary (paste text or upload a file).");
+    return;
+  }
+
+  spinner.classList.add("active");
+  $("#verify-btn").disabled = true;
+  try {
+    const res = await fetch("/v1/verify", {
+      method: "POST",
+      headers: { "X-API-Key": key },
+      body: formData,
+    });
+    const body = await res.json();
+    if (!res.ok) throw new Error(body.detail || `Request failed (${res.status})`);
+    renderResults(body);
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    spinner.classList.remove("active");
+    $("#verify-btn").disabled = false;
+  }
+});
+</script>
+</body>
+</html>
