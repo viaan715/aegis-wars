@@ -1,0 +1,26 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+pydantic>=2.9
+pydantic-settings>=2.5
+python-multipart>=0.0.9
+jinja2>=3.1
+python-dotenv>=1.0
+apscheduler>=3.10
+requests>=2.32
+numpy>=1.26
+opencv-python-headless>=4.10
+
+# Biometric matching (open-source, run fully locally)
+deepface>=0.0.93
+tf-keras>=2.17
+resemblyzer>=0.1.4
+librosa>=0.10
+soundfile>=0.12
+
+# Legitimate, ToS-compliant public video search (see app/ingestion/README.md)
+google-api-python-client>=2.146
+
+# Tests
+pytest>=8.0
+httpx>=0.27

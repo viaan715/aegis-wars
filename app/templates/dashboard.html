@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aegis — Deepfake Auditing Dashboard</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-face:    #2a78d6;
+    --series-voice:   #eb6834;
+    --status-good:     #0ca30c;
+    --status-warning:  #fab219;
+    --status-serious:  #ec835a;
+    --status-critical: #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-face:    #3987e5;
+      --series-voice:   #d95926;
+      --status-good:     #0ca30c;
+      --status-warning:  #fab219;
+      --status-serious:  #ec835a;
+      --status-critical: #e66767;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+  header.top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 8px; }
+  header.top h1 { font-size: 20px; margin: 0; }
+  header.top p { color: var(--text-secondary); margin: 4px 0 0; font-size: 13px; }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-tile .label { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-tile .value { font-size: 28px; font-weight: 600; margin-top: 6px; }
+
+  section { margin-bottom: 28px; }
+  section > h2 { font-size: 15px; margin: 0 0 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--text-muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; padding: 0 10px 8px; border-bottom: 1px solid var(--gridline); }
+  td { padding: 10px 10px; border-bottom: 1px solid var(--gridline); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; }
+  a { color: var(--series-face); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .dot.face { background: var(--series-face); }
+  .dot.voice { background: var(--series-voice); }
+  .dot.status-new { background: var(--status-warning); }
+  .dot.status-reviewed { background: var(--text-muted); }
+  .dot.status-confirmed { background: var(--status-critical); }
+  .dot.status-dismissed { background: var(--status-good); }
+
+  select.status-select { font: inherit; font-size: 12px; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 2px 4px; }
+
+  .empty { color: var(--text-muted); font-size: 13px; padding: 18px 0; }
+
+  .creator-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .creator-card h3 { margin: 0 0 2px; font-size: 14px; }
+  .creator-card .email { color: var(--text-muted); font-size: 12px; margin-bottom: 10px; }
+  .creator-card .counts { display: flex; gap: 14px; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+  .creator-card form { display: flex; gap: 6px; margin-top: 6px; align-items: center; }
+  .creator-card input[type=file] { font-size: 11px; max-width: 140px; }
+  .creator-card button, .toolbar button, #create-creator button { font: inherit; font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--page); color: var(--text-primary); cursor: pointer; }
+  .creator-card button:hover, .toolbar button:hover, #create-creator button:hover { border-color: var(--text-secondary); }
+  .creator-card .delete-btn { color: var(--status-critical); border-color: var(--status-critical); margin-left: auto; }
+
+  .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+  #create-creator { display: flex; gap: 6px; }
+  #create-creator input { font: inherit; font-size: 12px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--page); color: var(--text-primary); }
+  #scan-status { font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="viz-root wrap">
+  <header class="top">
+    <div>
+      <h1>Aegis — Deepfake Auditing Dashboard</h1>
+      <p>Privacy-first monitoring for cloned faces &amp; voices across enrolled creators.</p>
+    </div>
+    <div class="toolbar">
+      <span id="scan-status"></span>
+      <button id="run-scan-btn" onclick="runScan()">Run scan now</button>
+    </div>
+  </header>
+
+  <div class="stat-row">
+    <div class="card stat-tile">
+      <div class="label">Enrolled creators</div>
+      <div class="value">{{ creators|length }}</div>
+    </div>
+    <div class="card stat-tile">
+      <div class="label">New alerts</div>
+      <div class="value">{{ alerts|selectattr("status.value", "equalto", "new")|list|length }}</div>
+    </div>
+    <div class="card stat-tile">
+      <div class="label">Confirmed clones</div>
+      <div class="value">{{ alerts|selectattr("status.value", "equalto", "confirmed")|list|length }}</div>
+    </div>
+    <div class="card stat-tile">
+      <div class="label">Total alerts (recent)</div>
+      <div class="value">{{ alerts|length }}</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Flagged matches</h2>
+    <div class="card">
+      {% if alerts %}
+      <table>
+        <thead>
+          <tr>
+            <th>Creator</th>
+            <th>Type</th>
+            <th>Video</th>
+            <th>Similarity</th>
+            <th>At</th>
+            <th>Detected</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="alerts-body">
+          {% for a in alerts %}
+          <tr data-alert-id="{{ a.id }}">
+            <td>{{ a.creator_name }}</td>
+            <td><span class="badge"><span class="dot {{ a.match_type.value }}"></span>{{ a.match_type.value }}</span></td>
+            <td><a href="{{ a.video_url }}" target="_blank" rel="noopener">{{ a.video_title or a.video_url }}</a></td>
+            <td class="num">{{ "%.2f"|format(a.similarity) }} <span style="color:var(--text-muted)">/ {{ "%.2f"|format(a.threshold) }}</span></td>
+            <td class="num">{{ "%.1f"|format(a.timestamp_seconds) }}s</td>
+            <td>{{ a.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>
+              <span class="badge"><span class="dot status-{{ a.status.value }}"></span>
+                <select class="status-select" onchange="updateStatus({{ a.id }}, this.value)">
+                  {% for s in ["new", "reviewed", "confirmed", "dismissed"] %}
+                  <option value="{{ s }}" {% if a.status.value == s %}selected{% endif %}>{{ s }}</option>
+                  {% endfor %}
+                </select>
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty">No alerts yet. Enroll a creator, add a scan source, and run a scan to populate this feed.</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section>
+    <h2>Creators</h2>
+    <div class="card" style="margin-bottom:12px;">
+      <form id="create-creator" onsubmit="createCreator(event)">
+        <input name="name" placeholder="Creator name" required />
+        <input name="email" type="email" placeholder="Email" required />
+        <button type="submit">Enroll creator</button>
+      </form>
+    </div>
+    <div class="creator-grid">
+      {% for c in creators %}
+      <div class="card creator-card">
+        <h3>{{ c.name }}</h3>
+        <div class="email">{{ c.email }}</div>
+        <div class="counts">
+          <span>{{ c.face_references|length }}/3 face refs</span>
+          <span>{{ 1 if c.voice_references else 0 }}/1 voice ref</span>
+        </div>
+        <form onsubmit="uploadFaces(event, {{ c.id }})">
+          <input type="file" name="files" accept="image/*" multiple required />
+          <button type="submit">Add photos</button>
+        </form>
+        <form onsubmit="uploadVoice(event, {{ c.id }})">
+          <input type="file" name="file" accept="audio/*" required />
+          <button type="submit">Add voice clip</button>
+        </form>
+        <form onsubmit="deleteCreator(event, {{ c.id }})" style="margin-top:10px;">
+          <button type="submit" class="delete-btn">Delete all data</button>
+        </form>
+      </div>
+      {% else %}
+      <div class="empty">No creators enrolled yet.</div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+async function refresh() { window.location.reload(); }
+
+async function createCreator(ev) {
+  ev.preventDefault();
+  const form = new FormData(ev.target);
+  const res = await fetch("/creators", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: form.get("name"), email: form.get("email") }),
+  });
+  if (!res.ok) { alert("Could not create creator: " + (await res.text())); return; }
+  refresh();
+}
+
+async function uploadFaces(ev, creatorId) {
+  ev.preventDefault();
+  const form = new FormData(ev.target);
+  const res = await fetch(`/creators/${creatorId}/face-references`, { method: "POST", body: form });
+  if (!res.ok) { alert("Upload failed: " + (await res.text())); return; }
+  refresh();
+}
+
+async function uploadVoice(ev, creatorId) {
+  ev.preventDefault();
+  const form = new FormData(ev.target);
+  const res = await fetch(`/creators/${creatorId}/voice-reference`, { method: "POST", body: form });
+  if (!res.ok) { alert("Upload failed: " + (await res.text())); return; }
+  refresh();
+}
+
+async function deleteCreator(ev, creatorId) {
+  ev.preventDefault();
+  if (!confirm("Permanently delete this creator and all biometric data?")) return;
+  await fetch(`/creators/${creatorId}`, { method: "DELETE" });
+  refresh();
+}
+
+async function updateStatus(alertId, status) {
+  await fetch(`/alerts/${alertId}/status`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+}
+
+async function runScan() {
+  const btn = document.getElementById("run-scan-btn");
+  const statusEl = document.getElementById("scan-status");
+  btn.disabled = true;
+  statusEl.textContent = "Scanning…";
+  try {
+    const res = await fetch("/scan/run", { method: "POST" });
+    const data = await res.json();
+    statusEl.textContent = `Checked ${data.sources_checked} source(s), ${data.candidates_found} new video(s), ${data.alerts_created} alert(s).`;
+  } catch (e) {
+    statusEl.textContent = "Scan failed — see server logs.";
+  } finally {
+    btn.disabled = false;
+    setTimeout(refresh, 1200);
+  }
+}
+</script>
+</body>
+</html>
