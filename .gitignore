@@ -1,3 +1,30 @@
+<<<<<<< HEAD
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Runtime data — biometric references, downloaded media, and the DB
+# must never be committed. See app/config.py for paths.
+data/uploads/*
+!data/uploads/.gitkeep
+data/incoming/*
+!data/incoming/.gitkeep
+data/media/*
+!data/media/.gitkeep
+data/evidence/*
+!data/evidence/.gitkeep
+*.db
+*.sqlite3
+
+.env
+.DS_Store
+*.log
+.pytest_cache/
+.mypy_cache/
+=======
 node_modules/
 dist/
 build/
@@ -9,3 +36,4 @@ server/data/app.db
 server/data/*.db
 server/data/*.db-journal
 .DS_Store
+>>>>>>> origin/main
