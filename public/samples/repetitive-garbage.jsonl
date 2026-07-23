@@ -1,0 +1,53 @@
+{"id":"dup-1","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-2","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-3","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-4","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-5","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-6","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-7","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-8","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-9","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-10","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-11","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-12","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-13","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"dup-14","prompt":"Write a product tagline.","response":"Our product is the best product because it is the best product on the market today."}
+{"id":"near-1","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the fastest option available today."}
+{"id":"near-2","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the cheapest option available today."}
+{"id":"near-3","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the smartest option available today."}
+{"id":"near-4","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the simplest option available today."}
+{"id":"near-5","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the boldest option available today."}
+{"id":"near-6","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the safest option available today."}
+{"id":"near-7","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the leanest option available today."}
+{"id":"near-8","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the fastest option available today."}
+{"id":"near-9","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the newest option available today."}
+{"id":"near-10","prompt":"Write a product tagline.","response":"Our team built this product to be reliable, well supported, and ready for real customers from day one, and it is frankly the brightest option available today."}
+{"id":"loop-1","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-2","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-3","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-4","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-5","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-6","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-7","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"loop-8","prompt":"Describe your daily routine.","response":"wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work wake up eat breakfast go to work"}
+{"id":"empty-1","prompt":"Describe the weather today.","response":""}
+{"id":"empty-2","prompt":"Describe the weather today.","response":""}
+{"id":"empty-3","prompt":"Describe the weather today.","response":""}
+{"id":"empty-4","prompt":"Describe the weather today.","response":""}
+{"id":"empty-5","prompt":"Describe the weather today.","response":""}
+{"id":"corrupt-1","prompt":"Summarize the attached note.","response":"CafÃ© on the corner has the best croissants in townâ€™s history."}
+{"id":"corrupt-2","prompt":"Summarize the attached note.","response":"The naÃ¯ve approach failedâ€”try a different heuristic instead."}
+{"id":"corrupt-3","prompt":"Summarize the attached note.","response":"Итог: \u0000\u0001 broken control characters in this row\u0007."}
+{"id":"corrupt-4","prompt":"Summarize the attached note.","response":"RÃ©sumÃ© attached; see attachÃ© for details on the roleâ€™s scope."}
+{"id":"corrupt-5","prompt":"Summarize the attached note.","response":"Bad byte sequence: ��� unreadable replacement characters."}
+{"id":"outlier-1","prompt":"Random fact.","response":"The mitochondria is the powerhouse of the cell, converting nutrients into usable cellular energy through respiration."}
+{"id":"outlier-2","prompt":"Random fact.","response":"Quantum entanglement links particle states across arbitrary distances, defying classical locality assumptions entirely."}
+{"id":"outlier-3","prompt":"Random fact.","response":"The Treaty of Westphalia in 1648 established the modern concept of state sovereignty in international relations."}
+{"id":"outlier-4","prompt":"Random fact.","response":"Kubernetes schedules containerized workloads across a cluster of machines using a declarative control-loop model."}
+{"id":"outlier-5","prompt":"Random fact.","response":"Volcanic ash from the Krakatoa eruption altered global temperatures for several years afterward."}
+{"id":"hq-11","prompt":"Explain the Doppler effect in simple terms.","response":"The change in frequency of a wave for an observer moving relative to its source. This concept, the Doppler effect, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #11)."}
+{"id":"hq-12","prompt":"Compound interest refers to interest calculated on both the initial principal and accumulated interest. It matters because it shapes how we understand the broader system it's part of, and it shows up in classrooms and real-world work alike.","response":"Interest calculated on both the initial principal and accumulated interest. This concept, compound interest, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #12)."}
+{"id":"hq-13","prompt":"What are the key ideas behind the immune system?","response":"The body's defense network against pathogens. This concept, the immune system, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #13)."}
+{"id":"hq-14","prompt":"A concise way to think about the Cold War: the geopolitical tension between the US and USSR from 1947 to 1991. Historians, scientists, and engineers each approach it from a different angle, but the core definition stays consistent.","response":"The geopolitical tension between the US and USSR from 1947 to 1991. This concept, the Cold War, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #14)."}
+{"id":"hq-15","prompt":"Summarize hash tables for a curious beginner, covering why it's studied and one common misconception.","response":"A data structure that maps keys to values using a hash function. This concept, hash tables, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #15)."}
+{"id":"hq-16","prompt":"Explain climate feedback loops in simple terms.","response":"Processes that amplify or dampen the effects of climate change. This concept, climate feedback loops, connects to several adjacent ideas and is typically introduced with a concrete example before moving to formal definitions, which helps build intuition steadily rather than all at once (record #16)."}
