@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 __pycache__/
 *.pyc
 .venv/
@@ -23,3 +24,16 @@ data/evidence/*
 *.log
 .pytest_cache/
 .mypy_cache/
+=======
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.*
+!.env.example
+server/data/app.db
+server/data/*.db
+server/data/*.db-journal
+.DS_Store
+>>>>>>> origin/main
